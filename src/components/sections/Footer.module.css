@@ -1,0 +1,93 @@
+.footer {
+  background: var(--c-dark);
+  color: #c7ccd6;
+  padding-top: clamp(40px, 6vw, 64px);
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 20px;
+  color: #fff;
+}
+.logoMark {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: #fff;
+  color: var(--c-accent-yellow);
+  display: grid;
+  place-items: center;
+}
+.tagline {
+  margin-top: 14px;
+  font-size: 14px;
+  color: #9aa1ad;
+  max-width: 30ch;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.colTitle {
+  font-size: 15px;
+  color: #fff;
+  margin-bottom: 14px;
+}
+.col ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.link {
+  font-size: 14px;
+  color: #9aa1ad;
+  transition: color 0.15s ease;
+}
+.link:hover {
+  color: #fff;
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 20px;
+  font-size: 13px;
+  color: #808896;
+}
+.bottomLinks {
+  display: inline-flex;
+  gap: 18px;
+}
+.bottomLinks a:hover {
+  color: #fff;
+}
+
+@media (max-width: 760px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .cols {
+    grid-template-columns: 1fr 1fr;
+  }
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

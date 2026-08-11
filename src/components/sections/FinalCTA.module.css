@@ -1,0 +1,45 @@
+.section {
+  background: var(--c-bg);
+}
+
+.banner {
+  background: linear-gradient(120deg, #4d96ff 0%, #6a7bff 60%, #7a5cff 100%);
+  border-radius: var(--r-lg);
+  padding: clamp(32px, 5vw, 56px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+.banner::after {
+  content: '';
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent 70%);
+  border-radius: 50%;
+}
+
+.title {
+  color: #fff;
+  font-size: clamp(22px, 3.4vw, 34px);
+}
+.sub {
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 8px;
+  font-size: 15px;
+}
+
+.banner :global(button) {
+  background: #fff;
+  color: var(--c-primary);
+}
+.banner :global(button):hover {
+  background: #f0f5ff;
+}

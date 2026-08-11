@@ -1,0 +1,20 @@
+{
+  "name": "happy-learning",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "快乐学园 - 面向小学生的在线学习平台前端",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.10"
+  }
+}

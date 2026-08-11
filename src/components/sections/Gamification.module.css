@@ -1,0 +1,157 @@
+.section {
+  background: var(--c-bg);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: clamp(24px, 4vw, 48px);
+  align-items: stretch;
+}
+
+/* 成长面板：紫色渐变 */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: clamp(24px, 3vw, 36px);
+  border-radius: var(--r-lg);
+  color: #fff;
+  background: linear-gradient(150deg, #8b6bff 0%, #7a5cff 55%, #6a4cf0 100%);
+  box-shadow: var(--shadow-pop);
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.22);
+  display: grid;
+  place-items: center;
+}
+.name {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 20px;
+}
+.levelPill {
+  display: inline-block;
+  margin-top: 4px;
+  background: rgba(255, 255, 255, 0.22);
+  padding: 2px 10px;
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pointsBox {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.pointsNum {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1;
+}
+.pointsUnit {
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+.nextLevel {
+  font-size: 13.5px;
+  opacity: 0.9;
+}
+
+.streak {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 10px 16px;
+  border-radius: var(--r-md);
+  font-size: 14px;
+}
+.streak strong {
+  font-family: var(--font-head);
+  font-size: 17px;
+}
+
+/* 徽章墙 */
+.wall {
+  background: var(--c-surface);
+  border: 2px solid var(--c-line);
+  border-radius: var(--r-lg);
+  padding: clamp(22px, 3vw, 32px);
+  box-shadow: var(--shadow-soft);
+}
+.wallTitle {
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.wallCount {
+  font-family: var(--font-head);
+  font-size: 14px;
+  color: var(--c-gamify);
+  background: #efeaff;
+  padding: 3px 12px;
+  border-radius: var(--r-pill);
+}
+
+.badges {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.badgeIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 24px -12px rgba(122, 92, 255, 0.5);
+}
+.badgeName {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--c-ink);
+}
+.badgeLock {
+  font-size: 11.5px;
+  color: var(--c-ink-faint);
+}
+.locked {
+  opacity: 0.7;
+}
+.locked .badgeIcon {
+  box-shadow: none;
+}
+
+@media (max-width: 880px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 420px) {
+  .badges {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

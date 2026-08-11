@@ -1,0 +1,23 @@
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 720px;
+}
+
+.center {
+  align-items: center;
+  text-align: center;
+  margin-inline: auto;
+}
+
+.title {
+  font-size: clamp(26px, 4vw, 40px);
+  color: var(--c-ink);
+}
+
+.subtitle {
+  font-size: clamp(15px, 1.6vw, 17px);
+  color: var(--c-ink-soft);
+  max-width: 60ch;
+}

@@ -1,0 +1,161 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--c-bg) 88%, transparent);
+  backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--c-line);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 72px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--c-ink);
+}
+
+.logoMark {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: var(--c-accent-yellow);
+  background: #fff;
+  box-shadow: var(--shadow-soft);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 12px;
+}
+
+.navLink {
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--c-ink-soft);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.navLink:hover {
+  background: var(--c-surface-2);
+  color: var(--c-ink);
+}
+
+.actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.points,
+.badgePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 14px;
+}
+.points {
+  background: var(--c-primary-soft);
+  color: var(--c-primary-dark);
+}
+.pointsNum {
+  font-variant-numeric: tabular-nums;
+}
+.badgePill {
+  background: #fdeef4;
+  color: var(--c-chinese);
+}
+
+.bump .pointsNum {
+  animation: points-bump 0.6s ease;
+  display: inline-block;
+}
+
+.cta {
+  margin-left: 4px;
+}
+
+.menuBtn {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--c-surface-2);
+  color: var(--c-ink);
+  align-items: center;
+  justify-content: center;
+}
+
+.drawer {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 20px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-line);
+}
+.drawer.open {
+  max-height: 360px;
+  padding: 16px 20px 22px;
+}
+
+.drawerLink {
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--c-ink);
+}
+.drawerLink:hover {
+  background: var(--c-surface-2);
+}
+
+/* 响应式：移动端隐藏桌面导航与积分文字，显示菜单按钮 */
+@media (max-width: 880px) {
+  .nav,
+  .badgePill,
+  .cta {
+    display: none;
+  }
+  .menuBtn {
+    display: inline-flex;
+  }
+  .drawer {
+    display: flex;
+  }
+  .points {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .logoText {
+    display: none;
+  }
+  .bar {
+    height: 64px;
+  }
+}

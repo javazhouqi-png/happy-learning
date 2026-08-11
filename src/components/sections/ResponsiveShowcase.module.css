@@ -1,0 +1,198 @@
+.section {
+  background: var(--c-surface);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: clamp(32px, 6vw, 80px);
+  align-items: center;
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 420px;
+}
+.point {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-ink);
+  background: var(--c-bg);
+  border: 2px solid var(--c-line);
+  border-radius: var(--r-md);
+  padding: 16px 18px;
+}
+.pointIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--c-gamify);
+  flex-shrink: 0;
+}
+
+/* 手机样机 */
+.phone {
+  width: 300px;
+  background: #1f2230;
+  border-radius: 42px;
+  padding: 12px;
+  box-shadow: 0 30px 60px -24px rgba(31, 34, 48, 0.6);
+  justify-self: center;
+}
+.screen {
+  background: var(--c-bg);
+  border-radius: 32px;
+  overflow: hidden;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+.statusBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-ink);
+}
+.battery {
+  color: var(--c-ink-soft);
+}
+
+.appHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+}
+.appLogo {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: #fff;
+  color: var(--c-accent-yellow);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-soft);
+}
+.appName {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 16px;
+  flex: 1;
+}
+.appPoints {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--c-primary-soft);
+  color: var(--c-primary-dark);
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 12.5px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+}
+
+.taskCard {
+  margin: 6px 16px 14px;
+  background: linear-gradient(135deg, #ffb866, var(--c-math));
+  color: #fff;
+  border-radius: var(--r-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 14px 26px -14px var(--c-math);
+}
+.taskLabel {
+  font-size: 12px;
+  opacity: 0.9;
+}
+.taskText {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 16px;
+}
+.taskCard :global(button) {
+  align-self: flex-start;
+  background: #fff;
+  color: var(--c-math);
+}
+
+.subjects {
+  padding: 4px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.subjectsTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-ink-soft);
+  margin-bottom: 4px;
+}
+.subjectRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 8px;
+  border-radius: var(--r-sm);
+}
+.subjectIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+.subjectName {
+  flex: 1;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--c-ink);
+}
+.chevron {
+  color: var(--c-ink-faint);
+}
+
+.tabBar {
+  display: flex;
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-line);
+  padding: 8px 0 12px;
+}
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--c-ink-faint);
+  transition: color 0.15s ease;
+}
+.tabActive {
+  color: var(--c-primary);
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .points {
+    max-width: none;
+  }
+}

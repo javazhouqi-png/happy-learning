@@ -1,0 +1,68 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--c-surface);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  border: 2px solid var(--c-line);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card);
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+}
+
+.play {
+  --accent: var(--c-primary);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease;
+}
+.play:hover {
+  transform: scale(1.08);
+}
+
+.duration {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background: rgba(45, 49, 66, 0.78);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  font-variant-numeric: tabular-nums;
+}
+
+.body {
+  padding: 18px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meta {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.title {
+  font-size: 18px;
+  color: var(--c-ink);
+}

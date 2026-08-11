@@ -1,0 +1,77 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-head);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--c-primary-soft);
+  outline-offset: 2px;
+}
+
+.icon {
+  display: inline-flex;
+}
+
+.label {
+  display: inline-flex;
+}
+
+/* 尺寸 */
+.sm {
+  font-size: 14px;
+  padding: 8px 16px;
+}
+.md {
+  font-size: 15px;
+  padding: 12px 22px;
+}
+.lg {
+  font-size: 17px;
+  padding: 16px 30px;
+}
+
+/* 变体 */
+.primary {
+  background: var(--c-primary);
+  color: #fff;
+  box-shadow: var(--shadow-card);
+}
+.primary:hover {
+  background: var(--c-primary-dark);
+  box-shadow: 0 22px 46px -18px rgba(77, 150, 255, 0.55);
+  transform: translateY(-2px);
+}
+
+.outline {
+  background: #fff;
+  color: var(--c-primary);
+  border: 2px solid var(--c-primary-soft);
+}
+.outline:hover {
+  border-color: var(--c-primary);
+  transform: translateY(-2px);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--c-ink);
+}
+.ghost:hover {
+  background: rgba(45, 49, 66, 0.06);
+}
+
+.full {
+  width: 100%;
+}

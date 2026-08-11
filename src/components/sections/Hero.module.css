@@ -1,0 +1,139 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(120deg, #e8f1ff 0%, var(--c-bg) 45%, #fff3e9 100%);
+  padding-block: clamp(40px, 7vw, 90px);
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: clamp(28px, 5vw, 64px);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+}
+
+.title {
+  font-size: clamp(34px, 6vw, 60px);
+  color: var(--c-ink);
+  line-height: 1.12;
+}
+
+.subtitle {
+  font-size: clamp(15px, 1.8vw, 18px);
+  color: var(--c-ink-soft);
+  max-width: 48ch;
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.social {
+  font-size: 13.5px;
+  color: var(--c-ink-faint);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.visual {
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+/* 装饰光斑 */
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(8px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.hero::before {
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, #ffd6e7, transparent 70%);
+  top: -40px;
+  right: 8%;
+}
+.hero::after {
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, #cfe6ff, transparent 70%);
+  bottom: -30px;
+  left: 4%;
+}
+
+.card {
+  position: relative;
+  width: min(360px, 86%);
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  border-radius: 32px;
+  box-shadow: var(--shadow-card);
+  display: grid;
+  place-items: center;
+  animation: floaty 5s ease-in-out infinite;
+}
+
+.mascot {
+  width: 78%;
+  height: 78%;
+}
+
+.stickerStar {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--c-chinese);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 18px -8px var(--c-chinese);
+}
+
+.stickerBadge {
+  position: absolute;
+  bottom: 20px;
+  left: 18px;
+  background: var(--c-primary);
+  color: #fff;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-card);
+}
+
+@media (max-width: 860px) {
+  .inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .copy {
+    align-items: center;
+  }
+  .ctaRow {
+    justify-content: center;
+  }
+  .visual {
+    order: -1;
+  }
+}

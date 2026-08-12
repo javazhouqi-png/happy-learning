@@ -39,6 +39,15 @@ function defaultState() {
     todayStudySec: 0, // 今日已学秒数（受家长每日上限约束）
     parent: { dailyLimitMin: 30, eyeRest: true, sound: true },
     history: [], // [{ ts, type, detail }] 最新在前，最多保留 50 条
+    // —— 以下为「趣味激励闭环」相关状态（借鉴 math-for-piglets 存钱罐 / candy-learn-abacus 花园）——
+    redeemedRewards: [], // 已兑换的奖励 id 列表（装饰性，不影响学习进度）
+    // 错题复习的间隔重复排程：每科一个 Leitner 阶梯 {box, next}。
+    // box: 0=待巩固(明天), 1=间隔3天, 2=间隔7天, 3=已稳定(7天)；next: 下次复习的本地日期串。
+    reviewSchedule: {
+      chinese: { box: 0, next: null },
+      math: { box: 0, next: null },
+      english: { box: 0, next: null },
+    },
   };
 }
 
@@ -56,6 +65,14 @@ function yesterdayStr() {
   const d = new Date();
   d.setDate(d.getDate() - 1); // 用 setDate 计算，可正确处理夏令时偏移
   return localDateStr(d);
+}
+
+// 在本地日期串上叠加 n 天，返回新的本地日期串（用于间隔重复的“下次复习”计算）。
+function addDays(dateStr, n) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const dt = new Date(y, m - 1, d);
+  dt.setDate(dt.getDate() + n);
+  return localDateStr(dt);
 }
 
 /* ----------------------------- 持久化读取 ----------------------------- */
@@ -83,6 +100,8 @@ function loadState() {
       completedLessons: parsed.completedLessons || {},
       videosWatched: parsed.videosWatched || {},
       history: Array.isArray(parsed.history) ? parsed.history : [],
+      redeemedRewards: Array.isArray(parsed.redeemedRewards) ? parsed.redeemedRewards : [],
+      reviewSchedule: { ...base.reviewSchedule, ...(parsed.reviewSchedule || {}) },
     };
   } catch {
     return defaultState();
@@ -275,6 +294,37 @@ function reducer(state, action) {
       };
     }
 
+    // 兑换奖励：受控且幂等。cost 由组件从 REWARDS 传入（状态层不依赖数据层）。
+    // 已拥有 / 积分不足 时静默忽略（直接返回原状态），由 UI 负责禁用按钮，避免误扣。
+    // 兑换只扣积分、记录历史，不改变学习进度——奖励纯属趣味与个性化。
+    case 'REDEEM_REWARD': {
+      const { id, cost } = action;
+      const price = safeInt(cost);
+      if (!id || state.redeemedRewards.includes(id)) return state;
+      if (state.points < price) return state;
+      return {
+        ...state,
+        points: state.points - price,
+        redeemedRewards: [...state.redeemedRewards, id],
+        history: pushHistory(state.history, 'reward', `兑换 ${id}`),
+      };
+    }
+
+    // 记录一次复习结果，推进间隔重复（Leitner）阶梯。借鉴 flashcard 类项目的 SRS 思路：
+    // 全对 -> box+1（间隔拉长到 3/7 天），答错 -> 重置为 box0（明天再练）。
+    // 仅维护每科一个轻量排程，适合低龄用户；不引入逐题 SRS 的复杂度。
+    case 'RECORD_REVIEW': {
+      const { subjectId, allCorrect } = action;
+      const base = state.reviewSchedule[subjectId] || { box: 0, next: null };
+      const box = allCorrect ? Math.min(base.box + 1, 3) : 0;
+      const intervalDays = [1, 3, 7, 7][box]; // box0->1天, box1->3天, box2/3->7天
+      const next = addDays(localDateStr(), intervalDays);
+      return {
+        ...state,
+        reviewSchedule: { ...state.reviewSchedule, [subjectId]: { box, next } },
+      };
+    }
+
     default:
       return state;
   }
@@ -382,6 +432,8 @@ export function AppProvider({ children }) {
       updateParent: (patch) => dispatch({ type: 'UPDATE_PARENT', patch }),
       clearWrong: (subjectId) => dispatch({ type: 'CLEAR_WRONG', subjectId }),
       addPoints: (amount, reason) => dispatch({ type: 'ADD_POINTS', amount, reason }),
+      redeemReward: (id, cost) => dispatch({ type: 'REDEEM_REWARD', id, cost }),
+      recordReview: (subjectId, allCorrect) => dispatch({ type: 'RECORD_REVIEW', subjectId, allCorrect }),
       reset: () => dispatch({ type: 'RESET' }),
     }),
     []

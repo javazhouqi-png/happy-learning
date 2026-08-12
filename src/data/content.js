@@ -328,6 +328,22 @@ export const BADGES = [
   },
 ];
 
+/* ----------------------------- 积分奖励商店 ----------------------------- */
+// 可用积分兑换的「装饰性」奖励（不影响学习进度，纯趣味与个性化）。
+// 借鉴 math-for-piglets 的“虚拟存钱罐”与 candy-learn-abacus 的“糖果/神奇花园”思路：
+// 让积分既能“赚”也能“花”，形成正向激励闭环；同时这些奖励本身就是可收藏的贴纸（见 CollectionAlbum）。
+// cost 为该奖励所需积分；kind 仅用于展示分组与图标配色。
+export const REWARDS = [
+  { id: 'hat-star', name: '星星头饰', icon: 'star', cost: 60, kind: 'hat', desc: '给星宝戴上一枚闪闪小星星' },
+  { id: 'hat-crown', name: '小皇冠', icon: 'medal', cost: 150, kind: 'hat', desc: '今天你就是学习小王子' },
+  { id: 'skin-sunset', name: '暖阳主题', icon: 'flame', cost: 120, kind: 'theme', desc: '把界面染成温暖的夕阳色' },
+  { id: 'sticker-pack', name: '欢乐贴纸包', icon: 'heart', cost: 80, kind: 'sticker', desc: '解锁一整套可爱收藏贴纸' },
+  { id: 'pet-plant', name: '魔法小盆栽', icon: 'sparkle', cost: 200, kind: 'pet', desc: '随打卡天数慢慢长大的小伙伴' },
+];
+
+// 按 id 取奖励；找不到返回 null（供模块做空值兜底）。
+export const getReward = (id) => REWARDS.find((r) => r.id === id) || null;
+
 /* ----------------------------- 其它文案 ----------------------------- */
 // 主导航配置（与 Header 的 NAV 保持一致）：按业务类别拆分的独立菜单项。
 // 仅供需要时复用；Header 当前内置同一份 NAV，避免跨文件耦合。

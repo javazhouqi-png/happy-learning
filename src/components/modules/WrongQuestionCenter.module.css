@@ -55,6 +55,21 @@
   color: #ff6b6b;
 }
 
+.due {
+  align-self: flex-start;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--c-accent-yellow, #ffb703);
+  padding: 3px 10px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-card);
+}
+.nextReview {
+  font-size: 13px;
+  color: var(--c-ink-faint);
+}
+
 .reviewBox {
   border-top: 1px dashed var(--c-line);
   padding-top: 16px;

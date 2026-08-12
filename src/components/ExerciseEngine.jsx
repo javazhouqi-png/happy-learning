@@ -11,7 +11,7 @@ import styles from './ExerciseEngine.module.css'
 // 支持「错题本复习」：仅挑出此前答错的题目重练，答对即从错题本移除。
 // initialReview：受控属性（默认 false）。错题本复习中心会传 true，直接以“仅错题”模式打开，
 // 无需用户再点一次“复习错题”；不传时保持原有行为，向后兼容。
-export default function ExerciseEngine({ subjectId, initialReview = false }) {
+export default function ExerciseEngine({ subjectId, initialReview = false, onComplete }) {
   const subject = getSubject(subjectId)
   const questions = getQuiz(subjectId)
   const { state, derived, actions } = useApp()
@@ -53,6 +53,15 @@ export default function ExerciseEngine({ subjectId, initialReview = false }) {
       .map((q) => q.id)
     actions.answerQuiz(subjectId, correctCount, activeQuestions.length, { wrongIds, correctIds })
     setSubmitted(true)
+
+    // 复习完成上报（可选）：错题复习中心据此推进间隔重复排程。普通练习不传该回调。
+    if (typeof onComplete === 'function') {
+      onComplete({
+        correct: correctCount,
+        total: activeQuestions.length,
+        allCorrect: correctCount === activeQuestions.length,
+      })
+    }
 
     // 趣味反馈：根据本轮对错情况，给出撒花 / 音效 / 吉祥物表情 + 随机幽默文案。
     // 全对给大庆祝，部分对给鼓励，全错给温柔安慰——不打击信心。

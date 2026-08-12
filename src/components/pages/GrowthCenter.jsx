@@ -2,10 +2,11 @@ import PageHeader from '../ui/PageHeader.jsx'
 import SubjectMastery from '../modules/SubjectMastery.jsx'
 import GradeKnowledge from '../modules/GradeKnowledge.jsx'
 import AchievementWall from '../sections/AchievementWall.jsx'
+import RewardStore from '../modules/RewardStore.jsx'
 import ProgressTracking from '../sections/ProgressTracking.jsx'
 import styles from './Page.module.css'
 
-// 成长中心：掌握度 + 年级知识清单 + 勋章墙 + 进度，聚焦“看见自己的进步”。
+// 成长中心：掌握度 + 年级知识清单 + 勋章墙 + 奖励商店 + 进度，聚焦“看见自己的进步”。
 export default function GrowthCenter() {
   return (
     <div className={`container ${styles.page}`}>
@@ -19,6 +20,7 @@ export default function GrowthCenter() {
         <SubjectMastery />
         <GradeKnowledge />
         <AchievementWall />
+        <RewardStore />
         <ProgressTracking />
       </div>
     </div>

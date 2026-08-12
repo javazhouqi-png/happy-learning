@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import Icon from '../ui/Icon.jsx'
 import { footerColumns, brand } from '../../data/content.js'
 import styles from './Footer.module.css'
@@ -11,7 +12,7 @@ export default function Footer() {
             <span className={styles.logoMark}><Icon name="star" size={20} fill="currentColor" /></span>
             {brand.name}
           </div>
-          <p className={styles.tagline}>{brand.tagline}</p>
+          <p className={styles.tagline}>{brand.slogan}</p>
         </div>
 
         <div className={styles.cols}>
@@ -20,8 +21,12 @@ export default function Footer() {
               <h4 className={styles.colTitle}>{col.title}</h4>
               <ul>
                 {col.links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className={styles.link}>{link}</a>
+                  <li key={link.to}>
+                    {link.to.startsWith('/#') ? (
+                      <a href={link.to} className={styles.link}>{link.label}</a>
+                    ) : (
+                      <Link to={link.to} className={styles.link}>{link.label}</Link>
+                    )}
                   </li>
                 ))}
               </ul>

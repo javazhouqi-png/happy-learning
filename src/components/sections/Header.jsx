@@ -1,50 +1,72 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import Icon from '../ui/Icon.jsx'
 import Button from '../ui/Button.jsx'
 import { useApp } from '../../state/AppContext.jsx'
-import { navItems, brand } from '../../data/content.js'
+import { brand } from '../../data/content.js'
 import styles from './Header.module.css'
 
-// 导航锚点 → 区块 id 映射
-const navTarget = {
-  subjects: 'subjects',
-  courses: 'videos',
-  challenge: 'gamification',
-  parents: 'parents'
-}
+// 导航项：锚点滚动到首页区块，或跳转到独立路由
+const NAV = [
+  { id: 'subjects', label: '学科' },
+  { id: 'practice', label: '练习' },
+  { id: 'videos', label: '动画', route: '/videos' },
+  { id: 'parent', label: '家长' },
+]
 
 export default function Header() {
-  const { points, mobileNavOpen, toggleMobileNav, setTab } = useApp()
+  const { derived } = useApp()
+  const navigate = useNavigate()
+  const location = useLocation()
   const [bump, setBump] = useState(false)
-  const prevPoints = useRef(points)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const prevPoints = useRef(derived.points)
 
-  // 积分变化时触发数字跳动动画（全局状态驱动）
   useEffect(() => {
-    if (points !== prevPoints.current) {
+    if (derived.points !== prevPoints.current) {
       setBump(true)
-      prevPoints.current = points
+      prevPoints.current = derived.points
       const t = setTimeout(() => setBump(false), 600)
       return () => clearTimeout(t)
     }
-  }, [points])
+  }, [derived.points])
 
-  const goTo = (id) => {
-    const el = document.getElementById(navTarget[id] || id)
+  const scrollTo = (id) => {
+    const el = document.getElementById(id)
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    toggleMobileNav(false)
+  }
+
+  const handleNav = (item) => {
+    setMobileOpen(false)
+    if (item.route) {
+      navigate(item.route)
+      return
+    }
+    if (location.pathname !== '/') {
+      navigate('/')
+      setTimeout(() => scrollTo(item.id), 80)
+    } else {
+      scrollTo(item.id)
+    }
   }
 
   return (
     <header className={styles.header}>
       <div className={`container ${styles.bar}`}>
-        <a className={styles.logo} href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
-          <span className={styles.logoMark}><Icon name="star" size={22} fill="currentColor" /></span>
+        <Link
+          to="/"
+          className={styles.logo}
+          onClick={() => setMobileOpen(false)}
+        >
+          <span className={styles.logoMark}>
+            <Icon name="star" size={22} fill="currentColor" />
+          </span>
           <span className={styles.logoText}>{brand.name}</span>
-        </a>
+        </Link>
 
         <nav className={styles.nav} aria-label="主导航">
-          {navItems.map((item) => (
-            <button key={item.id} className={styles.navLink} onClick={() => goTo(item.id)}>
+          {NAV.map((item) => (
+            <button key={item.id} className={styles.navLink} onClick={() => handleNav(item)}>
               {item.label}
             </button>
           ))}
@@ -53,35 +75,36 @@ export default function Header() {
         <div className={styles.actions}>
           <span className={`${styles.points} ${bump ? styles.bump : ''}`} title="我的积分">
             <Icon name="sparkle" size={16} fill="currentColor" />
-            <span className={styles.pointsNum}>{points}</span>
+            <span className={styles.pointsNum}>{derived.points}</span>
           </span>
-          <span className={styles.badgePill} title="我的徽章">
-            <Icon name="medal" size={16} fill="currentColor" /> 4
+          <span className={styles.badgePill} title="已获得徽章">
+            <Icon name="medal" size={16} fill="currentColor" /> {derived.unlockedCount}
           </span>
-          <Button size="sm" className={styles.cta} onClick={() => goTo('subjects')}>
-            开始学习
-          </Button>
+          <Link to="/learn/chinese">
+            <Button size="sm" className={styles.cta}>
+              开始学习
+            </Button>
+          </Link>
           <button
             className={styles.menuBtn}
             aria-label="菜单"
-            aria-expanded={mobileNavOpen}
-            onClick={() => toggleMobileNav(!mobileNavOpen)}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((v) => !v)}
           >
-            <Icon name={mobileNavOpen ? 'close' : 'menu'} size={24} />
+            <Icon name={mobileOpen ? 'close' : 'menu'} size={24} />
           </button>
         </div>
       </div>
 
-      {/* 移动端抽屉 */}
-      <div className={`${styles.drawer} ${mobileNavOpen ? styles.open : ''}`}>
-        {navItems.map((item) => (
-          <button key={item.id} className={styles.drawerLink} onClick={() => goTo(item.id)}>
+      <div className={`${styles.drawer} ${mobileOpen ? styles.open : ''}`}>
+        {NAV.map((item) => (
+          <button key={item.id} className={styles.drawerLink} onClick={() => handleNav(item)}>
             {item.label}
           </button>
         ))}
-        <Button fullWidth onClick={() => { goTo('subjects'); setTab('home') }}>
-          开始学习
-        </Button>
+        <Link to="/learn/chinese" onClick={() => setMobileOpen(false)}>
+          <Button fullWidth>开始学习</Button>
+        </Link>
       </div>
     </header>
   )

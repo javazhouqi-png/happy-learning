@@ -1,25 +1,27 @@
+import { useState } from 'react'
 import Icon from '../ui/Icon.jsx'
 import Button from '../ui/Button.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
 import { useApp } from '../../state/AppContext.jsx'
-import { subjects, brand } from '../../data/content.js'
+import { SUBJECTS, brand } from '../../data/content.js'
 import styles from './ResponsiveShowcase.module.css'
 
 const tabs = [
   { id: 'home', label: '首页', icon: 'home' },
   { id: 'learn', label: '学习', icon: 'book' },
   { id: 'game', label: '游戏', icon: 'gamepad' },
-  { id: 'me', label: '我的', icon: 'user' }
+  { id: 'me', label: '我的', icon: 'user' },
 ]
 
 const points = [
   { icon: 'sparkle', text: '同一套组件，桌面 / 移动端自动适配' },
   { icon: 'check', text: '移动端独立导航抽屉与底部 Tab' },
-  { icon: 'shield', text: '触控友好，按钮与点击区域足够大' }
+  { icon: 'shield', text: '触控友好，按钮与点击区域足够大' },
 ]
 
 export default function ResponsiveShowcase() {
-  const { points: userPoints, activeTab, setTab } = useApp()
+  const { derived } = useApp()
+  const [activeTab, setActiveTab] = useState('learn')
 
   return (
     <section className={`section ${styles.section}`}>
@@ -53,7 +55,7 @@ export default function ResponsiveShowcase() {
               <div className={styles.appHeader}>
                 <span className={styles.appLogo}><Icon name="star" size={18} fill="currentColor" /></span>
                 <span className={styles.appName}>{brand.name}</span>
-                <span className={styles.appPoints}><Icon name="sparkle" size={13} fill="currentColor" /> {userPoints}</span>
+                <span className={styles.appPoints}><Icon name="sparkle" size={13} fill="currentColor" /> {derived.points}</span>
               </div>
 
               <div className={styles.taskCard}>
@@ -64,9 +66,9 @@ export default function ResponsiveShowcase() {
 
               <div className={styles.subjects}>
                 <span className={styles.subjectsTitle}>我的学科</span>
-                {subjects.map((s) => (
+                {SUBJECTS.map((s) => (
                   <div key={s.id} className={styles.subjectRow}>
-                    <span className={styles.subjectIcon} style={{ background: `var(${s.colorVar})` }}>
+                    <span className={styles.subjectIcon} style={{ background: s.color }}>
                       <Icon name={s.icon} size={16} fill="currentColor" />
                     </span>
                     <span className={styles.subjectName}>{s.name}</span>
@@ -80,7 +82,7 @@ export default function ResponsiveShowcase() {
                   <button
                     key={t.id}
                     className={`${styles.tab} ${activeTab === t.id ? styles.tabActive : ''}`}
-                    onClick={() => setTab(t.id)}
+                    onClick={() => setActiveTab(t.id)}
                   >
                     <Icon name={t.icon} size={20} fill={activeTab === t.id ? 'currentColor' : 'none'} />
                     <span>{t.label}</span>

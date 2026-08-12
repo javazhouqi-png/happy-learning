@@ -1,9 +1,16 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import SectionHeading from '../ui/SectionHeading.jsx'
 import VideoCard from '../ui/VideoCard.jsx'
-import { videos } from '../../data/content.js'
+import VideoModal from '../VideoModal.jsx'
+import { useApp } from '../../state/AppContext.jsx'
+import { VIDEOS } from '../../data/content.js'
 import styles from './AnimatedVideos.module.css'
 
 export default function AnimatedVideos() {
+  const { state } = useApp()
+  const [active, setActive] = useState(null)
+
   return (
     <section className={`section ${styles.section}`} id="videos">
       <div className="container section__inner">
@@ -13,13 +20,21 @@ export default function AnimatedVideos() {
           color="var(--c-english)"
           title="动画教学，一看就懂"
           subtitle="把知识点变成好玩的动画故事，孩子看得进去，自然记得住。"
+          action={<Link to="/videos" className={styles.allLink}>查看全部 →</Link>}
         />
         <div className={styles.grid}>
-          {videos.map((video) => (
-            <VideoCard key={video.id} video={video} />
+          {VIDEOS.map((video) => (
+            <VideoCard
+              key={video.id}
+              video={video}
+              watched={!!state.videosWatched[video.id]}
+              onPlay={setActive}
+            />
           ))}
         </div>
       </div>
+
+      {active && <VideoModal video={active} onClose={() => setActive(null)} />}
     </section>
   )
 }

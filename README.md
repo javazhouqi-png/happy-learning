@@ -64,17 +64,23 @@ npm run preview
 happy-learning/
 ├─ index.html                 # HTML 入口
 ├─ vite.config.js             # Vite 配置（React 插件）
+├─ scripts/
+│  └─ ssr-check.mjs           # 无浏览器下的渲染冒烟测试（捕获首屏崩溃）
+├─ docs/
+│  └─ EXAMPLES.md             # 组件 / 状态使用与扩展示例
 ├─ public/
 │  └─ star.svg                # 吉祥物 / 品牌图标资源
 ├─ src/
-│  ├─ main.jsx                # React 渲染入口
+│  ├─ main.jsx                # React 渲染入口（HashRouter + AppProvider）
 │  ├─ index.css               # 全局设计令牌（:root CSS 变量）
-│  ├─ App.jsx                 # 页面装配：组合所有业务区块
+│  ├─ App.jsx                 # 路由装配：组合页面与公共区块
 │  ├─ data/
-│  │  └─ content.js           # 内容与业务数据（数据/视图分离）
+│  │  └─ content.js           # 内容与业务数据 + 纯函数工具（数据/视图分离）
 │  ├─ state/
-│  │  └─ AppContext.jsx       # 全局状态：积分/答题/家长开关/Tab/移动导航
+│  │  └─ AppContext.jsx       # 全局状态：reducer + derived + actions + 持久化
 │  └─ components/
+│     ├─ ExerciseEngine.jsx    # 答题引擎（逐题判分 + 错题本复习）
+│     ├─ VideoModal.jsx        # 视频播放弹窗（模拟进度 + 观看计分）
 │     ├─ ui/                  # 可复用 UI 原语
 │     │  ├─ Icon.jsx           # 内联 SVG 图标集
 │     │  ├─ Button.jsx         # 按钮（含主/次/幽灵变体）
@@ -83,18 +89,22 @@ happy-learning/
 │     │  ├─ SectionHeading.jsx # 区块标题
 │     │  ├─ SubjectCard.jsx    # 学科卡片
 │     │  └─ VideoCard.jsx      # 视频卡片
-│     └─ sections/            # 业务区块（页面从上到下）
-│        ├─ Header.jsx         # 顶部导航（含移动端抽屉）
-│        ├─ Hero.jsx           # 主视觉 + 吉祥物
-│        ├─ SubjectModules.jsx # 三大基础学科
-│        ├─ InteractiveExercises.jsx # 互动练习题（答题 + 积分）
-│        ├─ AnimatedVideos.jsx # 趣味动画视频
-│        ├─ Gamification.jsx   # 游戏化激励
-│        ├─ ProgressTracking.jsx # 学习进度跟踪
-│        ├─ ParentPanel.jsx    # 家长查看面板
-│        ├─ ResponsiveShowcase.jsx # 响应式手机样机
-│        ├─ FinalCTA.jsx       # 底部行动号召
-│        └─ Footer.jsx         # 页脚
+│     ├─ sections/            # 首页业务区块（从上到下）
+│     │  ├─ Header.jsx         # 顶部导航（含移动端抽屉）
+│     │  ├─ Hero.jsx           # 主视觉 + 吉祥物
+│     │  ├─ SubjectModules.jsx # 三大基础学科
+│     │  ├─ InteractiveExercises.jsx # 互动练习题（答题 + 积分）
+│     │  ├─ AnimatedVideos.jsx # 趣味动画视频
+│     │  ├─ Gamification.jsx   # 游戏化激励
+│     │  ├─ ProgressTracking.jsx # 学习进度跟踪
+│     │  ├─ ParentPanel.jsx    # 家长查看面板（今日屏幕时间 / 开关）
+│     │  ├─ ResponsiveShowcase.jsx # 响应式手机样机
+│     │  ├─ FinalCTA.jsx       # 底部行动号召
+│     │  └─ Footer.jsx         # 页脚
+│     └─ pages/               # 路由级页面
+│        ├─ Home.jsx           # 首页（组装各业务区块）
+│        ├─ SubjectPage.jsx    # 学科页（课程 / 练习 / 视频 Tab）
+│        └─ VideoLibrary.jsx   # 动画课堂（学科筛选）
 ```
 
 ---
@@ -131,15 +141,82 @@ happy-learning/
 
 ## 🧩 状态管理
 
-全局状态由 `src/state/AppContext.jsx` 统一管理，使用 `useReducer` 管理以下维度：
+全局状态由 `src/state/AppContext.jsx` 统一管理，采用 **Context + useReducer** 的单向数据流：
 
-- `points`：用户积分（互动练习题答对后累加）
-- `answered` / `isCorrect`：当前答题状态与判定结果
-- `toggles`：家长面板中的护眼 / 时长管理等开关
-- `activeTab`：手机样机底部 Tab 高亮态
-- `mobileNavOpen`：移动端抽屉导航开关
+- `useApp()` 暴露 `{ state, derived, actions }` 三部分：原始状态、派生计算结果、稳定动作函数；
+- 组件只通过 `actions` 派发意图，不直接改 `state`；派生数据由 `useMemo` 集中计算，避免散落各处的重复逻辑；
+- 状态在每次变更后写入 `localStorage`（键 `happy-learning-state-v1`），刷新不丢；隐私模式等写入失败会被静默忽略，不影响使用。
 
-组件通过 `useApp()` 钩子消费状态、派发 `action`，彼此解耦、单向数据流。
+### 原始状态（state）
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `points` | number | 累计积分（学完课程 +15 / 答对题 +10 / 观看视频 +5） |
+| `completedLessons` | `{ [lessonId]: true }` | 已学完课程索引 |
+| `quizBySubject` | `{ [subjectId]: { correct, total } }` | 各科答题累计 |
+| `wrongBySubject` | `{ [subjectId]: { [questionId]: true } }` | 错题本（支持复习模式） |
+| `videosWatched` | `{ [videoId]: true }` | 已观看视频索引 |
+| `studySeconds` | number | 累计学习秒数（全期） |
+| `todayStudySec` | number | 今日学习秒数（跨天自动清零） |
+| `todayDate` | string | 今日时长对应的日期，用于按自然日归零 |
+| `streakDays` | number | 连续学习天数 |
+| `lastActiveDate` | string | 最近活跃日期（本地日期） |
+| `parent` | `{ dailyLimitMin, eyeRest, sound }` | 家长设置 |
+| `history` | `Array<{ ts, type, detail }>` | 学习动态，最多 50 条，最新在前 |
+
+### 动作（actions）
+
+| 方法 | 签名 | 说明 |
+| --- | --- | --- |
+| `completeLesson` | `(lessonId, subjectId, durationMin)` | 学完课程（幂等，重复不计分） |
+| `answerQuiz` | `(subjectId, correct, total, { wrongIds, correctIds })` | 提交答题，维护错题本 |
+| `watchVideo` | `(videoId, durationSec, subjectId)` | 观看视频（幂等） |
+| `recordStudy` | `(seconds)` | 追加学习时长（跨天清零） |
+| `updateParent` | `(patch)` | 更新家长设置（浅合并） |
+| `clearWrong` | `(subjectId)` | 清空某科错题本 |
+| `reset` | `()` | 清空全部进度 |
+
+### 派生数据（derived，组件直接取用）
+
+`level` / `levelTitle`（等级与称号）、`nextLevelPoints` / `levelProgress`（升级进度）、
+`badges` / `unlockedCount`（徽章墙）、`mastery`（三科掌握度百分比）、
+`wrongCountBySubject`（各科错题数）、`todayStudyMin` / `dailyLimitMin` / `dailyRemainingMin` / `dailyOverLimit`（今日屏幕时间）。
+
+### 边界场景与处理
+
+- **存储损坏 / 旧版本**：`loadState` 对 `points` 等强制转数字，缺失字段回退默认；解析异常整体回退默认状态，**绝不抛错白屏**。
+- **重复计分**：课程 / 视频完成均做幂等保护，重复点击不再加分。
+- **跨天归零**：`todayStudySec` 按本地自然日归零，家长每日上限按“天”生效而非累计全生涯。
+- **连续打卡**：今天已记过不重复 +1；昨天活跃 +1；更早断签重置为 1。使用本地日期，避免 UTC 凌晨错算。
+- **答题防呆**：`safeInt` 把 `undefined`/负数/NaN 收敛为安全值；未答完不允许提交。
+- **错题本自清理**：复习时答对即移出错题本，改对即清。
+
+---
+
+## 📚 组件与状态使用示例
+
+更多可运行示例见 [`docs/EXAMPLES.md`](./docs/EXAMPLES.md)。常用片段：
+
+```jsx
+import { useApp } from '../state/AppContext.jsx'
+import { getSubject, levelTitle } from '../data/content.js'
+
+function MyComponent() {
+  const { state, derived, actions } = useApp()
+  // 读取派生数据
+  console.log(derived.levelTitle, derived.points, derived.mastery.math)
+  // 派发动作（幂等，组件无需关心 reducer 细节）
+  actions.completeLesson('ma-1', 'math', 8)
+  return <p>{getSubject('math').name} 掌握度 {derived.mastery.math}%</p>
+}
+```
+
+新增一门学科（数据驱动，无需改组件）：
+
+```js
+// src/data/content.js —— 在 SUBJECTS 增加一项，并补上 LESSONS / QUIZZES / VIDEOS 对应 key
+export const SUBJECTS = [ /* ... */ { id: 'science', name: '科学', color: '#2bb3c0', icon: 'sparkle', tagline: '…', desc: '…' } ]
+```
 
 ---
 

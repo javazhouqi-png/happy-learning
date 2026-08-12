@@ -183,6 +183,14 @@
   background: #ffeef2;
 }
 
+.cta {
+  margin-top: 4px;
+}
+
+.demo {
+  width: 100%;
+}
+
 /* 移动端改为单列堆叠 */
 @media (max-width: 860px) {
   .layout {

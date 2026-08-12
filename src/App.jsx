@@ -1,32 +1,30 @@
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import Header from './components/sections/Header.jsx'
-import Hero from './components/sections/Hero.jsx'
-import SubjectModules from './components/sections/SubjectModules.jsx'
-import InteractiveExercises from './components/sections/InteractiveExercises.jsx'
-import AnimatedVideos from './components/sections/AnimatedVideos.jsx'
-import Gamification from './components/sections/Gamification.jsx'
-import ProgressTracking from './components/sections/ProgressTracking.jsx'
-import ParentPanel from './components/sections/ParentPanel.jsx'
-import ResponsiveShowcase from './components/sections/ResponsiveShowcase.jsx'
-import FinalCTA from './components/sections/FinalCTA.jsx'
 import Footer from './components/sections/Footer.jsx'
+import Home from './components/pages/Home.jsx'
+import SubjectPage from './components/pages/SubjectPage.jsx'
+import VideoLibrary from './components/pages/VideoLibrary.jsx'
 
-// 页面编排：按信息层级自上而下组织各业务区块。
-// 全局状态（积分 / 答题 / 开关 / Tab）由 AppProvider 通过 Context 下发，
-// 各区块只负责消费状态、派发动作，互不耦合。
+// 路由根：所有页面共用顶部导航与页脚；主体按路由切换。
 export default function App() {
+  const { pathname } = useLocation()
+
+  // 路由切换后回到顶部，避免停留在上一页滚动位置
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }, [pathname])
+
   return (
     <>
       <Header />
       <main>
-        <Hero />
-        <SubjectModules />
-        <InteractiveExercises />
-        <AnimatedVideos />
-        <Gamification />
-        <ProgressTracking />
-        <ParentPanel />
-        <ResponsiveShowcase />
-        <FinalCTA />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/learn/:subjectId" element={<SubjectPage />} />
+          <Route path="/videos" element={<VideoLibrary />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
       </main>
       <Footer />
     </>

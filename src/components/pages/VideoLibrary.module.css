@@ -1,0 +1,118 @@
+.page {
+  padding: 28px 0 64px;
+  background: var(--c-bg);
+  min-height: 70vh;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--c-ink-soft);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 6px 0;
+  margin-bottom: 12px;
+}
+.back:hover {
+  color: var(--c-primary);
+}
+.backIcon {
+  transform: rotate(180deg);
+}
+
+.head {
+  margin-bottom: 26px;
+}
+.title {
+  font-family: var(--font-head);
+  font-size: clamp(26px, 4vw, 36px);
+  color: var(--c-ink);
+  margin: 0;
+}
+.sub {
+  margin: 6px 0 0;
+  color: var(--c-ink-soft);
+  font-size: 15px;
+}
+
+/* 学科筛选筹码 */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-ink-soft);
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-line);
+  border-radius: var(--r-pill);
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.chip:hover {
+  border-color: var(--chip, var(--c-primary));
+  color: var(--c-ink);
+}
+.chipActive {
+  color: #fff;
+  background: var(--chip, var(--c-primary));
+  border-color: var(--chip, var(--c-primary));
+}
+.chipCount {
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: var(--r-pill);
+  padding: 1px 8px;
+  font-variant-numeric: tabular-nums;
+}
+.chipActive .chipCount {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.empty {
+  text-align: center;
+  color: var(--c-ink-faint);
+  font-size: 15px;
+  padding: 40px 0;
+}
+.emptyLink {
+  font-family: inherit;
+  color: var(--c-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 15px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap);
+}
+
+.foot {
+  margin-top: 32px;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    max-width: 460px;
+    margin-inline: auto;
+  }
+}

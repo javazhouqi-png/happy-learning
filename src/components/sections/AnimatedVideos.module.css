@@ -15,3 +15,15 @@
     margin-inline: auto;
   }
 }
+
+.allLink {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 15px;
+  color: var(--c-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.allLink:hover {
+  text-decoration: underline;
+}

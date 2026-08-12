@@ -1,0 +1,101 @@
+/* 庆祝层：固定全屏、不拦截点击，toast 从顶部悬浮出现 */
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 84px; /* 避开顶部导航 */
+}
+
+.toast {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  background: #fff;
+  color: var(--c-ink);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-pop);
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 16px;
+  max-width: 90vw;
+  animation: toast-in 0.35s ease both;
+}
+
+.big {
+  font-size: 18px;
+  padding: 14px 26px;
+}
+
+/* 警告调（如答错但仍有鼓励）用暖橙，弱化挫败感 */
+.warn {
+  background: #fff3e9;
+  color: #d9690b;
+}
+
+.emoji {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 彩带 */
+.confetti {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 59;
+}
+
+.piece {
+  position: absolute;
+  top: -20px;
+  border-radius: 2px;
+  opacity: 0.9;
+  animation-name: fall;
+  animation-timing-function: ease-in;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh) rotate(540deg);
+    opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+  .piece {
+    display: none;
+  }
+}

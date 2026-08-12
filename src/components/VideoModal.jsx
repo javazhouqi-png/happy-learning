@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { getSubject } from '../data/content.js'
 import { useApp } from '../state/AppContext.jsx'
+import { useFun } from './fun/FunContext.jsx'
 import Icon from './ui/Icon.jsx'
 import styles from './VideoModal.module.css'
 
@@ -13,6 +14,7 @@ function parseDuration(str) {
 export default function VideoModal({ video, onClose }) {
   const subject = getSubject(video.subject)
   const { actions } = useApp()
+  const { celebrate, sound } = useFun()
   const durationSec = parseDuration(video.duration)
 
   const [playing, setPlaying] = useState(false)
@@ -33,6 +35,9 @@ export default function VideoModal({ video, onClose }) {
           setPlaying(false)
           setDone(true)
           actions.watchVideo(video.id, durationSec, video.subject)
+          // 看完视频给一点正反馈：撒花 + 音效，强化“完成即奖励”的游戏感
+          celebrate({ title: '观看完成 +5 积分', emoji: '📺' })
+          sound('ding')
           return 100
         }
         return next

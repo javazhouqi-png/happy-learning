@@ -3,6 +3,7 @@ import SubjectModules from '../sections/SubjectModules.jsx'
 import InteractiveExercises from '../sections/InteractiveExercises.jsx'
 import AnimatedVideos from '../sections/AnimatedVideos.jsx'
 import Gamification from '../sections/Gamification.jsx'
+import AchievementWall from '../sections/AchievementWall.jsx'
 import ProgressTracking from '../sections/ProgressTracking.jsx'
 import ParentPanel from '../sections/ParentPanel.jsx'
 import ResponsiveShowcase from '../sections/ResponsiveShowcase.jsx'
@@ -17,6 +18,7 @@ export default function Home() {
       <InteractiveExercises />
       <AnimatedVideos />
       <Gamification />
+      <AchievementWall />
       <ProgressTracking />
       <ParentPanel />
       <ResponsiveShowcase />

@@ -3,6 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import Icon from '../ui/Icon.jsx'
 import Button from '../ui/Button.jsx'
 import { useApp } from '../../state/AppContext.jsx'
+import { useFun } from '../fun/FunContext.jsx'
+import { pickRandom, EGG_MESSAGES } from '../../data/fun.js'
 import { brand } from '../../data/content.js'
 import styles from './Header.module.css'
 
@@ -16,11 +18,28 @@ const NAV = [
 
 export default function Header() {
   const { derived } = useApp()
+  const { celebrate, setMood } = useFun()
   const navigate = useNavigate()
   const location = useLocation()
   const [bump, setBump] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const prevPoints = useRef(derived.points)
+  const logoClicks = useRef(0)
+  const logoTimer = useRef(null)
+
+  // logo 彩蛋：2 秒内连点 5 次触发撒花庆祝（不影响正常跳转首页）。
+  const onLogoEgg = () => {
+    logoClicks.current += 1
+    if (logoTimer.current) clearTimeout(logoTimer.current)
+    logoTimer.current = setTimeout(() => {
+      logoClicks.current = 0
+    }, 2000)
+    if (logoClicks.current >= 5) {
+      logoClicks.current = 0
+      celebrate({ title: pickRandom(EGG_MESSAGES), emoji: '🎉', confetti: true })
+      setMood('dance', 2000)
+    }
+  }
 
   useEffect(() => {
     if (derived.points !== prevPoints.current) {
@@ -56,7 +75,10 @@ export default function Header() {
         <Link
           to="/"
           className={styles.logo}
-          onClick={() => setMobileOpen(false)}
+          onClick={(e) => {
+            setMobileOpen(false)
+            onLogoEgg()
+          }}
         >
           <span className={styles.logoMark}>
             <Icon name="star" size={22} fill="currentColor" />

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { getQuiz, getSubject } from '../data/content.js'
 import { useApp } from '../state/AppContext.jsx'
+import { useFun } from './fun/FunContext.jsx'
+import { pickRandom, PRAISE, ENCOURAGE, CLEAR_ALL } from '../data/fun.js'
 import Icon from './ui/Icon.jsx'
 import Button from './ui/Button.jsx'
 import styles from './ExerciseEngine.module.css'
@@ -11,6 +13,7 @@ export default function ExerciseEngine({ subjectId }) {
   const subject = getSubject(subjectId)
   const questions = getQuiz(subjectId)
   const { state, derived, actions } = useApp()
+  const { celebrate, sound, setMood } = useFun()
 
   // answers 以题目 id 为键（而非序号），筛选/重排序时不会错位。
   const [answers, setAnswers] = useState({}) // { [questionId]: optionIndex }
@@ -48,6 +51,22 @@ export default function ExerciseEngine({ subjectId }) {
       .map((q) => q.id)
     actions.answerQuiz(subjectId, correctCount, activeQuestions.length, { wrongIds, correctIds })
     setSubmitted(true)
+
+    // 趣味反馈：根据本轮对错情况，给出撒花 / 音效 / 吉祥物表情 + 随机幽默文案。
+    // 全对给大庆祝，部分对给鼓励，全错给温柔安慰——不打击信心。
+    if (correctCount === activeQuestions.length) {
+      celebrate({ title: pickRandom(CLEAR_ALL), emoji: '🏆', confetti: true })
+      sound('fanfare')
+      setMood('cheer', 2200)
+    } else if (correctCount > 0) {
+      celebrate({ title: pickRandom(PRAISE), emoji: '🌟' })
+      sound('correct')
+      setMood('cheer')
+    } else {
+      celebrate({ title: pickRandom(ENCOURAGE), emoji: '💪', tone: 'warn' })
+      sound('wrong')
+      setMood('sad')
+    }
   }
 
   // 切换模式时清空已选与提交态，避免不同题集间的答案串台。

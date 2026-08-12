@@ -22,6 +22,7 @@ const vite = await createServer({
 try {
   const { default: App } = await vite.ssrLoadModule('/src/App.jsx')
   const { AppProvider } = await vite.ssrLoadModule('/src/state/AppContext.jsx')
+  const { FunProvider } = await vite.ssrLoadModule('/src/components/fun/FunContext.jsx')
 
   const routes = ['/', '/learn/math', '/videos']
   for (const route of routes) {
@@ -29,7 +30,11 @@ try {
       React.createElement(
         MemoryRouter,
         { initialEntries: [route] },
-        React.createElement(AppProvider, null, React.createElement(App, null))
+        React.createElement(
+          AppProvider,
+          null,
+          React.createElement(FunProvider, null, React.createElement(App, null))
+        )
       )
     )
     console.log(`SSR_OK ${route} length=`, html.length)

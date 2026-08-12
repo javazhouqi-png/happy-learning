@@ -4,6 +4,7 @@ import Icon from '../ui/Icon.jsx'
 import Button from '../ui/Button.jsx'
 import ProgressBar from '../ui/ProgressBar.jsx'
 import ExerciseEngine from '../ExerciseEngine.jsx'
+import LessonTexts from '../modules/LessonTexts.jsx'
 import VideoCard from '../ui/VideoCard.jsx'
 import VideoModal from '../VideoModal.jsx'
 import { useApp } from '../../state/AppContext.jsx'
@@ -89,6 +90,7 @@ export default function SubjectPage() {
                       <p key={i}>{p}</p>
                     ))}
                   </div>
+                  <LessonTexts lesson={lesson} color={subject.color} />
                   {done ? (
                     <div className={styles.doneRow}><Icon name="check" size={18} fill="currentColor" /> 已学完 +15 积分</div>
                   ) : (

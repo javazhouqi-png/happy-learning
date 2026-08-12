@@ -16,6 +16,22 @@
 - **家长查看面板**：孩子档案、今日动态时间线、护眼与时长管理开关（实时切换）
 - **响应式适配**：桌面三栏在移动端自动塌缩为单列，点击区适配触控
 - **真实交互**：移动端汉堡抽屉导航、平滑锚点滚动、状态驱动的 Tab 切换
+- **趣味层（见下）**：庆祝动效、音效、悬浮吉祥物、彩蛋与更丰富的勋章墙
+
+---
+
+## 🎉 趣味层
+
+应用根部（`src/main.jsx`：`AppProvider` → `FunProvider` → `App`）挂载了一层轻量「趣味层」，对外只暴露一个 `useFun()` Hook，业务组件保持干净、核心 reducer 不被触碰。
+
+- **`FunProvider` / `useFun()`**（`src/components/fun/FunContext.jsx`）：统一的庆祝与反馈 API——`celebrate({ title, emoji, confetti, tone })` 吐司提示、`sound(type)` 音效、`setMood(mood, duration)` 驱动吉祥物、`unlockSecret()`。
+- **`CelebrationLayer`**（`src/components/fun/CelebrationLayer.jsx`）：固定全屏、非阻塞吐司 + 纯 CSS 礼花（36 片随机配色），在 `prefers-reduced-motion` 下自动关闭。
+- **`Mascot`**（「星宝」，右下角）：轻柔漂浮，随情绪切换表情与气泡；连续快速点击 7 次解锁神秘徽章。
+- **`FunWatchers`**（`src/components/fun/FunWatchers.jsx`）：纯副作用监听，在升级、新徽章解锁、连击达标时触发庆祝 + 音效，不改动应用状态。
+- **音效**（`src/utils/sound.js`）：原生 Web Audio API（无第三方库），内置 `correct / wrong / ding / fanfare / levelup / egg` 配方；尊重家长音效开关，无音频环境静默失败。
+- **彩蛋**：连点吉祥物 7 次 → 神秘探索者徽章 + 礼花；2 秒内连点顶部 Logo 5 次 → 礼花爆发。
+- **`AchievementWall`**（`src/components/sections/AchievementWall.jsx`）：勋章墙，解锁秘密后追加 `SECRET_BADGE`。
+- **趣味文案**集中在 `src/data/fun.js`（`PRAISE`、`ENCOURAGE`、`LEVEL_UP`、`BADGE_UNLOCK`、`EGG_MESSAGES`、`MASCOT_LINES`）。
 
 ---
 
@@ -75,12 +91,22 @@ happy-learning/
 │  ├─ index.css               # 全局设计令牌（:root CSS 变量）
 │  ├─ App.jsx                 # 路由装配：组合页面与公共区块
 │  ├─ data/
-│  │  └─ content.js           # 内容与业务数据 + 纯函数工具（数据/视图分离）
+│  │  ├─ content.js           # 内容与业务数据 + 纯函数工具（数据/视图分离）
+│  │  └─ fun.js               # 趣味文案与彩蛋文案（表扬 / 鼓励 / 徽章 / 表情）
 │  ├─ state/
 │  │  └─ AppContext.jsx       # 全局状态：reducer + derived + actions + 持久化
+│  ├─ utils/
+│  │  └─ sound.js             # Web Audio API 音效（无第三方库）
 │  └─ components/
 │     ├─ ExerciseEngine.jsx    # 答题引擎（逐题判分 + 错题本复习）
 │     ├─ VideoModal.jsx        # 视频播放弹窗（模拟进度 + 观看计分）
+│     ├─ fun/                  # 趣味层
+│     │  ├─ FunContext.jsx     # FunProvider + useFun()
+│     │  ├─ FunWatchers.jsx    # 升级 / 徽章 / 连击 副作用监听
+│     │  ├─ CelebrationLayer.jsx
+│     │  ├─ CelebrationLayer.module.css
+│     │  ├─ Mascot.jsx
+│     │  └─ Mascot.module.css
 │     ├─ ui/                  # 可复用 UI 原语
 │     │  ├─ Icon.jsx           # 内联 SVG 图标集
 │     │  ├─ Button.jsx         # 按钮（含主/次/幽灵变体）
@@ -97,6 +123,7 @@ happy-learning/
 │     │  ├─ AnimatedVideos.jsx # 趣味动画视频
 │     │  ├─ Gamification.jsx   # 游戏化激励
 │     │  ├─ ProgressTracking.jsx # 学习进度跟踪
+│     │  ├─ AchievementWall.jsx # 勋章墙（含神秘徽章）
 │     │  ├─ ParentPanel.jsx    # 家长查看面板（今日屏幕时间 / 开关）
 │     │  ├─ ResponsiveShowcase.jsx # 响应式手机样机
 │     │  ├─ FinalCTA.jsx       # 底部行动号召
@@ -216,6 +243,22 @@ function MyComponent() {
 ```js
 // src/data/content.js —— 在 SUBJECTS 增加一项，并补上 LESSONS / QUIZZES / VIDEOS 对应 key
 export const SUBJECTS = [ /* ... */ { id: 'science', name: '科学', color: '#2bb3c0', icon: 'sparkle', tagline: '…', desc: '…' } ]
+```
+
+使用趣味层：
+
+```jsx
+import { useFun } from '../components/fun/FunContext.jsx'
+
+function ExerciseFooterView() {
+  const { celebrate, sound, setMood } = useFun()
+  const onAllCorrect = () => {
+    celebrate({ title: '全对啦！', emoji: '🏆', confetti: true })
+    sound('fanfare')
+    setMood('cheer', 2200)
+  }
+  return <button onClick={onAllCorrect}>提交</button>
+}
 ```
 
 ---

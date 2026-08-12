@@ -1,0 +1,70 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--gap);
+}
+
+.card {
+  background: var(--c-surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.ring {
+  flex-shrink: 0;
+}
+.ringBg {
+  fill: none;
+  stroke: var(--c-surface-2);
+  stroke-width: 10;
+}
+.ringFg {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 60px 60px;
+  transition: stroke-dashoffset 0.6s ease;
+}
+.ringPct {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 700;
+  fill: var(--c-ink);
+  text-anchor: middle;
+}
+.ringLabel {
+  font-size: 11px;
+  fill: var(--c-ink-faint);
+  text-anchor: middle;
+}
+
+.name {
+  font-family: var(--font-head);
+  font-size: 18px;
+  color: var(--c-ink);
+}
+
+.bar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.barLabel {
+  font-size: 13px;
+  color: var(--c-ink-soft);
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--c-ink-faint);
+  background: var(--c-surface-2);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+}

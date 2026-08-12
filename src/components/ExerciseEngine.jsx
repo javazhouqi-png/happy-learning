@@ -9,7 +9,9 @@ import styles from './ExerciseEngine.module.css'
 
 // 答题引擎：逐题作答 -> 提交判分 -> 反馈 -> 计入积分与进度。
 // 支持「错题本复习」：仅挑出此前答错的题目重练，答对即从错题本移除。
-export default function ExerciseEngine({ subjectId }) {
+// initialReview：受控属性（默认 false）。错题本复习中心会传 true，直接以“仅错题”模式打开，
+// 无需用户再点一次“复习错题”；不传时保持原有行为，向后兼容。
+export default function ExerciseEngine({ subjectId, initialReview = false }) {
   const subject = getSubject(subjectId)
   const questions = getQuiz(subjectId)
   const { state, derived, actions } = useApp()
@@ -18,7 +20,7 @@ export default function ExerciseEngine({ subjectId }) {
   // answers 以题目 id 为键（而非序号），筛选/重排序时不会错位。
   const [answers, setAnswers] = useState({}) // { [questionId]: optionIndex }
   const [submitted, setSubmitted] = useState(false)
-  const [reviewMode, setReviewMode] = useState(false)
+  const [reviewMode, setReviewMode] = useState(!!initialReview)
 
   // 错题本中的题目集合（用于复习模式筛选）。
   const wrongSet = derived.wrongBySubject[subjectId] || {}

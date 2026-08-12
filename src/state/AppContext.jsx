@@ -120,8 +120,17 @@ function addTodayStudy(state, seconds) {
 /* ----------------------------- 历史记录 ----------------------------- */
 
 // 写入一条动态；最多保留 50 条，超出丢弃最旧，防止本地存储无限膨胀。
-function pushHistory(history, type, detail) {
-  const entry = { ts: Date.now(), type, detail };
+// extra 可选携带 { points, seconds }：points = 本次获得的积分，seconds = 本次累计的学习秒数，
+// 供「家长周报」等聚合模块直接求和，避免再去解析 detail 文案。历史结构向后兼容——
+// 旧数据没有这两个字段时，聚合处用 `|| 0` 兜底，不会崩溃。
+function pushHistory(history, type, detail, extra = {}) {
+  const entry = {
+    ts: Date.now(),
+    type,
+    detail,
+    points: Number.isFinite(+extra.points) ? +extra.points : 0,
+    seconds: Number.isFinite(+extra.seconds) ? +extra.seconds : 0,
+  };
   return [entry, ...history].slice(0, 50);
 }
 
@@ -157,7 +166,12 @@ function reducer(state, action) {
         studySeconds: state.studySeconds + safeInt(durationMin) * 60,
         streakDays: bumpStreak(state),
         lastActiveDate: localDateStr(),
-        history: pushHistory(state.history, 'lesson', `${subjectId} 课程完成 +${gained}`),
+        history: pushHistory(
+          state.history,
+          'lesson',
+          `${subjectId} 课程完成 +${gained}`,
+          { points: gained, seconds: safeInt(durationMin) * 60 }
+        ),
       };
     }
 
@@ -186,7 +200,8 @@ function reducer(state, action) {
         history: pushHistory(
           state.history,
           'quiz',
-          `${subjectId} 答题 ${safeInt(correct)}/${safeInt(total)} 正确 +${gained}`
+          `${subjectId} 答题 ${safeInt(correct)}/${safeInt(total)} 正确 +${gained}`,
+          { points: gained }
         ),
       };
     }
@@ -206,7 +221,12 @@ function reducer(state, action) {
         studySeconds: state.studySeconds + sec,
         streakDays: bumpStreak(state),
         lastActiveDate: localDateStr(),
-        history: pushHistory(state.history, 'video', `${subjectId} 视频观看 +${gained}`),
+        history: pushHistory(
+          state.history,
+          'video',
+          `${subjectId} 视频观看 +${gained}`,
+          { points: gained, seconds: sec }
+        ),
       };
     }
 
@@ -237,6 +257,23 @@ function reducer(state, action) {
     // 重置全部进度：回到默认。用户主动触发，用于换账号或重新开始。
     case 'RESET':
       return defaultState();
+
+    // 趣味游戏加分：受控且幂等（amount<=0 视为无效，直接原样返回）。
+    // 仅累加积分与历史，不计入学习时长、也不刷新连续打卡天数（游戏时间不计入“学习天数”）。
+    case 'ADD_POINTS': {
+      const gained = safeInt(action.amount);
+      if (gained <= 0) return state;
+      return {
+        ...state,
+        points: state.points + gained,
+        history: pushHistory(
+          state.history,
+          'game',
+          `${action.reason || '游戏'} +${gained}`,
+          { points: gained }
+        ),
+      };
+    }
 
     default:
       return state;
@@ -344,6 +381,7 @@ export function AppProvider({ children }) {
       recordStudy: (seconds) => dispatch({ type: 'RECORD_STUDY', seconds }),
       updateParent: (patch) => dispatch({ type: 'UPDATE_PARENT', patch }),
       clearWrong: (subjectId) => dispatch({ type: 'CLEAR_WRONG', subjectId }),
+      addPoints: (amount, reason) => dispatch({ type: 'ADD_POINTS', amount, reason }),
       reset: () => dispatch({ type: 'RESET' }),
     }),
     []

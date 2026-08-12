@@ -1,0 +1,62 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--gap);
+}
+
+.card {
+  background: var(--c-surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-card);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-top: 4px solid var(--accent, var(--c-chinese));
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.icon {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--accent, var(--c-chinese));
+  flex-shrink: 0;
+}
+.name {
+  font-family: var(--font-head);
+  font-size: 18px;
+  color: var(--c-ink);
+}
+.count {
+  font-size: 14px;
+  color: var(--c-ink-soft);
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.clearLink {
+  font-size: 13px;
+  color: var(--c-ink-faint);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.clearLink:hover {
+  color: #ff6b6b;
+}
+
+.reviewBox {
+  border-top: 1px dashed var(--c-line);
+  padding-top: 16px;
+  animation: pop-in 0.3s ease both;
+}

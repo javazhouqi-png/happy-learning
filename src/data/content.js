@@ -334,6 +334,10 @@ export const NAV_ITEMS = [
   { id: 'practice', label: '练习', to: '/#practice' },
   { id: 'videos', label: '动画', to: '/#videos' },
   { id: 'parent', label: '家长', to: '/#parent' },
+  { id: 'checkin', label: '打卡', to: '/#checkin' },
+  { id: 'wrong', label: '错题', to: '/#wrong' },
+  { id: 'mastery', label: '掌握度', to: '/#mastery' },
+  { id: 'game', label: '游戏', to: '/#game' },
 ];
 
 export const PARENT_TIPS = [
@@ -341,6 +345,17 @@ export const PARENT_TIPS = [
   '用积分和徽章鼓励，比批评更有效。',
   '控制单次屏幕时间，保护视力与专注力。',
   '看完动画后问问孩子“学到了什么”，巩固记忆。',
+];
+
+/* ----------------------------- 趣味游戏素材 ----------------------------- */
+// 记忆翻牌游戏的配对词库（字词 ↔ emoji 图标）。纯数据，便于后续扩充或按学科切换。
+export const MATCH_WORDS = [
+  { word: '太阳', emoji: '☀️' },
+  { word: '月亮', emoji: '🌙' },
+  { word: '星星', emoji: '⭐' },
+  { word: '苹果', emoji: '🍎' },
+  { word: '书本', emoji: '📚' },
+  { word: '小猫', emoji: '🐱' },
 ];
 
 // 等级对照：每 LEVEL_STEP 积分升一级；levelFromPoints 由累计积分推导等级（最低 1 级）。

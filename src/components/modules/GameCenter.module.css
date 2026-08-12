@@ -1,0 +1,106 @@
+.panel {
+  background: var(--c-surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(20px, 3vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.progress {
+  font-size: 15px;
+  color: var(--c-ink-soft);
+}
+.progress strong {
+  font-family: var(--font-head);
+  font-size: 20px;
+  color: var(--c-gamify);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--r-md);
+  perspective: 600px;
+  background: transparent;
+}
+.card:disabled {
+  cursor: default;
+}
+
+/* 翻牌正反面：用绝对定位叠加，靠 opacity 切换显示，配合翻转动画更生动 */
+.back,
+.front {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: var(--r-md);
+  backface-visibility: hidden;
+  transition: transform 0.35s ease, opacity 0.25s ease;
+}
+.back {
+  background: linear-gradient(135deg, var(--c-gamify), #9d86ff);
+  color: #fff;
+  font-family: var(--font-head);
+  font-size: 32px;
+  box-shadow: var(--shadow-soft);
+}
+.front {
+  background: var(--c-surface-2);
+  color: var(--c-ink);
+  border: 2px solid var(--c-line);
+  opacity: 0;
+  transform: rotateY(180deg);
+}
+.emoji {
+  font-size: 34px;
+  line-height: 1;
+}
+.word {
+  font-family: var(--font-head);
+  font-size: 16px;
+}
+
+.card.faceUp .back {
+  opacity: 0;
+  transform: rotateY(180deg);
+}
+.card.faceUp .front {
+  opacity: 1;
+  transform: rotateY(0deg);
+}
+.card.matched .front {
+  border-color: var(--c-english);
+  background: #eafaf0;
+}
+
+.tip {
+  font-size: 13px;
+  color: var(--c-ink-faint);
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .board {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+}

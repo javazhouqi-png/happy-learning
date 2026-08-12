@@ -75,6 +75,9 @@ export default function GradeKnowledge() {
                     <span className={styles.count}>{sub.items.length} 项</span>
                   </div>
 
+                  {/* 教材/课标口径说明（如英语起始年级）：存在时以弱化提示条呈现，避免误导 */}
+                  {sub.note && <p className={styles.subjectNote}>{sub.note}</p>}
+
                   <ul className={styles.list}>
                     {sub.items.map((item, i) => {
                       const key = `${grade}-${sid}-${i}`

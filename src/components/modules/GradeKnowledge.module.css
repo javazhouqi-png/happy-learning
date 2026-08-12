@@ -50,6 +50,18 @@
   flex-wrap: wrap;
 }
 
+/* 教材/课标口径说明条：弱化呈现，用于标注版本或起始年级差异（如英语一二年级为预备级） */
+.subjectNote {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border-radius: var(--r-md, 12px);
+  background: color-mix(in srgb, var(--accent, var(--c-primary)) 10%, #fff);
+  border-left: 3px solid var(--accent, var(--c-primary));
+  color: var(--c-ink-soft);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
 .subjectIcon {
   width: 38px;
   height: 38px;

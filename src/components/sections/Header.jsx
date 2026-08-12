@@ -15,6 +15,7 @@ const NAV = [
   { id: 'learn', label: '学习', route: '/learn' },
   { id: 'review', label: '复习', route: '/review' },
   { id: 'growth', label: '成长', route: '/growth' },
+  { id: 'grade', label: '年级', route: '/grade' },
   { id: 'play', label: '乐园', route: '/play' },
   { id: 'parent', label: '家长', route: '/parent' },
 ]

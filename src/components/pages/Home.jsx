@@ -14,6 +14,7 @@ const QUICK = [
   { to: '/learn', label: '学习中心', desc: '学科与练习', icon: 'book', color: 'var(--c-primary)' },
   { to: '/review', label: '复习中心', desc: '打卡与错题', icon: 'check', color: 'var(--c-gamify)' },
   { to: '/growth', label: '成长中心', desc: '掌握度与徽章', icon: 'trophy', color: 'var(--c-english)' },
+  { to: '/grade', label: '年级学习', desc: '分层学习路径', icon: 'book', color: 'var(--c-chinese)' },
   { to: '/play', label: '趣味乐园', desc: '动画与游戏', icon: 'star', color: 'var(--c-accent-yellow)' },
   { to: '/parent', label: '家长空间', desc: '时长与周报', icon: 'medal', color: 'var(--c-chinese)' },
 ]

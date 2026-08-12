@@ -24,7 +24,7 @@ try {
   const { AppProvider } = await vite.ssrLoadModule('/src/state/AppContext.jsx')
   const { FunProvider } = await vite.ssrLoadModule('/src/components/fun/FunContext.jsx')
 
-  const routes = ['/', '/learn', '/learn/math', '/review', '/growth', '/play', '/parent', '/videos']
+  const routes = ['/', '/learn', '/learn/math', '/review', '/growth', '/grade', '/play', '/parent', '/videos']
   for (const route of routes) {
     const html = renderToString(
       React.createElement(

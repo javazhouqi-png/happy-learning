@@ -6,6 +6,7 @@ import Home from './components/pages/Home.jsx'
 import LearnCenter from './components/pages/LearnCenter.jsx'
 import ReviewCenter from './components/pages/ReviewCenter.jsx'
 import GrowthCenter from './components/pages/GrowthCenter.jsx'
+import GradeLearning from './components/modules/GradeLearning.jsx'
 import PlayCenter from './components/pages/PlayCenter.jsx'
 import ParentCenter from './components/pages/ParentCenter.jsx'
 import SubjectPage from './components/pages/SubjectPage.jsx'
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/learn/:subjectId" element={<SubjectPage />} />
           <Route path="/review" element={<ReviewCenter />} />
           <Route path="/growth" element={<GrowthCenter />} />
+          <Route path="/grade" element={<GradeLearning />} />
           <Route path="/play" element={<PlayCenter />} />
           <Route path="/parent" element={<ParentCenter />} />
           <Route path="/videos" element={<VideoLibrary />} />

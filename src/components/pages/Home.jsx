@@ -8,6 +8,7 @@ import AchievementWall from '../sections/AchievementWall.jsx'
 import DailyCheckIn from '../modules/DailyCheckIn.jsx'
 import WrongQuestionCenter from '../modules/WrongQuestionCenter.jsx'
 import SubjectMastery from '../modules/SubjectMastery.jsx'
+import GradeKnowledge from '../modules/GradeKnowledge.jsx'
 import ProgressTracking from '../sections/ProgressTracking.jsx'
 import ParentPanel from '../sections/ParentPanel.jsx'
 import ParentWeeklyReport from '../modules/ParentWeeklyReport.jsx'
@@ -29,6 +30,7 @@ export default function Home() {
       <DailyCheckIn />
       <WrongQuestionCenter />
       <SubjectMastery />
+      <GradeKnowledge />
       <ProgressTracking />
       <ParentPanel />
       <ParentWeeklyReport />

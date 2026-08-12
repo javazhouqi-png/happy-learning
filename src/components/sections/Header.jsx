@@ -8,13 +8,20 @@ import { pickRandom, EGG_MESSAGES } from '../../data/fun.js'
 import { brand } from '../../data/content.js'
 import styles from './Header.module.css'
 
-// 导航项：锚点滚动到首页区块，或跳转到独立路由
+// 主导航：6 个独立菜单，按业务类别拆分（学习 / 复习 / 成长 / 乐园 / 家长）。
+// 全部为路由跳转，不再依赖首页锚点；当前路由高亮，移动端折叠为抽屉。
 const NAV = [
-  { id: 'subjects', label: '学科' },
-  { id: 'practice', label: '练习' },
-  { id: 'videos', label: '动画', route: '/videos' },
-  { id: 'parent', label: '家长' },
+  { id: 'home', label: '首页', route: '/' },
+  { id: 'learn', label: '学习', route: '/learn' },
+  { id: 'review', label: '复习', route: '/review' },
+  { id: 'growth', label: '成长', route: '/growth' },
+  { id: 'play', label: '乐园', route: '/play' },
+  { id: 'parent', label: '家长', route: '/parent' },
 ]
+
+// 判断导航项是否处于激活态：首页需精确匹配，其余按前缀匹配（如 /learn/chinese 仍高亮“学习”）。
+const isActive = (item, pathname) =>
+  item.route === '/' ? pathname === '/' : pathname.startsWith(item.route)
 
 export default function Header() {
   const { derived } = useApp()
@@ -50,23 +57,9 @@ export default function Header() {
     }
   }, [derived.points])
 
-  const scrollTo = (id) => {
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   const handleNav = (item) => {
     setMobileOpen(false)
-    if (item.route) {
-      navigate(item.route)
-      return
-    }
-    if (location.pathname !== '/') {
-      navigate('/')
-      setTimeout(() => scrollTo(item.id), 80)
-    } else {
-      scrollTo(item.id)
-    }
+    navigate(item.route)
   }
 
   return (
@@ -88,7 +81,11 @@ export default function Header() {
 
         <nav className={styles.nav} aria-label="主导航">
           {NAV.map((item) => (
-            <button key={item.id} className={styles.navLink} onClick={() => handleNav(item)}>
+            <button
+              key={item.id}
+              className={`${styles.navLink} ${isActive(item, location.pathname) ? styles.navLinkActive : ''}`}
+              onClick={() => handleNav(item)}
+            >
               {item.label}
             </button>
           ))}
@@ -102,7 +99,7 @@ export default function Header() {
           <span className={styles.badgePill} title="已获得徽章">
             <Icon name="medal" size={16} fill="currentColor" /> {derived.unlockedCount}
           </span>
-          <Link to="/learn/chinese">
+          <Link to="/learn">
             <Button size="sm" className={styles.cta}>
               开始学习
             </Button>
@@ -120,11 +117,15 @@ export default function Header() {
 
       <div className={`${styles.drawer} ${mobileOpen ? styles.open : ''}`}>
         {NAV.map((item) => (
-          <button key={item.id} className={styles.drawerLink} onClick={() => handleNav(item)}>
+          <button
+            key={item.id}
+            className={`${styles.drawerLink} ${isActive(item, location.pathname) ? styles.drawerLinkActive : ''}`}
+            onClick={() => handleNav(item)}
+          >
             {item.label}
           </button>
         ))}
-        <Link to="/learn/chinese" onClick={() => setMobileOpen(false)}>
+        <Link to="/learn" onClick={() => setMobileOpen(false)}>
           <Button fullWidth>开始学习</Button>
         </Link>
       </div>

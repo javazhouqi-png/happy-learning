@@ -54,6 +54,10 @@
   background: var(--c-surface-2);
   color: var(--c-ink);
 }
+.navLinkActive {
+  background: var(--c-primary-soft);
+  color: var(--c-primary-dark);
+}
 
 .actions {
   margin-left: auto;
@@ -131,6 +135,10 @@
 }
 .drawerLink:hover {
   background: var(--c-surface-2);
+}
+.drawerLinkActive {
+  background: var(--c-primary-soft);
+  color: var(--c-primary-dark);
 }
 
 /* 响应式：移动端隐藏桌面导航与积分文字，显示菜单按钮 */

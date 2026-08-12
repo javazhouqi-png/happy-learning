@@ -329,16 +329,15 @@ export const BADGES = [
 ];
 
 /* ----------------------------- 其它文案 ----------------------------- */
+// 主导航配置（与 Header 的 NAV 保持一致）：按业务类别拆分的独立菜单项。
+// 仅供需要时复用；Header 当前内置同一份 NAV，避免跨文件耦合。
 export const NAV_ITEMS = [
-  { id: 'subjects', label: '学科', to: '/#subjects' },
-  { id: 'practice', label: '练习', to: '/#practice' },
-  { id: 'videos', label: '动画', to: '/#videos' },
-  { id: 'parent', label: '家长', to: '/#parent' },
-  { id: 'checkin', label: '打卡', to: '/#checkin' },
-  { id: 'wrong', label: '错题', to: '/#wrong' },
-  { id: 'mastery', label: '掌握度', to: '/#mastery' },
-  { id: 'knowledge', label: '知识清单', to: '/#knowledge' },
-  { id: 'game', label: '游戏', to: '/#game' },
+  { id: 'home', label: '首页', route: '/' },
+  { id: 'learn', label: '学习', route: '/learn' },
+  { id: 'review', label: '复习', route: '/review' },
+  { id: 'growth', label: '成长', route: '/growth' },
+  { id: 'play', label: '乐园', route: '/play' },
+  { id: 'parent', label: '家长', route: '/parent' },
 ];
 
 export const PARENT_TIPS = [
@@ -646,12 +645,12 @@ export const brand = { name: '快乐学园', slogan: '快乐学习，每天进�
 
 export const footerColumns = [
   {
-    title: '产品',
+    title: '学习',
     links: [
-      { label: '学科课程', to: '/#subjects' },
-      { label: '互动练习', to: '/#practice' },
+      { label: '学习中心', to: '/learn' },
+      { label: '复习中心', to: '/review' },
+      { label: '成长中心', to: '/growth' },
       { label: '动画课堂', to: '/videos' },
-      { label: '家长中心', to: '/#parent' },
     ],
   },
   {

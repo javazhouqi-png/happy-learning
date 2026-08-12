@@ -1,7 +1,7 @@
+import { useNavigate } from 'react-router-dom'
 import Button from '../ui/Button.jsx'
 import Icon from '../ui/Icon.jsx'
 import Pill from '../ui/Pill.jsx'
-import { useApp } from '../../state/AppContext.jsx'
 import { brand } from '../../data/content.js'
 import styles from './Hero.module.css'
 
@@ -35,12 +35,7 @@ function Mascot() {
 }
 
 export default function Hero() {
-  const { setTab } = useApp()
-
-  const scrollTo = (id) => {
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  }
+  const navigate = useNavigate()
 
   return (
     <section className={styles.hero} id="top">
@@ -57,7 +52,7 @@ export default function Hero() {
             积分、徽章、排行榜，越学越有动力。
           </p>
           <div className={styles.ctaRow}>
-            <Button size="lg" onClick={() => scrollTo('subjects')}>
+            <Button size="lg" onClick={() => navigate('/learn')}>
               免费开始学习
             </Button>
             <Button size="lg" variant="outline" icon={<Icon name="play" size={18} fill="currentColor" />}>

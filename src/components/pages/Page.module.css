@@ -1,0 +1,20 @@
+/* 子页面统一外壳：顶部留白 + 模块之间宽松的纵向间距，降低阅读压迫感。 */
+.page {
+  padding-bottom: 72px;
+}
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 6vw, 64px);
+  margin-top: 28px;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding-bottom: 48px;
+  }
+  .body {
+    gap: 40px;
+    margin-top: 20px;
+  }
+}

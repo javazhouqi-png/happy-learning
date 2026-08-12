@@ -1,0 +1,50 @@
+.head {
+  padding-top: 28px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--c-ink-soft);
+  padding: 4px 0;
+  margin-bottom: 14px;
+  transition: color 0.2s;
+}
+.back:hover {
+  color: var(--c-primary);
+}
+.backIcon {
+  transform: rotate(180deg);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--accent, var(--c-primary)) 16%, #fff);
+  color: var(--accent, var(--c-primary));
+}
+.title {
+  font-family: var(--font-head);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--c-ink);
+  line-height: 1.15;
+}
+.sub {
+  margin-top: 6px;
+  color: var(--c-ink-soft);
+  font-size: 15px;
+  max-width: 60ch;
+}

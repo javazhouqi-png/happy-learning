@@ -1,39 +1,49 @@
+import { Link } from 'react-router-dom'
+import Icon from '../ui/Icon.jsx'
 import Hero from '../sections/Hero.jsx'
 import SubjectModules from '../sections/SubjectModules.jsx'
-import InteractiveExercises from '../sections/InteractiveExercises.jsx'
-import AnimatedVideos from '../sections/AnimatedVideos.jsx'
-import GameCenter from '../modules/GameCenter.jsx'
 import Gamification from '../sections/Gamification.jsx'
-import AchievementWall from '../sections/AchievementWall.jsx'
-import DailyCheckIn from '../modules/DailyCheckIn.jsx'
-import WrongQuestionCenter from '../modules/WrongQuestionCenter.jsx'
-import SubjectMastery from '../modules/SubjectMastery.jsx'
-import GradeKnowledge from '../modules/GradeKnowledge.jsx'
-import ProgressTracking from '../sections/ProgressTracking.jsx'
-import ParentPanel from '../sections/ParentPanel.jsx'
-import ParentWeeklyReport from '../modules/ParentWeeklyReport.jsx'
 import ResponsiveShowcase from '../sections/ResponsiveShowcase.jsx'
 import FinalCTA from '../sections/FinalCTA.jsx'
+import styles from './Home.module.css'
 
-// 首页：按信息层级自上而下编排各业务区块。
-// 新增的「打卡 / 错题 / 掌握度 / 周报 / 游戏」模块通过 id 锚点与顶部导航联动。
+// 首页改为「总览仪表盘」：核心入口（学科）+ 我的成长快照 + 五大功能区快捷导航。
+// 原先堆叠的 16 个模块已拆分到独立菜单页（/learn /review /growth /play /parent），
+// 首页只保留高频、轻量的内容，降低认知负担。
+const QUICK = [
+  { to: '/learn', label: '学习中心', desc: '学科与练习', icon: 'book', color: 'var(--c-primary)' },
+  { to: '/review', label: '复习中心', desc: '打卡与错题', icon: 'check', color: 'var(--c-gamify)' },
+  { to: '/growth', label: '成长中心', desc: '掌握度与徽章', icon: 'trophy', color: 'var(--c-english)' },
+  { to: '/play', label: '趣味乐园', desc: '动画与游戏', icon: 'star', color: 'var(--c-accent-yellow)' },
+  { to: '/parent', label: '家长空间', desc: '时长与周报', icon: 'medal', color: 'var(--c-chinese)' },
+]
+
 export default function Home() {
   return (
     <>
       <Hero />
       <SubjectModules />
-      <InteractiveExercises />
-      <AnimatedVideos />
-      <GameCenter />
       <Gamification />
-      <AchievementWall />
-      <DailyCheckIn />
-      <WrongQuestionCenter />
-      <SubjectMastery />
-      <GradeKnowledge />
-      <ProgressTracking />
-      <ParentPanel />
-      <ParentWeeklyReport />
+
+      <section className={`section ${styles.quick}`}>
+        <div className="container">
+          <h2 className={styles.title}>继续探索</h2>
+          <div className={styles.grid}>
+            {QUICK.map((q) => (
+              <Link key={q.to} to={q.to} className={styles.card}>
+                <span className={styles.icon} style={{ background: q.color }}>
+                  <Icon name={q.icon} size={24} fill="currentColor" />
+                </span>
+                <span>
+                  <span className={styles.cardTitle}>{q.label}</span>
+                  <span className={styles.cardDesc}>{q.desc}</span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <ResponsiveShowcase />
       <FinalCTA />
     </>

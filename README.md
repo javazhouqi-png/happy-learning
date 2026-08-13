@@ -180,7 +180,8 @@ happy-learning/
 | --- | --- | --- |
 | `points` | number | 累计积分（学完课程 +15 / 答对题 +10 / 观看视频 +5） |
 | `completedLessons` | `{ [lessonId]: true }` | 已学完课程索引 |
-| `quizBySubject` | `{ [subjectId]: { correct, total } }` | 各科答题累计 |
+| `quizBySubject` | `{ [subjectId]: { correct, total } }` | 各科答题累计（全局汇总） |
+| `quizByGrade` | `{ [grade]: { [subjectId]: { correct, total } } }` | 按年级独立答题进度（年级分层学习按年级区分展示） |
 | `wrongBySubject` | `{ [subjectId]: { [questionId]: true } }` | 错题本（支持复习模式） |
 | `videosWatched` | `{ [videoId]: true }` | 已观看视频索引 |
 | `studySeconds` | number | 累计学习秒数（全期） |

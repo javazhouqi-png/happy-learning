@@ -1,5 +1,5 @@
 // 学习进度域 reducer：课程 / 答题 / 视频 / 计时。
-import type { AppState, AppAction, WrongInput, WrongMap } from '../types';
+import type { AppState, AppAction, SubjectStat, WrongInput, WrongMap } from '../types';
 import { addTodayStudy, bumpStreak, pushHistory, safeInt, emptySubject, localDateStr } from '../helpers';
 import { POINTS } from '../constants';
 
@@ -46,6 +46,17 @@ export function progressReducer(state: AppState, action: AppAction): AppState {
       correctIds.forEach((id: string) => {
         delete nextWrong[id];
       }); // 改对即移出错题本
+      // 按年级独立记录答题进度：当前年级（state.grade）决定这笔作答计入哪一年级，
+      // 使「年级分层学习」中各年级的掌握度/进度相互区分，不再共用全局 quizBySubject。
+      const g = state.grade;
+      const prevG = (state.quizByGrade[g] && state.quizByGrade[g][subjectId]) || emptySubject();
+      const nextGrade: Record<SubjectId, SubjectStat> = {
+        ...(state.quizByGrade[g] || {}),
+        [subjectId]: {
+          correct: prevG.correct + safeInt(correct),
+          total: prevG.total + safeInt(total),
+        },
+      };
       return {
         ...state,
         quizBySubject: {
@@ -55,6 +66,7 @@ export function progressReducer(state: AppState, action: AppAction): AppState {
             total: prev.total + safeInt(total),
           },
         },
+        quizByGrade: { ...state.quizByGrade, [g]: nextGrade },
         wrongBySubject: { ...state.wrongBySubject, [subjectId]: nextWrong },
         points: state.points + gained,
         streakDays: bumpStreak(state),

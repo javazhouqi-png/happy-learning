@@ -72,6 +72,24 @@ export function AppProvider({ children }) {
       mastery[sub] = Math.round((lessonRate * 0.6 + quizRate * 0.4) * 100);
     });
 
+    // 按年级独立掌握度：仅依据该年级自身的答题正确率（课程非按年级划分，故不混入完成率），
+    // 用于「年级分层学习」按年级展示各科的答题进度与掌握情况，互不串台。
+    // 遍历 state.quizByGrade 的现有年级键，避免从大体积 content.js 引入 GRADES 常量污染主包。
+    const progressByGrade = {};
+    Object.keys(state.quizByGrade || {}).forEach((kg) => {
+      const g = Number(kg);
+      progressByGrade[g] = {};
+      ['chinese', 'math', 'english'].forEach((sub) => {
+        const q = (state.quizByGrade[g] && state.quizByGrade[g][sub]) || emptySubject();
+        const rate = q.total ? q.correct / q.total : 0;
+        progressByGrade[g][sub] = {
+          correct: q.correct,
+          total: q.total,
+          mastery: Math.round(rate * 100),
+        };
+      });
+    });
+
     // 今日学习时长 / 家长每日上限（分钟）。
     // 未成年人模式下，每日上限强制不超过家长设定的“未成年人上限”（默认 40 分钟），
     // 复用既有每日时长统计与进度条，无需新增状态字段。
@@ -93,6 +111,7 @@ export function AppProvider({ children }) {
       badges,
       unlockedCount,
       mastery,
+      progressByGrade,
       wrongBySubject,
       wrongCountBySubject,
       todayStudySec: state.todayStudySec,

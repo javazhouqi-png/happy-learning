@@ -56,6 +56,9 @@ export interface AppState {
   points: number;
   completedLessons: Record<string, boolean>;
   quizBySubject: Record<SubjectId, SubjectStat>;
+  /** 按年级独立追踪的答题进度：quizByGrade[年级][学科] = { correct, total }。
+   *  用于「年级分层学习」等按年级区分展示答题进度 / 掌握度，避免各年级共用同一份全局进度。 */
+  quizByGrade: Record<number, Record<SubjectId, SubjectStat>>;
   wrongBySubject: Record<SubjectId, WrongMap>;
   videosWatched: Record<string, boolean>;
   studySeconds: number;

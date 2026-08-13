@@ -30,6 +30,13 @@ export function defaultState(): AppState {
     points: 0,
     completedLessons: {},
     quizBySubject: { chinese: emptySubject(), math: emptySubject(), english: emptySubject() },
+    quizByGrade: (() => {
+      const out: Record<number, Record<SubjectId, SubjectStat>> = {};
+      [1, 2, 3, 4, 5, 6].forEach((g) => {
+        out[g] = { chinese: emptySubject(), math: emptySubject(), english: emptySubject() };
+      });
+      return out;
+    })(),
     wrongBySubject: { chinese: {}, math: {}, english: {} },
     videosWatched: {},
     studySeconds: 0,
@@ -69,6 +76,30 @@ function mergeWrong(base: Record<SubjectId, WrongMap>, raw: any): Record<Subject
   return out;
 }
 
+// 按年级答题进度的默认结构与迁移合并：与 mergeSubjects 同思路，逐年级逐学科兜底。
+const GRADE_KEYS = [1, 2, 3, 4, 5, 6];
+function emptyGradeQuiz(): Record<number, Record<SubjectId, SubjectStat>> {
+  const out: Record<number, Record<SubjectId, SubjectStat>> = {};
+  GRADE_KEYS.forEach((g) => {
+    out[g] = { chinese: emptySubject(), math: emptySubject(), english: emptySubject() };
+  });
+  return out;
+}
+function mergeGradeQuiz(
+  base: Record<number, Record<SubjectId, SubjectStat>>,
+  raw: any
+): Record<number, Record<SubjectId, SubjectStat>> {
+  const out = emptyGradeQuiz();
+  if (raw && typeof raw === 'object') {
+    Object.keys(raw).forEach((kg) => {
+      const g = Number(kg);
+      if (!Number.isFinite(g) || !GRADE_KEYS.includes(g)) return;
+      out[g] = mergeSubjects(base[g] || out[g], raw[kg]);
+    });
+  }
+  return out;
+}
+
 /**
  * 版本迁移：旧 v1 档案（无 version 字段或 version<2）升级到 v2。
  * 以 defaultState 为基底浅合并旧数据，并对嵌套对象做深一层合并与字段兜底；
@@ -88,6 +119,7 @@ export function migrate(raw: Partial<AppState> | null | undefined): AppState {
     todayStudySec: num(r.todayStudySec),
     grade: num(r.grade) || base.grade,
     quizBySubject: mergeSubjects(base.quizBySubject, r.quizBySubject),
+    quizByGrade: mergeGradeQuiz(base.quizByGrade, r.quizByGrade),
     wrongBySubject: mergeWrong(base.wrongBySubject, r.wrongBySubject),
     reviewSchedule: { ...base.reviewSchedule, ...(r.reviewSchedule || {}) },
     parent: { ...base.parent, ...(r.parent || {}) },

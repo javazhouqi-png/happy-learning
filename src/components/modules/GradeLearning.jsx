@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useApp } from '../../state/AppContext.jsx'
 import Icon from '../ui/Icon.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
-import { GRADES, getGradeLearning, SUBJECTS } from '../../data/content.js'
+import { GRADES, getGradeLearning, getQuiz, SUBJECTS } from '../../data/content.js'
 import styles from './GradeLearning.module.css'
 
 // 取学科展示元信息：优先复用 SUBJECTS 的 name/color/icon；科学等补充学科在 GRADE_LEARNING 内自带。
@@ -65,6 +65,14 @@ export default function GradeLearning() {
   const activeSub = data?.subjects[subId] ? subId : subjectEntries[0]?.[0]
   const sub = activeSub ? data.subjects[activeSub] : null
 
+  // 本年级本题库的规模与已练进度（按年级独立追踪，避免各年级互相串台）。
+  const bankTotal = activeSub ? getQuiz(activeSub, grade).length : 0
+  const pg = (grade != null && derived.progressByGrade[grade] && derived.progressByGrade[grade][activeSub]) || {
+    correct: 0,
+    total: 0,
+    mastery: 0,
+  }
+
   const toggle = (key) => setOpen((o) => ({ ...o, [key]: !o[key] }))
 
   const onGrade = (g) => {
@@ -109,6 +117,10 @@ export default function GradeLearning() {
                 const meta = subjectMeta(sid)
                 const color = meta?.color || s.color || 'var(--c-gamify)'
                 const name = meta?.name || s.name || sid
+                // 按年级独立掌握度：每个学科 tab 显示当前年级各自的掌握度，不再共用全局值。
+                const subP = (derived.progressByGrade[grade] && derived.progressByGrade[grade][sid]) || {
+                  mastery: 0,
+                }
                 return (
                   <button
                     key={sid}
@@ -121,9 +133,7 @@ export default function GradeLearning() {
                     }}
                   >
                     {name}
-                    {meta && typeof derived.mastery[sid] === 'number' && (
-                      <span className={styles.subMastery}>{derived.mastery[sid]}%</span>
-                    )}
+                    <span className={styles.subMastery}>{subP.mastery || 0}%</span>
                   </button>
                 )
               })}
@@ -134,9 +144,12 @@ export default function GradeLearning() {
                 {/* 教材/课标口径说明（如英语预备级）：弱化提示条 */}
                 {sub.note && <p className={styles.note}>{sub.note}</p>}
 
-                {/* 学习路径概览：知识点数量 + 标题速览 */}
+                {/* 学习路径概览：知识点数量 + 标题速览 + 本年级答题进度 */}
                 <div className={styles.overview}>
                   <span className={styles.ovCount}>本年级「{sub.name || activeSub}」共 {sub.points.length} 个重点知识点</span>
+                  <span className={styles.ovCount}>
+                    已练 {pg.total}/{bankTotal} 题 · 掌握度 {pg.mastery}%
+                  </span>
                   <div className={styles.chips}>
                     {sub.points.map((p) => (
                       <span key={p.id} className={styles.chip}>{p.title}</span>

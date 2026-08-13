@@ -12,6 +12,8 @@ export function reducer(state: AppState, action: AppAction): AppState {
     case 'ANSWER_QUIZ':
     case 'WATCH_VIDEO':
     case 'RECORD_STUDY':
+    case 'MARK_TEXT_READ':
+    case 'MARK_TEXT_RECITE':
       return progressReducer(state, action);
 
     case 'UPDATE_PARENT':

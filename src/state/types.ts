@@ -67,6 +67,10 @@ export interface AppState {
   history: HistoryEntry[];
   redeemedRewards: string[];
   reviewSchedule: Record<SubjectId, ReviewSlot>;
+  /** 课文朗读打卡：键为 textbook.textKey，值为是否已朗读。 */
+  textRead: Record<string, boolean>;
+  /** 课文背诵打卡：键为 textbook.textKey，值为是否已背诵。 */
+  textRecite: Record<string, boolean>;
 }
 
 /** 动作联合；末尾宽松成员保证未知动作可被安全接受（降级为原状态）。 */
@@ -83,6 +87,8 @@ export type AppAction =
   | { type: 'REDEEM_REWARD'; id?: string; cost?: number }
   | { type: 'RECORD_REVIEW'; subjectId: SubjectId; allCorrect?: boolean }
   | { type: 'CLEAR_WRONG'; subjectId: SubjectId }
+  | { type: 'MARK_TEXT_READ'; key: string }
+  | { type: 'MARK_TEXT_RECITE'; key: string }
   | { type: 'HYDRATE'; next?: Partial<AppState> }
   | { type: 'RESET' }
   | { type: string; [key: string]: unknown };

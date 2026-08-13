@@ -9,6 +9,7 @@ import MinorModeGate from './components/MinorModeGate.jsx'
 const Home = lazy(() => import('./components/pages/Home.jsx'))
 const LearnCenter = lazy(() => import('./components/pages/LearnCenter.jsx'))
 const SubjectPage = lazy(() => import('./components/pages/SubjectPage.jsx'))
+const TextbookPage = lazy(() => import('./components/pages/TextbookPage.jsx'))
 const ReviewCenter = lazy(() => import('./components/pages/ReviewCenter.jsx'))
 const GrowthCenter = lazy(() => import('./components/pages/GrowthCenter.jsx'))
 const GradeLearning = lazy(() => import('./components/modules/GradeLearning.jsx'))
@@ -46,6 +47,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/learn" element={<LearnCenter />} />
             <Route path="/learn/:subjectId" element={<SubjectPage />} />
+            <Route path="/textbook" element={<TextbookPage />} />
             <Route path="/review" element={<ReviewCenter />} />
             <Route path="/growth" element={<GrowthCenter />} />
             <Route path="/grade" element={<GradeLearning />} />

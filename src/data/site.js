@@ -8,6 +8,7 @@ export const footerColumns = [
     title: '学习',
     links: [
       { label: '学习中心', to: '/learn' },
+      { label: '教材同步', to: '/textbook' },
       { label: '复习中心', to: '/review' },
       { label: '成长中心', to: '/growth' },
       { label: '动画课堂', to: '/videos' },

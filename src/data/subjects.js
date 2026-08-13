@@ -79,6 +79,23 @@ export const LESSONS = {
             { type: 'connect', prompt: '连一连，找朋友。', pairs: [{ left: '云', right: '雨' }, { left: '雪', right: '风' }, { left: '花', right: '树' }, { left: '鸟', right: '虫' }] },
           ],
         },
+        {
+          title: '《口耳目》',
+          ref: '一年级上册 · 识字一',
+          exercises: [
+            { type: 'read', prompt: '朗读课文，读准字音。' },
+            { type: 'fill', prompt: '选字填空：站如（ ），坐如钟。', options: ['松', '钟', '风', '虫'], answer: 1, explanation: '“站如松，坐如钟”是课文原句；注意“钟”与“松”的读音不同。' },
+            { type: 'think', prompt: '说一说：你的口、耳、目分别能做什么？' },
+          ],
+        },
+        {
+          title: '《日月水火》',
+          ref: '一年级上册 · 识字一',
+          exercises: [
+            { type: 'recite', prompt: '看图认字：日、月、水、火、山、石、田、禾。' },
+            { type: 'fill', prompt: '选一选：“火”字像（ ）。', options: ['一团火苗', '一道水波', '一座山', '一轮太阳'], answer: 0, explanation: '“火”的字形像跳动的火苗；日是太阳，水是水波。' },
+          ],
+        },
       ],
     },
     {
@@ -117,6 +134,43 @@ export const LESSONS = {
         },
       ],
     },
+    {
+      id: 'cn-4',
+      title: '课文我会读',
+      duration: 8,
+      paragraphs: [
+        '课文里有美丽的图画和有趣的故事。读准字音，读出节奏，你也能讲给别人听。',
+        '《秋天》写了天气凉了、树叶黄了；《小小的船》把月儿比作小船；《四季》说了春、夏、秋、冬的不同。',
+        '大声朗读三遍，再试着背一背你最喜欢的一篇！',
+      ],
+      texts: [
+        {
+          title: '《秋天》',
+          ref: '一年级上册 · 课文',
+          exercises: [
+            { type: 'recite', prompt: '朗读课文：“天气凉了，树叶黄了，一片片叶子从树上落下来……”' },
+            { type: 'fill', prompt: '选一选：秋天到了，树叶（ ）。', options: ['变绿了', '黄了落下来', '开花了', '长高了'], answer: 1, explanation: '秋天天气转凉，树叶变黄飘落；这是课文描写的景象。' },
+            { type: 'think', prompt: '你眼中的秋天还有什么变化？和爸爸妈妈说一说。' },
+          ],
+        },
+        {
+          title: '《小小的船》',
+          ref: '一年级上册 · 课文',
+          exercises: [
+            { type: 'recite', prompt: '背诵：“弯弯的月儿小小的船，小小的船儿两头尖……”' },
+            { type: 'fill', prompt: '选字填空：弯弯的（ ）儿小小的船。', options: ['月', '日', '星', '云'], answer: 0, explanation: '原句为“弯弯的月儿小小的船”；月儿弯弯像小船。' },
+          ],
+        },
+        {
+          title: '《四季》',
+          ref: '一年级上册 · 课文',
+          exercises: [
+            { type: 'read', prompt: '朗读课文，注意草芽、荷叶、谷穗、雪人的不同语气。' },
+            { type: 'think', prompt: '你最喜欢哪个季节？用“（ ）说：‘我是（ ）天。’”的句式说一说。' },
+          ],
+        },
+      ],
+    },
   ],
   math: [
     {
@@ -139,7 +193,7 @@ export const LESSONS = {
         },
         {
           title: '《1～5 的认识和加减法》',
-          ref: '一年级上册',
+          ref: '一年级上册 · 1～5的认识和加减法',
           exercises: [
             { type: 'fill', prompt: '算一算：3 + 2 =（ ）。', options: ['4', '5', '6', '1'], answer: 1, explanation: '3 添上 2 是 5，所以 3+2=5。' },
             { type: 'think', prompt: '用小棒摆一摆：怎样表示“5 可以分成 2 和 3”？' },
@@ -147,7 +201,7 @@ export const LESSONS = {
         },
         {
           title: '《20 以内的进位加法》',
-          ref: '一年级上册',
+          ref: '一年级上册 · 20以内的进位加法',
           exercises: [
             { type: 'fill', prompt: '用凑十法算：9 + 5 =（ ）。', options: ['12', '13', '14', '15'], answer: 2, explanation: '9+5：把 5 分成 1 和 4，9+1=10，10+4=14。' },
             { type: 'read', prompt: '说给家长听：你是怎么用“凑十法”算出 9+5 的？' },
@@ -167,7 +221,7 @@ export const LESSONS = {
       texts: [
         {
           title: '《表内乘法（一）》',
-          ref: '二年级上册',
+          ref: '一年级上册 · 表内乘法（一）',
           exercises: [
             { type: 'fill', prompt: '算一算：3 × 4 =（ ）。', options: ['7', '12', '9', '15'], answer: 1, explanation: '3×4 表示 4 个 3 相加：3+3+3+3=12。' },
             { type: 'think', prompt: '摆小棒表示“4 个 3”，并用一句乘法口诀说出来。' },
@@ -176,7 +230,7 @@ export const LESSONS = {
         },
         {
           title: '《表内乘法（二）》',
-          ref: '二年级上册',
+          ref: '一年级上册 · 表内乘法（二）',
           exercises: [
             { type: 'fill', prompt: '算一算：7 × 8 =（ ）。', options: ['54', '56', '63', '49'], answer: 1, explanation: '“七八五十六”，所以 7×8=56。' },
             { type: 'connect', prompt: '连一连：把口诀和对应的算式连起来。', pairs: [{ left: '七八五十六', right: '7×8' }, { left: '六九五十四', right: '6×9' }, { left: '九九八十一', right: '9×9' }, { left: '五八四十', right: '5×8' }] },
@@ -196,7 +250,7 @@ export const LESSONS = {
       texts: [
         {
           title: '《认识图形（一）》',
-          ref: '一年级上册',
+          ref: '一年级上册 · 认识图形（一）',
           exercises: [
             { type: 'think', prompt: '分一分：牙膏盒、皮球、积木块分别是什么形状？' },
             { type: 'read', prompt: '说一说：长方体、正方体、圆柱、球各有什么特点？' },
@@ -204,7 +258,7 @@ export const LESSONS = {
         },
         {
           title: '《观察物体（一）》',
-          ref: '二年级上册',
+          ref: '一年级上册 · 观察物体（一）',
           exercises: [
             { type: 'think', prompt: '从前面、侧面、上面看同一个物体，看到的形状一样吗？和同伴比一比。' },
             { type: 'fill', prompt: '选一选：球放在地上会（ ）。', options: ['稳稳不动', '滚动', '立起来', '变大'], answer: 1, explanation: '球是曲面，没有平面支撑，所以会滚动。' },
@@ -247,7 +301,7 @@ export const LESSONS = {
       texts: [
         {
           title: 'Unit 2 Colours',
-          ref: '三年级上册',
+          ref: '三年级上册 · Unit 2 Colours',
           exercises: [
             { type: 'read', prompt: '听读颜色词：red, blue, yellow, green, black, white…' },
             { type: 'fill', prompt: '选一选：red 是（ ）。', options: ['红色', '蓝色', '黄色', '绿色'], answer: 0, explanation: 'red 红色；blue 蓝色；yellow 黄色；green 绿色。' },
@@ -268,7 +322,7 @@ export const LESSONS = {
       texts: [
         {
           title: 'Unit 4 We love animals',
-          ref: '三年级上册',
+          ref: '三年级上册 · Unit 4 Animals',
           exercises: [
             { type: 'read', prompt: '听读动物词：cat, dog, bird, fish, panda, elephant…' },
             { type: 'fill', prompt: '选一选：panda 是（ ）。', options: ['猫', '狗', '熊猫', '鸟'], answer: 2, explanation: 'panda 是熊猫；cat 猫，dog 狗，bird 鸟。' },

@@ -80,6 +80,20 @@ function ExerciseRow({ ex, accent }) {
   )
 }
 
+// 可复用：渲染一篇课文的课后习题列表（朗读/背诵/思考/填空/连一连）。
+// 供 LessonTexts 与教材同步页（TextbookPage）共用，避免重复实现。
+export function TextExercises({ text, accent }) {
+  const exs = text?.exercises || []
+  if (exs.length === 0) return null
+  return (
+    <ul className={styles.exList}>
+      {exs.map((ex, j) => (
+        <ExerciseRow key={j} ex={ex} accent={accent} />
+      ))}
+    </ul>
+  )
+}
+
 // 课程下的“统编课文篇目 + 课后习题”区块。lesson.texts 为空时整体不渲染，不影响既有课程卡片。
 export default function LessonTexts({ lesson, color }) {
   const texts = lesson?.texts
@@ -98,11 +112,7 @@ export default function LessonTexts({ lesson, color }) {
               <span className={styles.textTitle}>{t.title}</span>
               {t.ref && <span className={styles.textRef}>{t.ref}</span>}
             </div>
-            <ul className={styles.exList}>
-              {t.exercises.map((ex, j) => (
-                <ExerciseRow key={j} ex={ex} accent={accent} />
-              ))}
-            </ul>
+            <TextExercises text={t} accent={accent} />
           </div>
         ))}
       </div>

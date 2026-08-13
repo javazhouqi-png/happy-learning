@@ -100,6 +100,52 @@ export function progressReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
+    // 课文朗读打卡：首次标记给分 + 历史；再次点击可取消（不影响已得分）。
+    case 'MARK_TEXT_READ': {
+      const key = (action as { key?: string }).key
+      if (!key) return state;
+      const already = !!state.textRead[key];
+      const next = { ...state.textRead };
+      if (already) delete next[key];
+      else next[key] = true;
+      const gained = already ? 0 : POINTS.textRead;
+      const today = addTodayStudy(state, 0);
+      return {
+        ...state,
+        ...today,
+        textRead: next,
+        points: state.points + gained,
+        streakDays: already ? state.streakDays : bumpStreak(state),
+        lastActiveDate: already ? state.lastActiveDate : localDateStr(),
+        history: already
+          ? state.history
+          : pushHistory(state.history, 'text', `课文朗读打卡 +${gained}`, { points: gained }),
+      };
+    }
+
+    // 课文背诵打卡：与朗读同理，分值更高。
+    case 'MARK_TEXT_RECITE': {
+      const key = (action as { key?: string }).key
+      if (!key) return state;
+      const already = !!state.textRecite[key];
+      const next = { ...state.textRecite };
+      if (already) delete next[key];
+      else next[key] = true;
+      const gained = already ? 0 : POINTS.textRecite;
+      const today = addTodayStudy(state, 0);
+      return {
+        ...state,
+        ...today,
+        textRecite: next,
+        points: state.points + gained,
+        streakDays: already ? state.streakDays : bumpStreak(state),
+        lastActiveDate: already ? state.lastActiveDate : localDateStr(),
+        history: already
+          ? state.history
+          : pushHistory(state.history, 'text', `课文背诵打卡 +${gained}`, { points: gained }),
+      };
+    }
+
     default:
       return state;
   }

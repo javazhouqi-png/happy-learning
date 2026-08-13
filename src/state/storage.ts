@@ -41,6 +41,8 @@ export function defaultState(): AppState {
     history: [],
     redeemedRewards: [],
     reviewSchedule: defaultReview(),
+    textRead: {},
+    textRecite: {},
   };
 }
 
@@ -91,6 +93,8 @@ export function migrate(raw: Partial<AppState> | null | undefined): AppState {
     parent: { ...base.parent, ...(r.parent || {}) },
     completedLessons: r.completedLessons || {},
     videosWatched: r.videosWatched || {},
+    textRead: r.textRead || {},
+    textRecite: r.textRecite || {},
     history: Array.isArray(r.history) ? (r.history as HistoryEntry[]) : [],
     redeemedRewards: Array.isArray(r.redeemedRewards) ? (r.redeemedRewards as string[]) : [],
   };

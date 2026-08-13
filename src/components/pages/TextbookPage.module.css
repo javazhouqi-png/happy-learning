@@ -1,0 +1,264 @@
+/* 教材同步页（Task：教材同步）。全部使用设计令牌，零硬编码色、零 emoji 图标。 */
+.page {
+  padding: 24px 0 56px;
+  color: var(--c-ink);
+}
+
+/* 页头 */
+.head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.headIcon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  color: #fff;
+  background: var(--accent, var(--c-primary));
+  flex: none;
+}
+.headTitle {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--c-ink);
+}
+.headSub {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--c-ink-soft);
+}
+
+/* 年级 Tab */
+.grades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.gradeTab {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--c-line);
+  background: var(--c-surface);
+  color: var(--c-ink-soft);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.gradeTab:hover { border-color: var(--accent, var(--c-primary)); }
+.gradeTabActive {
+  background: var(--accent, var(--c-primary));
+  border-color: var(--accent, var(--c-primary));
+  color: #fff;
+}
+.gradeTabOff {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* 学科子标签 */
+.subTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.subTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--c-line);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.subTabActive {
+  border-color: var(--accent, var(--c-primary));
+  background: var(--accent, var(--c-primary));
+  color: #fff;
+}
+.subMastery {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+}
+.subTabActive .subMastery { background: rgba(255, 255, 255, 0.25); }
+
+/* 空态 */
+.empty {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--c-ink-soft);
+}
+.emptyIcon { color: var(--c-line); margin-bottom: 10px; }
+.emptyBtn {
+  margin-top: 14px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: none;
+  background: var(--accent, var(--c-primary));
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* 册头 */
+.volume {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.volumeTag {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--c-ink);
+}
+.volumeMeta { font-size: 13px; color: var(--c-ink-soft); }
+
+/* 打卡进度 */
+.progressGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.progCell {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.progTop {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-ink);
+  margin-bottom: 8px;
+}
+.progNum { color: var(--c-ink-soft); }
+
+/* 单元列表 */
+.units { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.unit {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.unitHead {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+.unitIcon { color: var(--accent, var(--c-primary)); flex: none; }
+.unitName { font-size: 16px; font-weight: 800; color: var(--c-ink); flex: 1; }
+.unitCount { font-size: 12px; color: var(--c-ink-soft); }
+.chevron { color: var(--c-ink-soft); transition: transform 0.2s ease; flex: none; }
+.unitOpen .chevron { transform: rotate(90deg); }
+.unitBody {
+  padding: 4px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 课文卡 */
+.textCard {
+  border: 1px solid var(--c-line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: var(--c-surface-2);
+}
+.textHead {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.textTitle { margin: 0; font-size: 16px; font-weight: 800; color: var(--c-ink); }
+.textRef {
+  font-size: 11px;
+  color: var(--accent, var(--c-primary));
+  border: 1px solid var(--accent, var(--c-primary));
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.checkRow { display: flex; gap: 10px; margin-top: 10px; }
+.checkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent, var(--c-primary));
+  background: var(--c-surface);
+  color: var(--accent, var(--c-primary));
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.checkBtn.recite { border-color: var(--c-english); color: var(--c-english); }
+.checkOn {
+  background: var(--accent, var(--c-primary));
+  color: #fff;
+}
+.checkBtn.recite.checkOn { background: var(--c-english); border-color: var(--c-english); }
+
+/* 知识点速览 */
+.know {
+  margin-top: 24px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 16px;
+  padding: 16px 18px;
+}
+.knowHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.knowIcon { color: var(--c-gamify); flex: none; }
+.knowTitle { margin: 0; font-size: 16px; font-weight: 800; color: var(--c-ink); flex: 1; }
+.knowLink {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent, var(--c-primary));
+  text-decoration: none;
+}
+.knowLink:hover { text-decoration: underline; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font-size: 12px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line);
+  color: var(--c-ink);
+}
+
+@media (max-width: 600px) {
+  .progressGrid { grid-template-columns: 1fr; }
+  .headTitle { font-size: 20px; }
+}

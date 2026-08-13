@@ -13,6 +13,7 @@ import styles from './Header.module.css'
 const NAV = [
   { id: 'home', label: '首页', route: '/' },
   { id: 'learn', label: '学习', route: '/learn' },
+  { id: 'textbook', label: '教材', route: '/textbook' },
   { id: 'review', label: '复习', route: '/review' },
   { id: 'growth', label: '成长', route: '/growth' },
   { id: 'grade', label: '年级', route: '/grade' },

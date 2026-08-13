@@ -130,6 +130,8 @@ export function AppProvider({ children }) {
       addPoints: (amount, reason) => dispatch({ type: 'ADD_POINTS', amount, reason }),
       redeemReward: (id, cost) => dispatch({ type: 'REDEEM_REWARD', id, cost }),
       recordReview: (subjectId, allCorrect) => dispatch({ type: 'RECORD_REVIEW', subjectId, allCorrect }),
+      markTextRead: (key) => dispatch({ type: 'MARK_TEXT_READ', key }),
+      markTextRecite: (key) => dispatch({ type: 'MARK_TEXT_RECITE', key }),
       reset: () => dispatch({ type: 'RESET' }),
     }),
     []

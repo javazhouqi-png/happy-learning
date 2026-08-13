@@ -3,7 +3,7 @@
 }
 
 .banner {
-  background: linear-gradient(120deg, #4d96ff 0%, #6a7bff 60%, #7a5cff 100%);
+  background: linear-gradient(120deg, var(--c-primary) 0%, var(--c-gamify-light) 60%, var(--c-gamify) 100%);
   border-radius: var(--r-lg);
   padding: clamp(32px, 5vw, 56px);
   display: flex;
@@ -41,5 +41,5 @@
   color: var(--c-primary);
 }
 .banner :global(button):hover {
-  background: #f0f5ff;
+  background: var(--c-primary-soft);
 }

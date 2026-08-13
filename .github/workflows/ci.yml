@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck (tsc --noEmit)
+        run: npm run typecheck
+
+      - name: Lint (ESLint 9)
+        run: npm run lint
+
+      - name: Format check (Prettier)
+        run: npm run format:check
+
+      - name: Build
+        run: npm run build
+
+      # 设计门禁（配色令牌化 + 主包 < 180KB）：已达标，转为强制阻塞。
+      # emoji 图标禁令由 ESLint unicode 区间规则兜底；硬编码色仅允许 #fff/#000。
+      - name: Design token gate
+        run: bash scripts/check-design-tokens.sh

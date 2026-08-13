@@ -1,11 +1,16 @@
+import { useState } from 'react'
 import Icon from '../ui/Icon.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
 import ProgressBar from '../ui/ProgressBar.jsx'
 import { useApp } from '../../state/AppContext.jsx'
-import { brand, formatStudyTime } from '../../data/content.js'
+import { exportProfile, importProfile } from '../../state/profileIO.js'
+import { formatStudyTime } from '../../data/content.js'
+import { brand } from '../../data/site.js'
 import styles from './ParentPanel.module.css'
 
-const TYPE_ICON = { lesson: 'book', quiz: 'check', video: 'play' }
+// 学习动态图标映射。注意：AppContext 的 ADD_POINTS 写入 type:'game'，
+// 此前缺 'game' 键会让游戏动态图标错落成 star；现补 'gamepad'（Icon.jsx 已有该图标）。
+const TYPE_ICON = { lesson: 'book', quiz: 'check', video: 'play', game: 'gamepad' }
 
 function Toggle({ on, onClick }) {
   return (
@@ -30,6 +35,15 @@ export default function ParentPanel() {
   const { parent } = state
   const doneLessons = Object.keys(state.completedLessons).length
 
+  // —— 家长守护相关本地态 ——
+  const [pinOpen, setPinOpen] = useState(false)
+  const [pinInput, setPinInput] = useState('')
+  const [pinErr, setPinErr] = useState('')
+  const [verifyOpen, setVerifyOpen] = useState(false)
+  const [verifyInput, setVerifyInput] = useState('')
+  const [verifyErr, setVerifyErr] = useState('')
+  const [archiveOpen, setArchiveOpen] = useState(false)
+
   const guards = [
     { key: 'eyeRest', icon: 'moon', label: '护眼提醒', desc: '每 20 分钟提醒休息一下' },
     { key: 'sound', icon: 'sparkle', label: '音效反馈', desc: '答题与获得徽章时的提示音' },
@@ -43,6 +57,64 @@ export default function ParentPanel() {
   const remaining = derived.dailyRemainingMin
   const overLimit = derived.dailyOverLimit
   const usagePct = limit > 0 ? Math.min(100, Math.round((todayMin / limit) * 100)) : 0
+
+  // 未成年人模式开关：开启无需验证；关闭需家长密码验证（无密码则引导先设置）。
+  const onToggleMinor = () => {
+    if (parent.minorMode) {
+      if (!parent.parentPin) {
+        setPinErr('')
+        setPinInput('')
+        setPinOpen(true)
+        return
+      }
+      setVerifyInput('')
+      setVerifyErr('')
+      setVerifyOpen(true)
+    } else {
+      actions.setMinorMode(true)
+    }
+  }
+
+  const onVerifyClose = () => {
+    if (verifyInput === parent.parentPin) {
+      actions.setMinorMode(false)
+      setVerifyOpen(false)
+      setVerifyInput('')
+    } else {
+      setVerifyErr('家长密码不正确')
+    }
+  }
+
+  const onSavePin = () => {
+    if (!/^\d{4,6}$/.test(pinInput)) {
+      setPinErr('请输入 4–6 位数字密码')
+      return
+    }
+    actions.setParentPin(pinInput)
+    setPinOpen(false)
+    setPinInput('')
+    setPinErr('')
+  }
+
+  // 档案导出 / 导入
+  const onExport = () => {
+    exportProfile(state)
+    setArchiveOpen(false)
+  }
+  const onImportFile = async (e) => {
+    const file = e.target.files && e.target.files[0]
+    if (!file) return
+    try {
+      const next = await importProfile(file)
+      actions.hydrate(next)
+      setArchiveOpen(false)
+      window.alert('学习档案已导入，进度已恢复。')
+    } catch (err) {
+      window.alert((err && err.message) || '导入失败，请检查档案文件。')
+    } finally {
+      e.target.value = ''
+    }
+  }
 
   return (
     <section className={`section ${styles.section}`} id="parents">
@@ -70,7 +142,7 @@ export default function ParentPanel() {
               <div className={styles.stat}><strong>{derived.streakDays}</strong><span>连续天数</span></div>
               <div className={styles.stat}><strong>{derived.unlockedCount}</strong><span>获得徽章</span></div>
             </div>
-            <button className={styles.reset} onClick={() => { if (confirm('确定要清空所有学习进度吗？此操作不可恢复。')) actions.reset() }}>
+            <button className={styles.reset} onClick={() => { if (window.confirm('确定要清空所有学习进度吗？此操作不可恢复。')) actions.reset() }}>
               重置学习进度
             </button>
           </div>
@@ -83,7 +155,7 @@ export default function ParentPanel() {
                 {formatStudyTime(state.todayStudySec)} / {limit} 分钟
               </span>
             </div>
-            <ProgressBar value={usagePct} color={overLimit ? '#ff6b6b' : 'var(--c-english)'} height={10} />
+            <ProgressBar value={usagePct} color={overLimit ? 'var(--c-danger)' : 'var(--c-english)'} height={10} />
             <p className={styles.usageHint}>
               {overLimit ? (
                 <>
@@ -93,6 +165,11 @@ export default function ParentPanel() {
                 <>本日还可学习约 <strong>{remaining}</strong> 分钟。</>
               )}
             </p>
+            {parent.minorMode && (
+              <p className={styles.minorNote}>
+                <Icon name="shield" size={13} /> 未成年人模式已开启，每日上限已自动限制为 {parent.minorDailyCapMin} 分钟。
+              </p>
+            )}
           </div>
 
           {/* 今日动态 */}
@@ -129,11 +206,36 @@ export default function ParentPanel() {
                   max="120"
                   step="5"
                   value={parent.dailyLimitMin}
+                  disabled={parent.minorMode}
                   onChange={(e) => actions.updateParent({ dailyLimitMin: Number(e.target.value) })}
                   aria-label="每日学习上限（分钟）"
                 />
                 <span className={styles.limitValue}>{parent.dailyLimitMin} 分钟</span>
               </div>
+            </div>
+
+            {/* 未成年人模式 */}
+            <div className={styles.guardRow}>
+              <span className={styles.guardIcon}><Icon name="shield" size={18} strokeWidth={2} /></span>
+              <div className={styles.guardInfo}>
+                <div className={styles.guardLabel}>未成年人模式</div>
+                <div className={styles.guardDesc}>开启后 22:00–6:00 自动锁定，每日上限不超过 {parent.minorDailyCapMin} 分钟</div>
+              </div>
+              <Toggle on={parent.minorMode} onClick={onToggleMinor} />
+            </div>
+
+            {/* 家长密码 */}
+            <div className={styles.guardRow}>
+              <span className={styles.guardIcon}><Icon name="key" size={18} strokeWidth={2} /></span>
+              <div className={styles.guardInfo}>
+                <div className={styles.guardLabel}>家长密码</div>
+                <div className={styles.guardDesc}>
+                  {parent.parentPin ? '已设置（关闭未成年人模式时需验证）' : '未设置：关闭未成年人模式无需验证'}
+                </div>
+              </div>
+              <button className={styles.pinBtn} onClick={() => { setPinErr(''); setPinInput(''); setPinOpen(true) }}>
+                {parent.parentPin ? '修改' : '设置'}
+              </button>
             </div>
 
             {guards.map((g) => (
@@ -148,7 +250,98 @@ export default function ParentPanel() {
             ))}
           </div>
         </div>
+
+        {/* 学习档案：跨设备备份与恢复（移动端统一弹窗） */}
+        <div className={styles.archive}>
+          <div className={styles.archiveHead}>
+            <span className={styles.guardIcon}><Icon name="user" size={18} strokeWidth={2} /></span>
+            <div className={styles.guardInfo}>
+              <div className={styles.guardLabel}>学习档案</div>
+              <div className={styles.guardDesc}>导出进度备份，或导入到其他设备继续学习</div>
+            </div>
+          </div>
+          <button className={styles.archiveBtn} onClick={() => setArchiveOpen(true)}>
+            <Icon name="download" size={18} /> 管理学习档案
+          </button>
+        </div>
       </div>
+
+      {/* 家长密码设置 / 修改弹窗 */}
+      {pinOpen && (
+        <div className={styles.sheetOverlay} role="dialog" aria-modal="true" onClick={() => setPinOpen(false)}>
+          <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.sheetHandle} />
+            <h3 className={styles.sheetTitle}>设置家长密码</h3>
+            <p className={styles.sheetDesc}>用于关闭未成年人模式时验证身份，请牢记这串 4–6 位数字。</p>
+            <input
+              className={styles.sheetInput}
+              type="password"
+              inputMode="numeric"
+              autoFocus
+              placeholder="请输入 4–6 位数字"
+              value={pinInput}
+              onChange={(e) => setPinInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && onSavePin()}
+            />
+            {pinErr && <p className={styles.sheetErr}>{pinErr}</p>}
+            <div className={styles.sheetActions}>
+              <button className={styles.sheetBtnGhost} onClick={() => setPinOpen(false)}>取消</button>
+              <button className={styles.sheetBtn} onClick={onSavePin}>保存</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 关闭未成年人模式验证弹窗 */}
+      {verifyOpen && (
+        <div className={styles.sheetOverlay} role="dialog" aria-modal="true" onClick={() => setVerifyOpen(false)}>
+          <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.sheetHandle} />
+            <h3 className={styles.sheetTitle}>家长验证</h3>
+            <p className={styles.sheetDesc}>关闭未成年人模式需输入家长密码。</p>
+            <input
+              className={styles.sheetInput}
+              type="password"
+              inputMode="numeric"
+              autoFocus
+              placeholder="请输入家长密码"
+              value={verifyInput}
+              onChange={(e) => setVerifyInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && onVerifyClose()}
+            />
+            {verifyErr && <p className={styles.sheetErr}>{verifyErr}</p>}
+            <div className={styles.sheetActions}>
+              <button className={styles.sheetBtnGhost} onClick={() => setVerifyOpen(false)}>取消</button>
+              <button className={styles.sheetBtn} onClick={onVerifyClose}>验证并关闭</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 学习档案统一弹窗（导出 / 导入） */}
+      {archiveOpen && (
+        <div className={styles.sheetOverlay} role="dialog" aria-modal="true" onClick={() => setArchiveOpen(false)}>
+          <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.sheetHandle} />
+            <h3 className={styles.sheetTitle}>管理学习档案</h3>
+            <p className={styles.sheetDesc}>导出当前全部进度到文件，或在其他设备导入继续学习。</p>
+            <button className={styles.sheetBtn} onClick={onExport}>
+              <Icon name="download" size={18} /> 导出当前档案
+            </button>
+            <button className={styles.sheetBtn} onClick={() => document.getElementById('archive-file-input').click()}>
+              <Icon name="upload" size={18} /> 导入档案
+            </button>
+            <input
+              id="archive-file-input"
+              type="file"
+              accept="application/json,.json"
+              style={{ display: 'none' }}
+              onChange={onImportFile}
+            />
+            <button className={styles.sheetBtnGhost} onClick={() => setArchiveOpen(false)}>关闭</button>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

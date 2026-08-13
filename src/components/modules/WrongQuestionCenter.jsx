@@ -45,12 +45,22 @@ export default function WrongQuestionCenter() {
                   <span className={styles.icon}><Icon name={sub.icon} size={22} fill="currentColor" /></span>
                   <div>
                     <h3 className={styles.name}>{sub.name}</h3>
-                    <p className={styles.count}>{count > 0 ? `${count} 道待复习` : '暂无错题 🎉'}</p>
+                    <p className={styles.count}>
+                      {count > 0 ? (
+                        `${count} 道待复习`
+                      ) : (
+                        <>
+                          <Icon name="check" size={14} /> 暂无错题
+                        </>
+                      )}
+                    </p>
                   </div>
                 </div>
 
                 {dueToday && (
-                  <span className={styles.due}>🔥 今天待复习</span>
+                  <span className={styles.due}>
+                    <Icon name="flame" size={14} fill="currentColor" /> 今天待复习
+                  </span>
                 )}
                 {count > 0 && sched.next && !dueToday && (
                   <p className={styles.nextReview}>下次复习：{sched.next}</p>

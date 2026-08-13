@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import Icon from '../ui/Icon.jsx'
-import { footerColumns, brand } from '../../data/content.js'
+import { footerColumns, brand } from '../../data/site.js'
 import styles from './Footer.module.css'
 
 export default function Footer() {

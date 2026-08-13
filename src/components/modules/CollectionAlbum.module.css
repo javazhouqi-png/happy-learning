@@ -19,7 +19,7 @@
 }
 .gardenText strong {
   font-family: var(--font-head);
-  color: var(--c-accent-yellow, #ffb703);
+  color: var(--c-accent-yellow);
   font-size: 18px;
 }
 
@@ -29,7 +29,7 @@
   color: var(--c-ink);
   margin: 20px 0 12px;
   padding-left: 10px;
-  border-left: 4px solid var(--c-accent-yellow, #ffb703);
+  border-left: 4px solid var(--c-accent-yellow);
 }
 
 .grid {
@@ -57,7 +57,7 @@
   transform: translateY(-3px) rotate(-1deg);
 }
 .on {
-  border: 2px solid color-mix(in srgb, var(--c-accent-yellow, #ffb703) 50%, #fff);
+  border: 2px solid color-mix(in srgb, var(--c-accent-yellow) 50%, #fff);
 }
 .off {
   opacity: 0.55;
@@ -71,7 +71,7 @@
   display: grid;
   place-items: center;
   color: #fff;
-  background: var(--c-accent-yellow, #ffb703);
+  background: var(--c-accent-yellow);
 }
 .off .stickerIcon {
   background: var(--c-ink-faint);

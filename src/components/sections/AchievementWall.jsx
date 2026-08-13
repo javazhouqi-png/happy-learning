@@ -46,7 +46,15 @@ export default function AchievementWall() {
                   <Icon name={unlocked ? b.icon : 'lock'} size={28} fill="currentColor" />
                 </span>
                 <h3 className={styles.name}>{b.name}</h3>
-                <p className={styles.desc}>{unlocked ? b.desc : `🔒 ${b.desc}`}</p>
+                <p className={styles.desc}>
+                  {unlocked ? (
+                    b.desc
+                  ) : (
+                    <>
+                      <Icon name="lock" size={12} /> {b.desc}
+                    </>
+                  )}
+                </p>
                 {unlocked && <span className={styles.ribbon}>已获得</span>}
               </li>
             )

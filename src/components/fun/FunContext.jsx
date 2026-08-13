@@ -26,7 +26,8 @@ export function FunProvider({ children }) {
     const evt = {
       id,
       title: opts.title || '好棒！',
-      emoji: opts.emoji || '🎉',
+      // 图标统一走 Icon 图标库的键名（禁止 emoji 作功能图标，P0）
+      icon: opts.icon || 'confetti',
       confetti: !!opts.confetti,
       tone: opts.tone || 'good', // good / warn
       duration: opts.confetti ? 2800 : 2200,

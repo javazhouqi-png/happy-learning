@@ -57,7 +57,7 @@
   transition: transform 0.35s ease, opacity 0.25s ease;
 }
 .back {
-  background: linear-gradient(135deg, var(--c-gamify), #9d86ff);
+  background: linear-gradient(135deg, var(--c-gamify), var(--c-gamify-light));
   color: #fff;
   font-family: var(--font-head);
   font-size: 32px;
@@ -89,7 +89,7 @@
 }
 .card.matched .front {
   border-color: var(--c-english);
-  background: #eafaf0;
+  background: var(--c-success-soft);
 }
 
 .tip {

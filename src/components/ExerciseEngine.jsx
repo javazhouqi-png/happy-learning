@@ -13,7 +13,7 @@ import styles from './ExerciseEngine.module.css'
 // 无需用户再点一次“复习错题”；不传时保持原有行为，向后兼容。
 export default function ExerciseEngine({ subjectId, initialReview = false, onComplete }) {
   const subject = getSubject(subjectId)
-  const questions = getQuiz(subjectId)
+  const questions = getQuiz(subjectId, state.grade)
   const { state, derived, actions } = useApp()
   const { celebrate, sound, setMood } = useFun()
 
@@ -51,7 +51,18 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
     const correctIds = activeQuestions
       .filter((q) => answers[q.id] === q.answer)
       .map((q) => q.id)
-    actions.answerQuiz(subjectId, correctCount, activeQuestions.length, { wrongIds, correctIds })
+    // 错题本溯源：为每道答错的题记录 4 个来源字段（年级 / 学科 / 知识点 id / 知识点标题），
+    // 便于家长周报与错题溯源；知识点信息取自题目自身的 grade/pointId/pointTitle（GRADE_LEARNING 提供）。
+    const wrongEntries = activeQuestions
+      .filter((q) => answers[q.id] !== q.answer)
+      .map((q) => ({
+        id: q.id,
+        grade: q.grade ?? state.grade,
+        subject: subjectId,
+        pointId: q.pointId ?? q.point ?? null,
+        pointTitle: q.pointTitle ?? null,
+      }))
+    actions.answerQuiz(subjectId, correctCount, activeQuestions.length, { wrongIds, correctIds, wrongEntries })
     setSubmitted(true)
 
     // 复习完成上报（可选）：错题复习中心据此推进间隔重复排程。普通练习不传该回调。
@@ -66,15 +77,15 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
     // 趣味反馈：根据本轮对错情况，给出撒花 / 音效 / 吉祥物表情 + 随机幽默文案。
     // 全对给大庆祝，部分对给鼓励，全错给温柔安慰——不打击信心。
     if (correctCount === activeQuestions.length) {
-      celebrate({ title: pickRandom(CLEAR_ALL), emoji: '🏆', confetti: true })
+      celebrate({ title: pickRandom(CLEAR_ALL), icon: 'trophy', confetti: true })
       sound('fanfare')
       setMood('cheer', 2200)
     } else if (correctCount > 0) {
-      celebrate({ title: pickRandom(PRAISE), emoji: '🌟' })
+      celebrate({ title: pickRandom(PRAISE), icon: 'star' })
       sound('correct')
       setMood('cheer')
     } else {
-      celebrate({ title: pickRandom(ENCOURAGE), emoji: '💪', tone: 'warn' })
+      celebrate({ title: pickRandom(ENCOURAGE), icon: 'muscle', tone: 'warn' })
       sound('wrong')
       setMood('sad')
     }

@@ -5,7 +5,7 @@ import Button from '../ui/Button.jsx'
 import { useApp } from '../../state/AppContext.jsx'
 import { useFun } from '../fun/FunContext.jsx'
 import { pickRandom, EGG_MESSAGES } from '../../data/fun.js'
-import { brand } from '../../data/content.js'
+import { brand } from '../../data/site.js'
 import styles from './Header.module.css'
 
 // 主导航：6 个独立菜单，按业务类别拆分（学习 / 复习 / 成长 / 乐园 / 家长）。
@@ -44,7 +44,7 @@ export default function Header() {
     }, 2000)
     if (logoClicks.current >= 5) {
       logoClicks.current = 0
-      celebrate({ title: pickRandom(EGG_MESSAGES), emoji: '🎉', confetti: true })
+      celebrate({ title: pickRandom(EGG_MESSAGES), icon: 'egg', confetti: true })
       setMood('dance', 2000)
     }
   }

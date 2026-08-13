@@ -60,7 +60,7 @@
   font-weight: 600;
   font-size: 13px;
   color: var(--c-math);
-  background: #fff3e6;
+  background: var(--c-math-soft);
   padding: 5px 12px;
   border-radius: var(--r-pill);
 }
@@ -132,7 +132,7 @@
 
 .active {
   border-color: var(--c-math);
-  background: #fff3e6;
+  background: var(--c-math-soft);
 }
 .active .optLabel {
   background: var(--c-math);
@@ -141,7 +141,7 @@
 }
 .right {
   border-color: var(--c-english);
-  background: #eafaf0;
+  background: var(--c-success-soft);
 }
 .right .optLabel {
   background: var(--c-english);
@@ -149,13 +149,13 @@
   border-color: var(--c-english);
 }
 .wrong {
-  border-color: #ff5a7a;
-  background: #ffeef2;
+  border-color: var(--c-danger);
+  background: var(--c-danger-soft);
 }
 .wrong .optLabel {
-  background: #ff5a7a;
+  background: var(--c-danger);
   color: #fff;
-  border-color: #ff5a7a;
+  border-color: var(--c-danger);
 }
 
 .quizFooter {
@@ -175,12 +175,12 @@
   border-radius: var(--r-md);
 }
 .ok {
-  color: #1f9d57;
-  background: #eafaf0;
+  color: var(--c-success-ink);
+  background: var(--c-success-soft);
 }
 .no {
-  color: #d6336c;
-  background: #ffeef2;
+  color: var(--c-danger-ink);
+  background: var(--c-danger-soft);
 }
 
 .cta {

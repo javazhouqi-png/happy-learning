@@ -123,7 +123,7 @@
   border-radius: 12px;
   display: grid;
   place-items: center;
-  background: #fff3e6;
+  background: var(--c-math-soft);
   color: var(--c-math);
   flex-shrink: 0;
 }
@@ -180,8 +180,8 @@
   transition: all 0.15s ease;
 }
 .reset:hover {
-  border-color: #ff6b6b;
-  color: #e23b3b;
+  border-color: var(--c-danger);
+  color: var(--c-danger-ink);
 }
 
 /* 今日屏幕时间 */
@@ -211,7 +211,7 @@
   font-variant-numeric: tabular-nums;
 }
 .usageVal.over {
-  color: #e23b3b;
+  color: var(--c-danger-ink);
 }
 .usageHint {
   display: flex;
@@ -235,7 +235,7 @@
   width: 50px;
   height: 28px;
   border-radius: var(--r-pill);
-  background: #d7dbe2;
+  background: var(--c-switch-off);
   position: relative;
   transition: background 0.2s ease;
   flex-shrink: 0;
@@ -264,5 +264,207 @@
   }
   .profile {
     grid-row: auto;
+  }
+}
+
+/* 未成年人模式提示 */
+.minorNote {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--c-math);
+  background: var(--c-math-soft);
+  border-radius: var(--r-md);
+  padding: 8px 10px;
+}
+
+/* 家长密码按钮 */
+.pinBtn {
+  flex-shrink: 0;
+  border: 1.5px solid var(--c-line);
+  background: none;
+  color: var(--c-primary);
+  border-radius: var(--r-md);
+  padding: 7px 14px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.pinBtn:hover {
+  border-color: var(--c-primary);
+  background: var(--c-primary-soft);
+}
+
+/* 学习档案卡片 */
+.archive {
+  margin-top: var(--gap);
+  background: var(--c-surface);
+  border: 2px solid var(--c-line);
+  border-radius: var(--r-lg);
+  padding: clamp(20px, 3vw, 26px);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.archiveHead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.archiveBtn {
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--c-primary);
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 22px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.archiveBtn:hover {
+  transform: translateY(-1px);
+  background: var(--c-gamify);
+}
+
+/* 统一弹窗（移动端底部抽屉 / 桌面居中卡片） */
+.sheetOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  background: rgba(20, 24, 38, 0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px;
+}
+.sheet {
+  width: min(440px, 100%);
+  background: var(--c-surface);
+  border: 2px solid var(--c-line);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  padding: 18px 22px calc(22px + env(safe-area-inset-bottom));
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.25);
+  animation: sheetUp 0.22s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@keyframes sheetUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.sheetHandle {
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--c-line);
+  margin: 0 auto 4px;
+}
+.sheetTitle {
+  font-family: var(--font-head);
+  font-size: 19px;
+  color: var(--c-ink);
+  margin: 0;
+  text-align: center;
+}
+.sheetDesc {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--c-ink-soft);
+  margin: 0;
+  text-align: center;
+}
+.sheetInput {
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+  letter-spacing: 6px;
+  font-size: 18px;
+  padding: 12px;
+  border: 1.5px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font-family: inherit;
+}
+.sheetInput:focus {
+  outline: none;
+  border-color: var(--c-primary);
+}
+.sheetErr {
+  font-size: 13px;
+  color: var(--c-danger-ink);
+  margin: 0;
+  text-align: center;
+}
+.sheetActions {
+  display: flex;
+  gap: 10px;
+}
+.sheetBtn {
+  flex: 1;
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--c-primary);
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.sheetBtn:hover {
+  transform: translateY(-1px);
+  background: var(--c-gamify);
+}
+.sheetBtnGhost {
+  flex: 1;
+  border: 1.5px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: none;
+  color: var(--c-ink-soft);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 13px;
+  cursor: pointer;
+}
+
+@media (min-width: 600px) {
+  .sheetOverlay {
+    align-items: center;
+  }
+  .sheet {
+    border-radius: var(--r-lg);
+    animation: sheetPop 0.22s ease;
+  }
+  @keyframes sheetPop {
+    from {
+      transform: scale(0.94);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 }

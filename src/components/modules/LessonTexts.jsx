@@ -84,7 +84,7 @@ function ExerciseRow({ ex, accent }) {
 export default function LessonTexts({ lesson, color }) {
   const texts = lesson?.texts
   if (!texts || texts.length === 0) return null
-  const accent = color || '#FF6B9D'
+  const accent = color || 'var(--c-chinese)'
   return (
     <div className={styles.wrap} style={{ '--accent': accent }}>
       <h4 className={styles.title}>

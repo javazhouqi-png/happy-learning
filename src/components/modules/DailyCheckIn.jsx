@@ -169,7 +169,11 @@ export default function DailyCheckIn() {
           <div className={styles.streakBar}>
             <Icon name="flame" size={20} />
             <span>当前连续打卡 <strong>{state.streakDays}</strong> 天</span>
-            {state.streakDays >= 2 && <span className={styles.streakTip}>坚持就是胜利 💪</span>}
+            {state.streakDays >= 2 && (
+              <span className={styles.streakTip}>
+                坚持就是胜利 <Icon name="muscle" size={14} />
+              </span>
+            )}
           </div>
         </div>
       </div>

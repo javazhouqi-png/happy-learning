@@ -17,7 +17,7 @@
   padding: clamp(24px, 3vw, 36px);
   border-radius: var(--r-lg);
   color: #fff;
-  background: linear-gradient(150deg, #8b6bff 0%, #7a5cff 55%, #6a4cf0 100%);
+  background: linear-gradient(150deg, var(--c-gamify-light) 0%, var(--c-gamify) 55%, var(--c-gamify-dark) 100%);
   box-shadow: var(--shadow-pop);
 }
 
@@ -104,7 +104,7 @@
   font-family: var(--font-head);
   font-size: 14px;
   color: var(--c-gamify);
-  background: #efeaff;
+  background: var(--c-gamify-soft);
   padding: 3px 12px;
   border-radius: var(--r-pill);
 }

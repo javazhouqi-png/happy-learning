@@ -41,7 +41,7 @@
 /* 手机样机 */
 .phone {
   width: 300px;
-  background: #1f2230;
+  background: var(--c-showcase-dark);
   border-radius: 42px;
   padding: 12px;
   box-shadow: 0 30px 60px -24px rgba(31, 34, 48, 0.6);
@@ -105,7 +105,7 @@
 
 .taskCard {
   margin: 6px 16px 14px;
-  background: linear-gradient(135deg, #ffb866, var(--c-math));
+  background: linear-gradient(135deg, var(--c-math-light), var(--c-math));
   color: #fff;
   border-radius: var(--r-md);
   padding: 16px;

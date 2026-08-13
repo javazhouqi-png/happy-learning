@@ -5,13 +5,14 @@ import styles from './VideoCard.module.css'
 // 视频卡片：缩略图（学科色渐变）+ 播放按钮 + 时长徽章 + 标题 + 已看标记
 export default function VideoCard({ video, watched = false, onPlay }) {
   const subject = getSubject(video.subject)
-  const color = subject?.color || '#4d96ff'
+  const color = subject?.color || 'var(--c-primary)'
   return (
     <article className={styles.card} style={{ '--accent': color }}>
       <div
         className={styles.thumb}
         style={{ background: `linear-gradient(135deg, ${color}, color-mix(in srgb, ${color} 45%, #fff))` }}
       >
+        <div className={styles.loop} aria-hidden="true" />
         <button className={styles.play} onClick={() => onPlay?.(video)} aria-label={`播放 ${video.title}`}>
           <Icon name="play" size={26} fill="currentColor" />
         </button>

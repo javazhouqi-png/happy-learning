@@ -36,7 +36,7 @@ export default function VideoModal({ video, onClose }) {
           setDone(true)
           actions.watchVideo(video.id, durationSec, video.subject)
           // 看完视频给一点正反馈：撒花 + 音效，强化“完成即奖励”的游戏感
-          celebrate({ title: '观看完成 +5 积分', emoji: '📺' })
+          celebrate({ title: '观看完成 +5 积分', icon: 'check' })
           sound('ding')
           return 100
         }
@@ -58,7 +58,11 @@ export default function VideoModal({ video, onClose }) {
         </button>
 
         <div className={styles.player}>
-          <div className={styles.bg} />
+          {video.url ? (
+            <video className={styles.video} src={video.url} autoPlay muted loop playsInline />
+          ) : (
+            <div className={styles.bg} />
+          )}
           {!playing && !done && (
             <button className={styles.playBtn} onClick={() => setPlaying(true)} aria-label="播放">
               <Icon name="play" size={34} />

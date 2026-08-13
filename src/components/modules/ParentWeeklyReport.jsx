@@ -121,7 +121,13 @@ export default function ParentWeeklyReport() {
 
             <div className={styles.actions}>
               <Button variant="primary" size="sm" onClick={copyReport}>
-                {copied ? '已复制 ✓' : '复制周报'}
+                {copied ? (
+                  <>
+                    已复制 <Icon name="check" size={14} />
+                  </>
+                ) : (
+                  '复制周报'
+                )}
               </Button>
               <span className={styles.range}>
                 统计区间：{week[0]} ~ {week[week.length - 1]}

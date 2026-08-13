@@ -3,7 +3,7 @@
   border-radius: 20px;
   padding: 22px;
   box-shadow: 0 10px 30px rgba(77, 150, 255, 0.12);
-  border: 1px solid #f0f2f7;
+  border: 1px solid var(--c-line);
 }
 
 .head {
@@ -28,16 +28,16 @@
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
-  color: var(--accent, #4d96ff);
-  background: color-mix(in srgb, var(--accent, #4d96ff) 12%, #fff);
-  border: 1px solid color-mix(in srgb, var(--accent, #4d96ff) 30%, #fff);
+  color: var(--accent, var(--c-primary));
+  background: color-mix(in srgb, var(--accent, var(--c-primary)) 12%, #fff);
+  border: 1px solid color-mix(in srgb, var(--accent, var(--c-primary)) 30%, #fff);
   border-radius: 999px;
   padding: 5px 12px;
   cursor: pointer;
   transition: background 0.15s ease;
 }
 .reviewBtn:hover {
-  background: color-mix(in srgb, var(--accent, #4d96ff) 20%, #fff);
+  background: color-mix(in srgb, var(--accent, var(--c-primary)) 20%, #fff);
 }
 
 /* 复习模式提示 */
@@ -47,8 +47,8 @@
   flex-wrap: wrap;
   gap: 8px;
   font-size: 13px;
-  color: #6b7280;
-  background: #fff8f0;
+  color: var(--c-ink-soft);
+  background: var(--c-bg);
   border-radius: 10px;
   padding: 8px 12px;
   margin-bottom: 14px;
@@ -58,7 +58,7 @@
   margin-left: auto;
   font-family: inherit;
   font-size: 12px;
-  color: #e23b3b;
+  color: var(--c-danger-ink);
   background: none;
   border: none;
   cursor: pointer;
@@ -69,7 +69,7 @@
 .linkBtn {
   font-family: inherit;
   font-size: 13px;
-  color: var(--accent, #4d96ff);
+  color: var(--accent, var(--c-primary));
   background: none;
   border: none;
   cursor: pointer;
@@ -81,24 +81,24 @@
   align-items: center;
   gap: 8px;
   font-size: 15px;
-  color: #1f8f4d;
-  background: #e8f9ef;
+  color: var(--c-success-ink);
+  background: var(--c-success-soft);
   border-radius: 12px;
   padding: 16px;
 }
 
 .title {
-  font-family: 'Fredoka', system-ui, sans-serif;
+  font-family: var(--font-head);
   font-size: 20px;
-  color: #2d3142;
+  color: var(--c-ink);
   margin: 0;
 }
 
 .score {
-  font-family: 'Fredoka', system-ui, sans-serif;
+  font-family: var(--font-head);
   font-size: 16px;
   color: #fff;
-  background: var(--accent, #4d96ff);
+  background: var(--accent, var(--c-primary));
   padding: 4px 14px;
   border-radius: 999px;
 }
@@ -115,14 +115,14 @@
 .qText {
   font-size: 16px;
   font-weight: 600;
-  color: #2d3142;
+  color: var(--c-ink);
   margin: 0 0 10px;
   display: flex;
   gap: 8px;
 }
 
 .qNum {
-  color: var(--accent, #4d96ff);
+  color: var(--accent, var(--c-primary));
 }
 
 .options {
@@ -137,8 +137,8 @@
   gap: 10px;
   text-align: left;
   font-size: 15px;
-  color: #2d3142;
-  background: #f7f9fc;
+  color: var(--c-ink);
+  background: var(--c-bg);
   border: 2px solid transparent;
   border-radius: 14px;
   padding: 12px 14px;
@@ -148,24 +148,24 @@
 }
 
 .option:hover:not(:disabled) {
-  background: #eef4ff;
+  background: var(--c-primary-soft);
 }
 
 .picked {
-  border-color: var(--accent, #4d96ff);
-  background: #eef4ff;
+  border-color: var(--accent, var(--c-primary));
+  background: var(--c-primary-soft);
 }
 
 .right {
-  border-color: #3dca6e;
-  background: #e8f9ef;
-  color: #1f8f4d;
+  border-color: var(--c-success);
+  background: var(--c-success-soft);
+  color: var(--c-success-ink);
 }
 
 .wrong {
-  border-color: #ff6b6b;
-  background: #ffecec;
-  color: #d33;
+  border-color: var(--c-danger);
+  background: var(--c-danger-soft);
+  color: var(--c-danger-ink);
 }
 
 .optLabel {
@@ -191,8 +191,8 @@
   gap: 6px;
   margin: 10px 0 0;
   font-size: 13px;
-  color: #6b7280;
-  background: #fff8f0;
+  color: var(--c-ink-soft);
+  background: var(--c-bg);
   border-radius: 10px;
   padding: 8px 10px;
 }

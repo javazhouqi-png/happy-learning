@@ -18,7 +18,8 @@ export default function RewardStore() {
   const handleRedeem = (r) => {
     if (owned.includes(r.id) || points < r.cost) return
     actions.redeemReward(r.id, r.cost)
-    celebrate({ title: `兑换成功：${r.name}！`, emoji: '🎁' })
+    // 用该奖励自身的图标（比通用礼物图标语义更准），无对应时回落 sparkle
+    celebrate({ title: `兑换成功：${r.name}！`, icon: r.icon || 'sparkle' })
     sound('ding')
   }
 

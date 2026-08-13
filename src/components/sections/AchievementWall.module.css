@@ -75,6 +75,11 @@
   color: var(--c-ink-soft);
   line-height: 1.5;
 }
+/* 未解锁时前置锁图标（块级 svg），与文字同行居中对齐 */
+.desc svg {
+  display: inline-block;
+  vertical-align: -1px;
+}
 
 .ribbon {
   margin-top: 4px;

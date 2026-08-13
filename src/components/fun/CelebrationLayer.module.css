@@ -34,13 +34,15 @@
 
 /* 警告调（如答错但仍有鼓励）用暖橙，弱化挫败感 */
 .warn {
-  background: #fff3e9;
-  color: #d9690b;
+  background: var(--c-surface-2);
+  color: var(--c-warn);
 }
 
-.emoji {
-  font-size: 22px;
-  line-height: 1;
+/* 庆祝图标（Icon 图标库，随 toast 文字色着色） */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .title {

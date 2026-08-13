@@ -190,7 +190,7 @@
   border-left-color: var(--c-accent-yellow);
 }
 .block:nth-child(3) {
-  border-left-color: #ff6b6b;
+  border-left-color: var(--c-danger);
 }
 .block:nth-child(4) {
   border-left-color: var(--c-english);
@@ -217,7 +217,7 @@
 
 .bulb { color: var(--c-gamify); flex-shrink: 0; }
 .pen { color: var(--c-accent-yellow); flex-shrink: 0; }
-.warn { color: #ff6b6b; flex-shrink: 0; }
+.warn { color: var(--c-danger); flex-shrink: 0; }
 .spark { color: var(--c-english); flex-shrink: 0; }
 
 /* 配套练习（选择题） */
@@ -270,15 +270,15 @@
 }
 
 .exOptRight {
-  border-color: #2bbf6b;
-  background: color-mix(in srgb, #2bbf6b 12%, #fff);
-  color: #1c8a4d;
+  border-color: var(--c-success);
+  background: color-mix(in srgb, var(--c-success) 12%, #fff);
+  color: var(--c-success-ink);
 }
 
 .exOptWrong {
-  border-color: #ff6b6b;
-  background: color-mix(in srgb, #ff6b6b 12%, #fff);
-  color: #c93b3b;
+  border-color: var(--c-danger);
+  background: color-mix(in srgb, var(--c-danger) 12%, #fff);
+  color: var(--c-danger-ink);
 }
 
 .exFeedback {
@@ -290,8 +290,8 @@
   line-height: 1.5;
 }
 
-.exOk { color: #1c8a4d; }
-.exBad { color: #c93b3b; }
+.exOk { color: var(--c-success-ink); }
+.exBad { color: var(--c-danger-ink); }
 
 /* 常见误区 */
 .misList {
@@ -311,12 +311,26 @@
   line-height: 1.6;
 }
 
+/* 前导 Icon 为块级 svg，需 inline-flex 让图标与文字同行对齐 */
+.misWrong,
+.misFix {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 5px;
+}
+
 .misWrong {
-  color: #c93b3b;
+  color: var(--c-danger-ink);
 }
 
 .misFix {
-  color: #1c8a4d;
+  color: var(--c-success-ink);
+}
+
+.misWrong svg,
+.misFix svg {
+  flex-shrink: 0;
+  margin-top: 3px;
 }
 
 /* 实际应用 */

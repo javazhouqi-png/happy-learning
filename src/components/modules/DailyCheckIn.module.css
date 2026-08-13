@@ -166,20 +166,24 @@
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  background: linear-gradient(90deg, var(--c-accent-yellow), #ffd27a);
-  color: #6b4a00;
+  background: linear-gradient(90deg, var(--c-accent-yellow), var(--c-accent-yellow-soft));
+  color: var(--c-warn-ink);
   padding: 12px 18px;
   border-radius: var(--r-pill);
   font-weight: 600;
 }
-.streakBar svg {
-  color: #ff7a00;
+/* 仅前导火焰图标用饱和橙；.streakTip 内的图标继承文字色 */
+.streakBar > svg {
+  color: var(--c-accent-orange);
 }
 .streakBar strong {
   font-size: 18px;
 }
 .streakTip {
   margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 13px;
   opacity: 0.85;
 }

@@ -19,10 +19,36 @@
   aspect-ratio: 16 / 10;
   display: grid;
   place-items: center;
+  overflow: hidden;
+}
+
+/* 循环动画预览：模拟“视频在播”的动感，离线也可用；真实视频（video.url）将替换它为 <video>。 */
+.loop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, color-mix(in srgb, var(--accent) 70%, #fff) 0 12px, transparent 13px),
+    radial-gradient(circle at 70% 60%, color-mix(in srgb, var(--accent) 58%, #fff) 0 9px, transparent 10px),
+    linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 45%, #fff));
+  background-size: 200% 200%, 200% 200%, 200% 200%;
+  animation: cardFloat 6s ease-in-out infinite;
+  opacity: 0.96;
+}
+
+@keyframes cardFloat {
+  0%,
+  100% {
+    background-position: 0% 0%, 100% 100%, 0% 0%;
+  }
+  50% {
+    background-position: 100% 50%, 0% 50%, 100% 0%;
+  }
 }
 
 .play {
   --accent: var(--c-primary);
+  position: relative;
+  z-index: 1;
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -39,6 +65,7 @@
 
 .duration {
   position: absolute;
+  z-index: 1;
   right: 12px;
   bottom: 12px;
   background: rgba(45, 49, 66, 0.78);

@@ -1,0 +1,77 @@
+{
+  "A1-identity": {
+    "color": {
+      "bg":           { "value": "#fff8f0", "type": "color", "alias": "--c-bg" },
+      "surface":      { "value": "#ffffff", "type": "color", "alias": "--c-surface" },
+      "fg":           { "value": "#2d3142", "type": "color", "alias": "--c-ink" },
+      "accent":       { "value": "#4d96ff", "type": "color", "alias": "--c-primary" },
+      "accent-hover": { "value": "#3a7de0", "type": "color", "alias": "--c-primary-dark" },
+      "accent-soft":  { "value": "#e8f1ff", "type": "color", "alias": "--c-primary-soft" },
+      "border":       { "value": "#ffe3cc", "type": "color", "alias": "--c-line" }
+    },
+    "font": {
+      "display": { "value": "'Fredoka', 'Quicksand', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif", "type": "fontFamily" },
+      "body":    { "value": "'Quicksand', 'Noto Sans SC', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif", "type": "fontFamily" },
+      "mono":    { "value": "'JetBrains Mono', 'Fira Code', ui-monospace, 'SFMono-Regular', monospace", "type": "fontFamily" }
+    },
+    "radius": {
+      "sm":   { "value": "12px", "type": "dimension", "alias": "--r-sm" },
+      "md":   { "value": "18px", "type": "dimension", "alias": "--r-md" },
+      "lg":   { "value": "28px", "type": "dimension", "alias": "--r-lg" },
+      "pill": { "value": "999px", "type": "dimension", "alias": "--r-pill" }
+    },
+    "shadow": {
+      "card": { "value": "0 18px 40px -20px rgba(77,150,255,0.35)", "type": "boxShadow", "alias": "--shadow-card" },
+      "soft": { "value": "0 10px 30px -16px rgba(45,49,66,0.28)", "type": "boxShadow", "alias": "--shadow-soft" },
+      "pop":  { "value": "0 12px 28px -12px rgba(122,92,255,0.45)", "type": "boxShadow", "alias": "--shadow-pop" }
+    },
+    "spacing": {
+      "1":  { "value": "4px",  "type": "dimension" },
+      "2":  { "value": "8px",  "type": "dimension" },
+      "3":  { "value": "12px", "type": "dimension" },
+      "4":  { "value": "16px", "type": "dimension" },
+      "5":  { "value": "20px", "type": "dimension" },
+      "6":  { "value": "24px", "type": "dimension" },
+      "8":  { "value": "32px", "type": "dimension" },
+      "10": { "value": "40px", "type": "dimension" },
+      "12": { "value": "48px", "type": "dimension" }
+    }
+  },
+  "A2-semantic": {
+    "color": {
+      "success": { "value": "#2e9e5b", "type": "color" },
+      "warn":    { "value": "#e08e0b", "type": "color" },
+      "danger":  { "value": "#ff5a6e", "type": "color" }
+    },
+    "motion": {
+      "fast": { "value": "150ms", "type": "duration" },
+      "base": { "value": "200ms", "type": "duration" },
+      "slow": { "value": "250ms", "type": "duration" },
+      "ease": { "value": "cubic-bezier(0.2, 0, 0, 1)", "type": "cubicBezier" }
+    }
+  },
+  "B-slot": {
+    "color": {
+      "fg-2":         { "value": "#6b7280", "type": "color", "alias": "--c-ink-soft" },
+      "fg-meta":      { "value": "#9aa1ad", "type": "color", "alias": "--c-ink-faint" },
+      "surface-warm": { "value": "#fff3e9", "type": "color", "alias": "--c-surface-2" }
+    }
+  },
+  "C-extension": {
+    "color": {
+      "mascot-body":      { "value": "#ffd166", "type": "color" },
+      "mascot-cheek":     { "value": "#ff8fb1", "type": "color" },
+      "mascot-eye":       { "value": "#2d3142", "type": "color" },
+      "mascot-highlight": { "value": "#fff3c4", "type": "color" },
+      "garden-1":         { "value": "#7bdff2", "type": "color" },
+      "garden-2":         { "value": "#b8f2c8", "type": "color" },
+      "garden-3":         { "value": "#ffd6a5", "type": "color" },
+      "reward-gold":      { "value": "#ffb020", "type": "color", "alias": "--c-accent-yellow" },
+      "reward-ribbon":    { "value": "#ff6b9d", "type": "color", "alias": "--c-chinese" },
+      "parent-calm":      { "value": "#5b6b7b", "type": "color" },
+      "accent-amber":     { "value": "#ffb020", "type": "color", "alias": "--c-accent-amber" },
+      "hero-accent-1":    { "value": "#ffb020", "type": "color", "alias": "--c-accent-amber" },
+      "hero-accent-2":    { "value": "#ffe08a", "type": "color" }
+    }
+  }
+}

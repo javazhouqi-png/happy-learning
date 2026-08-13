@@ -3,7 +3,8 @@ import Icon from '../ui/Icon.jsx'
 import Button from '../ui/Button.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
 import { useApp } from '../../state/AppContext.jsx'
-import { SUBJECTS, brand } from '../../data/content.js'
+import { SUBJECTS } from '../../data/content.js'
+import { brand } from '../../data/site.js'
 import styles from './ResponsiveShowcase.module.css'
 
 const tabs = [

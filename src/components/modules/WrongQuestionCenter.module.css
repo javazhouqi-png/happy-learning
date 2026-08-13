@@ -36,6 +36,9 @@
   color: var(--c-ink);
 }
 .count {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   font-size: 14px;
   color: var(--c-ink-soft);
 }
@@ -52,15 +55,18 @@
   text-underline-offset: 2px;
 }
 .clearLink:hover {
-  color: #ff6b6b;
+  color: var(--c-danger);
 }
 
 .due {
   align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 13px;
   font-weight: 600;
   color: #fff;
-  background: var(--c-accent-yellow, #ffb703);
+  background: var(--c-accent-yellow);
   padding: 3px 10px;
   border-radius: 999px;
   box-shadow: var(--shadow-card);

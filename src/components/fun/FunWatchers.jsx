@@ -16,7 +16,7 @@ export default function FunWatchers() {
   // 等级提升
   useEffect(() => {
     if (derived.level > prevLevel.current) {
-      celebrate({ title: pickRandom(LEVEL_UP), emoji: '🚀', confetti: true })
+      celebrate({ title: pickRandom(LEVEL_UP), icon: 'rocket', confetti: true })
       sound('levelup')
     }
     prevLevel.current = derived.level
@@ -25,7 +25,7 @@ export default function FunWatchers() {
   // 解锁新徽章
   useEffect(() => {
     if (derived.unlockedCount > prevBadges.current) {
-      celebrate({ title: pickRandom(BADGE_UNLOCK), emoji: '🏅', confetti: true })
+      celebrate({ title: pickRandom(BADGE_UNLOCK), icon: 'medal', confetti: true })
       sound('fanfare')
     }
     prevBadges.current = derived.unlockedCount
@@ -34,7 +34,7 @@ export default function FunWatchers() {
   // 连续学习打卡（至少 2 天才庆祝，避免首日误触）
   useEffect(() => {
     if (derived.streakDays > prevStreak.current && derived.streakDays >= 2) {
-      celebrate({ title: `连续学习 ${derived.streakDays} 天，坚持就是胜利！🔥`, emoji: '🔥' })
+      celebrate({ title: `连续学习 ${derived.streakDays} 天，坚持就是胜利！`, icon: 'flame' })
       sound('fanfare')
     }
     prevStreak.current = derived.streakDays

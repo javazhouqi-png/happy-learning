@@ -85,7 +85,7 @@
   font-variant-numeric: tabular-nums;
 }
 .badgePill {
-  background: #fdeef4;
+  background: var(--c-chinese-soft);
   color: var(--c-chinese);
 }
 

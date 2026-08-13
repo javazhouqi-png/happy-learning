@@ -1,0 +1,24 @@
+{
+  "$comment": "插画 SVG 配色门禁豁免白名单（装饰性，非功能 UI）。check-design-tokens.sh 对下列路径跳过硬编码色检查，避免误伤品牌资产。功能 UI 一律必须走 token。",
+  "reason": "吉祥物/庆祝彩带/魔法花园/空状态插画属品牌装饰，内部配色需自由表达，不在四层 token 收敛范围内。",
+  "match": [
+    "src/components/fun/Mascot.jsx",
+    "src/components/fun/Mascot.module.css",
+    "src/components/fun/CelebrationLayer.jsx",
+    "src/components/fun/CelebrationLayer.module.css",
+    "src/components/fun/MagicGarden.jsx",
+    "src/components/fun/MagicGarden.module.css",
+    "src/components/illustrations/**",
+    "src/assets/illustrations/**",
+    "src/components/modules/EmptyState*.jsx",
+    "src/components/sections/Hero.jsx",
+    "src/components/sections/Hero.module.css"
+  ],
+  "examples_of_allowed_hardcoded": [
+    "Mascot 身体/脸颊/眼睛色（#ffd166/#ff8fb1/#2d3142 等，使用 --mascot-* token 或自由配色均可）",
+    "CelebrationLayer 彩带碎片色板 ['#4d96ff','#ff6b9d','#ff9f45','#3dca6e','#7a5cff','#ffb020']",
+    "MagicGarden 场景三色（--garden-1/2/3）",
+    "空状态插画多色描边"
+  ],
+  "non_whitelisted_must_use_token": "所有按钮/文字/边框/背景/卡片等功能性样式，硬编码色仅允许 #fff/#000，其余一律 var(--token)。"
+}

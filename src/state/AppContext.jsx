@@ -5,7 +5,7 @@ import {
   LEVEL_STEP,
   levelFromPoints,
   levelTitle,
-} from '../data/content.js';
+} from '../data/subjects.js';
 
 // 持久化键名（含版本号 v1）。若日后数据结构变更，升级此版本号即可自然放弃旧数据，
 // 配合 loadState 的类型兜底，避免旧存储把应用拖垮。
@@ -27,17 +27,18 @@ const emptySubject = () => ({ correct: 0, total: 0 });
  */
 function defaultState() {
   return {
+    grade: 1, // 当前孩子所处年级（1–6），驱动年级分层题库与配套练习；由「年级学习」页设置。
     points: 0,
     completedLessons: {}, // { [lessonId]: true }
     quizBySubject: { chinese: emptySubject(), math: emptySubject(), english: emptySubject() },
-    wrongBySubject: { chinese: {}, math: {}, english: {} }, // { [subjectId]: { [questionId]: true } } 错题本
+    wrongBySubject: { chinese: {}, math: {}, english: {} }, // { [subjectId]: { [questionId]: { grade, subject, pointId, pointTitle } } } 错题本（含溯源字段）
     videosWatched: {}, // { [videoId]: true }
     studySeconds: 0, // 累计学习秒数（全期）
     streakDays: 0, // 连续学习天数
     lastActiveDate: null, // 最近一次活跃日期（本地日期串）
     todayDate: null, // 当日学习时长对应的日期；跨天自动清零
     todayStudySec: 0, // 今日已学秒数（受家长每日上限约束）
-    parent: { dailyLimitMin: 30, eyeRest: true, sound: true },
+    parent: { dailyLimitMin: 30, eyeRest: true, sound: true, minorMode: false, parentPin: '', minorDailyCapMin: 40 },
     history: [], // [{ ts, type, detail }] 最新在前，最多保留 50 条
     // —— 以下为「趣味激励闭环」相关状态（借鉴 math-for-piglets 存钱罐 / candy-learn-abacus 花园）——
     redeemedRewards: [], // 已兑换的奖励 id 列表（装饰性，不影响学习进度）
@@ -196,12 +197,19 @@ function reducer(state, action) {
 
     // 提交答题：correct/total 已含本回合得分；同时维护错题本（答错的加入、答对的移出）。
     case 'ANSWER_QUIZ': {
-      const { subjectId, correct, total, wrongIds = [], correctIds = [] } = action;
+      const { subjectId, correct, total, wrongIds = [], correctIds = [], wrongEntries = [] } = action;
       const prev = state.quizBySubject[subjectId] || emptySubject();
       const gained = safeInt(correct) * POINTS.quizCorrect;
       const prevWrong = state.wrongBySubject[subjectId] || {};
       const nextWrong = { ...prevWrong };
-      wrongIds.forEach((id) => { if (id) nextWrong[id] = true; });
+      // 优先用带溯源字段的 wrongEntries（新链路）；旧链路仅传 wrongIds 时退化为记 true。
+      if (wrongEntries.length) {
+        wrongEntries.forEach((e) => {
+          if (e && e.id) nextWrong[e.id] = { grade: e.grade, subject: e.subject, pointId: e.pointId, pointTitle: e.pointTitle };
+        });
+      } else {
+        wrongIds.forEach((id) => { if (id) nextWrong[id] = true; });
+      }
       correctIds.forEach((id) => { delete nextWrong[id]; }); // 改对即移出错题本
       return {
         ...state,
@@ -262,6 +270,41 @@ function reducer(state, action) {
     // 家长设置：浅合并补丁，缺省字段不受影响。
     case 'UPDATE_PARENT': {
       return { ...state, parent: { ...state.parent, ...action.patch } };
+    }
+
+    // 设置当前孩子年级（1–6）：驱动年级分层题库与配套练习。仅合法区间才更新。
+    case 'SET_GRADE': {
+      const g = Number(action.grade);
+      if (!(g >= 1 && g <= 6)) return state;
+      return { ...state, grade: g };
+    }
+
+    // 切换未成年人模式（开启无需验证；关闭需家长密码，由 UI 侧先验证再派发）。
+    case 'SET_MINOR_MODE': {
+      return { ...state, parent: { ...state.parent, minorMode: !!action.on } };
+    }
+
+    // 设置 / 修改家长密码（最多 6 位，本地用于关闭未成年人模式时验证）。
+    case 'SET_PARENT_PIN': {
+      const pin = String(action.pin || '').slice(0, 6);
+      return { ...state, parent: { ...state.parent, parentPin: pin } };
+    }
+
+    // 导入档案：用经过校验的快照替换当前状态；缺字段由 defaultState 回填，绝不整体丢弃。
+    case 'HYDRATE': {
+      const next = action.next || {};
+      return {
+        ...defaultState(),
+        ...next,
+        parent: { ...defaultState().parent, ...(next.parent || {}) },
+        wrongBySubject: { ...defaultState().wrongBySubject, ...(next.wrongBySubject || {}) },
+        quizBySubject: { ...defaultState().quizBySubject, ...(next.quizBySubject || {}) },
+        reviewSchedule: { ...defaultState().reviewSchedule, ...(next.reviewSchedule || {}) },
+        completedLessons: next.completedLessons || {},
+        videosWatched: next.videosWatched || {},
+        history: Array.isArray(next.history) ? next.history : [],
+        redeemedRewards: Array.isArray(next.redeemedRewards) ? next.redeemedRewards : [],
+      };
     }
 
     // 清空某学科错题本（复习达标后可手动清零）。
@@ -394,8 +437,13 @@ export function AppProvider({ children }) {
     });
 
     // 今日学习时长 / 家长每日上限（分钟）。
+    // 未成年人模式下，每日上限强制不超过家长设定的“未成年人上限”（默认 40 分钟），
+    // 复用既有每日时长统计与进度条，无需新增状态字段。
     const todayStudyMin = Math.round(state.todayStudySec / 60);
-    const dailyLimitMin = state.parent.dailyLimitMin;
+    const minorCap = state.parent.minorMode
+      ? Math.min(state.parent.dailyLimitMin, state.parent.minorDailyCapMin || 40)
+      : state.parent.dailyLimitMin;
+    const dailyLimitMin = minorCap;
     const dailyRemainingMin = Math.max(0, dailyLimitMin - todayStudyMin);
     const dailyOverLimit = todayStudyMin > dailyLimitMin;
 
@@ -425,12 +473,16 @@ export function AppProvider({ children }) {
       completeLesson: (lessonId, subjectId, durationMin) =>
         dispatch({ type: 'COMPLETE_LESSON', lessonId, subjectId, durationMin }),
       answerQuiz: (subjectId, correct, total, opts = {}) =>
-        dispatch({ type: 'ANSWER_QUIZ', subjectId, correct, total, wrongIds: opts.wrongIds, correctIds: opts.correctIds }),
+        dispatch({ type: 'ANSWER_QUIZ', subjectId, correct, total, wrongIds: opts.wrongIds, correctIds: opts.correctIds, wrongEntries: opts.wrongEntries }),
       watchVideo: (videoId, durationSec, subjectId) =>
         dispatch({ type: 'WATCH_VIDEO', videoId, durationSec, subjectId }),
       recordStudy: (seconds) => dispatch({ type: 'RECORD_STUDY', seconds }),
       updateParent: (patch) => dispatch({ type: 'UPDATE_PARENT', patch }),
       clearWrong: (subjectId) => dispatch({ type: 'CLEAR_WRONG', subjectId }),
+      setGrade: (grade) => dispatch({ type: 'SET_GRADE', grade }),
+      setMinorMode: (on) => dispatch({ type: 'SET_MINOR_MODE', on }),
+      setParentPin: (pin) => dispatch({ type: 'SET_PARENT_PIN', pin }),
+      hydrate: (next) => dispatch({ type: 'HYDRATE', next }),
       addPoints: (amount, reason) => dispatch({ type: 'ADD_POINTS', amount, reason }),
       redeemReward: (id, cost) => dispatch({ type: 'REDEEM_REWARD', id, cost }),
       recordReview: (subjectId, allCorrect) => dispatch({ type: 'RECORD_REVIEW', subjectId, allCorrect }),

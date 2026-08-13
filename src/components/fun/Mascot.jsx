@@ -1,16 +1,18 @@
 import { useRef, useState } from 'react'
 import { useFun } from './FunContext.jsx'
 import { MASCOT_LINES } from '../../data/fun.js'
+import Icon from '../ui/Icon.jsx'
 import styles from './Mascot.module.css'
 
 // 学习伙伴「星宝」：悬浮在右下角的吉祥物。表情随学习事件切换（cheer/sad/dance），
 // 点击它 7 次可触发隐藏彩蛋——解锁一枚“神秘探索者”徽章（见 AchievementWall）。
+// 表情走 Icon 图标库的 mood-* 字形（禁止 emoji 作功能图标，P0；见 docs/design/icon-spec.md §1）
 const FACE = {
-  idle: '🙂',
-  cheer: '😄',
-  sad: '🥺',
-  dance: '🤩',
-  think: '🤔',
+  idle: 'mood-calm',
+  cheer: 'mood-happy',
+  sad: 'mood-sad',
+  dance: 'mood-wow',
+  think: 'mood-think',
 }
 
 // 触发彩蛋所需的连续点击次数
@@ -38,7 +40,7 @@ export default function Mascot({ mood = 'idle' }) {
     if (clicks.current >= EGG_CLICKS) {
       clicks.current = 0
       setMood('dance', 2600)
-      celebrate({ title: '🥚 你发现了隐藏彩蛋！', emoji: '🎉', confetti: true })
+      celebrate({ title: '你发现了隐藏彩蛋！', icon: 'egg', confetti: true })
       sound('egg')
       if (!secretUnlocked) unlockSecret()
       return
@@ -61,7 +63,7 @@ export default function Mascot({ mood = 'idle' }) {
     >
       {bubble && <span className={styles.bubble}>{line}</span>}
       <span className={styles.face} aria-hidden="true">
-        {FACE[mood] || FACE.idle}
+        <Icon name={FACE[mood] || FACE.idle} size={34} strokeWidth={1.6} />
       </span>
       <span className={styles.name}>星宝</span>
     </button>

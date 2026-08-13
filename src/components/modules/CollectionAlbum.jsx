@@ -24,18 +24,18 @@ function MagicGarden({ count, total }) {
     <svg className={styles.garden} viewBox="0 0 120 120" role="img" aria-label={`已收集 ${count} / ${total}`}>
       <ellipse cx="60" cy="108" rx="34" ry="7" fill="var(--c-line)" opacity="0.5" />
       {/* 花盆 */}
-      <path d="M44 86h32l-4 18a6 6 0 01-6 5H54a6 6 0 01-6-5z" fill="var(--c-accent-yellow, #ffb703)" />
+      <path d="M44 86h32l-4 18a6 6 0 01-6 5H54a6 6 0 01-6-5z" fill="var(--c-accent-yellow)" />
       {/* 茎 */}
-      <rect x="58" y="56" width="4" height="34" rx="2" fill="#4caf50" />
+      <rect x="58" y="56" width="4" height="34" rx="2" fill="var(--garden-leaf-1)" />
       {/* 叶（随成长放大） */}
       <g style={{ transformOrigin: '60px 80px', transform: `scale(${leafScale})` }}>
-        <path d="M60 78C44 74 36 60 40 50c14 2 24 14 20 28z" fill="#66bb6a" />
-        <path d="M60 78c16-4 24-18 20-28C66 52 56 64 60 78z" fill="#81c784" />
+        <path d="M60 78C44 74 36 60 40 50c14 2 24 14 20 28z" fill="var(--garden-leaf-2)" />
+        <path d="M60 78c16-4 24-18 20-28C66 52 56 64 60 78z" fill="var(--garden-leaf-3)" />
       </g>
       {/* 花（收集足够多才绽放） */}
       {bloomed && (
         <g className={styles.bloom}>
-          <circle cx="60" cy="48" r="9" fill="var(--c-gamify, #7c5cff)" />
+          <circle cx="60" cy="48" r="9" fill="var(--c-gamify)" />
           <circle cx="60" cy="48" r="4" fill="#fff" />
         </g>
       )}

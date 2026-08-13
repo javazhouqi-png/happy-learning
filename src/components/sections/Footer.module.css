@@ -1,6 +1,6 @@
 .footer {
   background: var(--c-dark);
-  color: #c7ccd6;
+  color: var(--c-on-dark);
   padding-top: clamp(40px, 6vw, 64px);
 }
 
@@ -33,7 +33,7 @@
 .tagline {
   margin-top: 14px;
   font-size: 14px;
-  color: #9aa1ad;
+  color: var(--c-on-dark-soft);
   max-width: 30ch;
 }
 
@@ -54,7 +54,7 @@
 }
 .link {
   font-size: 14px;
-  color: #9aa1ad;
+  color: var(--c-on-dark-soft);
   transition: color 0.15s ease;
 }
 .link:hover {
@@ -68,7 +68,7 @@
   gap: 12px;
   padding-block: 20px;
   font-size: 13px;
-  color: #808896;
+  color: var(--c-on-dark-faint);
 }
 .bottomLinks {
   display: inline-flex;

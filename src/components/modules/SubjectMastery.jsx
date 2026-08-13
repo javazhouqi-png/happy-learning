@@ -2,7 +2,8 @@ import { useApp } from '../../state/AppContext.jsx'
 import Icon from '../ui/Icon.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
 import ProgressBar from '../ui/ProgressBar.jsx'
-import { SUBJECTS, LESSONS } from '../../data/content.js'
+import { SUBJECTS } from '../../data/content.js'
+import { LESSONS } from '../../data/subjects.js'
 import styles from './SubjectMastery.module.css'
 
 // 掌握度进度环：纯展示组件，输入百分比，按比例绘制 SVG 圆环；pct 异常时兜底到 0~100。

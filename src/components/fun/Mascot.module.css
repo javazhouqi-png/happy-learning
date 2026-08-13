@@ -21,9 +21,11 @@
   transform: translateY(-3px) scale(1.04);
 }
 
+/* 表情为 Icon 线性字形（非 emoji），用品牌色着色 */
 .face {
-  font-size: 34px;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  color: var(--c-primary);
   animation: face-bob 1.6s ease-in-out infinite;
 }
 

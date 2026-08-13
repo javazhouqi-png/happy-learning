@@ -13,8 +13,41 @@
   --c-chinese: #ff6b9d; /* 语文 */
   --c-math: #ff9f45; /* 数学 */
   --c-english: #3dca6e; /* 英语 */
+  --c-science: #2bb3c0; /* 科学（新增：content.js 各年级 science.color 原为死值 #2bb3c0） */
   --c-gamify: #7a5cff; /* 游戏化 */
   --c-accent-yellow: #ffb020; /* 强调 / 星星 */
+
+  /* 学科 / 游戏化的浅底与渐变端点（*-soft 作浅色背景，与同名主色配对；*-light/-dark 作渐变端点） */
+  --c-chinese-soft: #fdeef4; /* 语文浅底（Header 徽章胶囊） */
+  --c-math-soft: #fff3e6; /* 数学浅底（学科标签 / 家长守护图标底） */
+  --c-math-light: #ffb866; /* 数学渐变亮端（样机任务卡） */
+  --c-gamify-soft: #efeaff; /* 游戏化浅底（勋章墙计数胶囊） */
+  --c-gamify-light: #8b6bff; /* 游戏化渐变亮端 */
+  --c-gamify-dark: #6a4cf0; /* 游戏化渐变暗端 */
+  --c-accent-yellow-soft: #ffd27a; /* 强调色浅端（打卡条渐变） */
+  --c-accent-orange: #ff7a00; /* 连续打卡火焰（比 --c-math 更饱和的橙） */
+
+  /* 语义色（对齐 design-tokens.json A2-semantic）：仅用于文字 / 边框 / 图标的功能语义 */
+  --c-success: #2e9e5b;
+  --c-warn: #e08e0b;
+  --c-danger: #ff5a6e;
+  /* 语义色配套：-ink 为浅底之上的可读文字色（保证对比度），-soft 为浅色背景 */
+  --c-success-ink: #1c8a4d;
+  --c-success-soft: #e8f9ef;
+  --c-danger-ink: #c93b3b;
+  --c-danger-soft: #ffecec;
+  --c-warn-ink: #6b4a00; /* 暖黄底之上的深棕文字（如打卡条） */
+
+  /* 插画 / 花园扩展色：装饰性配色收敛到 token（门禁白名单内文件引用，如 MagicGarden / Hero） */
+  --c-accent-amber: #ffb020; /* 吉祥物星芒描边 / Hero 渐变深端（对齐 design-tokens hero-accent-1） */
+  --hero-accent-2: #ffe08a; /* Hero 渐变浅端（对齐 design-tokens hero-accent-2） */
+  --mascot-cheek: #ff8fb1; /* 吉祥物腮红（Hero） */
+  --garden-1: #7bdff2; /* 魔法花园 · 场景色（对齐 design-tokens garden-1） */
+  --garden-2: #b8f2c8; /* 魔法花园 · 场景色（对齐 design-tokens garden-2） */
+  --garden-3: #ffd6a5; /* 魔法花园 · 场景色（对齐 design-tokens garden-3） */
+  --garden-leaf-1: #4caf50; /* 收藏册绿植 · 茎（按总监裁决由 --garden-1 改名，避免与魔法花园冲突） */
+  --garden-leaf-2: #66bb6a; /* 收藏册绿植 · 叶 */
+  --garden-leaf-3: #81c784; /* 收藏册绿植 · 叶 */
 
   /* 中性色 */
   --c-ink: #2d3142;
@@ -25,6 +58,15 @@
   --c-surface-2: #fff3e9;
   --c-line: #ffe3cc;
   --c-dark: #2d3142;
+
+  /* 深底之上的文字层级（--c-dark 背景，如 Footer；不可复用 --c-ink-* 以免语义混淆） */
+  --c-on-dark: #c7ccd6; /* 深底正文 */
+  --c-on-dark-soft: #9aa1ad; /* 深底次要文字 */
+  --c-on-dark-faint: #808896; /* 深底弱化文字（版权行） */
+
+  /* 中性控件色（暖色 --c-line 太浅、撑不起“关闭态”对比，故单列） */
+  --c-switch-off: #d7dbe2; /* 开关关闭态轨道 */
+  --c-showcase-dark: #1f2230; /* 样机外壳深色屏（ResponsiveShowcase 装饰） */
 
   /* 圆角 */
   --r-lg: 28px;

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import Button from '../ui/Button.jsx'
 import Icon from '../ui/Icon.jsx'
 import Pill from '../ui/Pill.jsx'
-import { brand } from '../../data/content.js'
+import { brand } from '../../data/site.js'
 import styles from './Hero.module.css'
 
 function Mascot() {
@@ -10,26 +10,26 @@ function Mascot() {
     <svg viewBox="0 0 200 200" className={styles.mascot} aria-label="快乐学园吉祥物" role="img">
       <defs>
         <radialGradient id="starG" cx="38%" cy="32%" r="75%">
-          <stop offset="0%" stopColor="#FFE08A" />
-          <stop offset="100%" stopColor="#FFB020" />
+          <stop offset="0%" stopColor="var(--hero-accent-2)" />
+          <stop offset="100%" stopColor="var(--c-accent-amber)" />
         </radialGradient>
       </defs>
       <path
         d="M100 18l20 44 47 7-34 33 8 47-41-22-41 22 8-47L33 69l47-7 20-44z"
         fill="url(#starG)"
-        stroke="#F59E0B"
+        stroke="var(--c-accent-amber)"
         strokeWidth="3"
       />
       {/* 眼睛 */}
-      <circle cx="80" cy="98" r="8" fill="#2D3142" />
-      <circle cx="120" cy="98" r="8" fill="#2D3142" />
+      <circle cx="80" cy="98" r="8" fill="var(--c-ink)" />
+      <circle cx="120" cy="98" r="8" fill="var(--c-ink)" />
       <circle cx="83" cy="95" r="2.5" fill="#fff" />
       <circle cx="123" cy="95" r="2.5" fill="#fff" />
       {/* 腮红 */}
-      <ellipse cx="68" cy="116" rx="9" ry="6" fill="#FF8FB1" opacity="0.85" />
-      <ellipse cx="132" cy="116" rx="9" ry="6" fill="#FF8FB1" opacity="0.85" />
+      <ellipse cx="68" cy="116" rx="9" ry="6" fill="var(--mascot-cheek)" opacity="0.85" />
+      <ellipse cx="132" cy="116" rx="9" ry="6" fill="var(--mascot-cheek)" opacity="0.85" />
       {/* 微笑 */}
-      <path d="M82 120q18 18 36 0" stroke="#2D3142" strokeWidth="4" fill="none" strokeLinecap="round" />
+      <path d="M82 120q18 18 36 0" stroke="var(--c-ink)" strokeWidth="4" fill="none" strokeLinecap="round" />
     </svg>
   )
 }

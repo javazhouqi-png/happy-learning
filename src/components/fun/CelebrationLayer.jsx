@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import Icon from '../ui/Icon.jsx'
 import styles from './CelebrationLayer.module.css'
 
 // 彩带碎片：固定数量，随机位置/颜色/动画延迟/时长，营造漫天撒花。
@@ -7,7 +8,15 @@ function Confetti() {
   const pieces = useMemo(
     () =>
       Array.from({ length: 36 }, (_, i) => {
-        const colors = ['#4d96ff', '#ff6b9d', '#ff9f45', '#3dca6e', '#7a5cff', '#ffb020']
+        // 彩带配色全部走 design token（避免硬编码十六进制色，符合 P0 门禁）。
+        const colors = [
+          'var(--c-primary)',
+          'var(--c-chinese)',
+          'var(--c-math)',
+          'var(--c-english)',
+          'var(--c-gamify)',
+          'var(--c-accent-yellow)',
+        ]
         return {
           id: i,
           left: Math.random() * 100,
@@ -52,7 +61,9 @@ export default function CelebrationLayer({ events }) {
           key={e.id}
           className={`${styles.toast} ${e.confetti ? styles.big : ''} ${e.tone === 'warn' ? styles.warn : ''}`}
         >
-          <span className={styles.emoji}>{e.emoji}</span>
+          <span className={styles.icon}>
+            <Icon name={e.icon} size={22} />
+          </span>
           <span className={styles.title}>{e.title}</span>
         </div>
       ))}

@@ -55,7 +55,7 @@ function ExerciseItem({ ex, index }) {
 // 「解析 / 配套练习 / 常见误区 / 实际应用 / 螺旋衔接」四件套，形成完整学习闭环。
 // 全部只读展示 + 轻量练习交互，不写任何业务状态；字段缺失以 || 兜底，绝不崩。
 export default function GradeLearning() {
-  const { derived } = useApp()
+  const { derived, actions } = useApp()
   const [grade, setGrade] = useState(1)
   const [subId, setSubId] = useState('chinese')
   const [open, setOpen] = useState({})
@@ -68,6 +68,7 @@ export default function GradeLearning() {
   const toggle = (key) => setOpen((o) => ({ ...o, [key]: !o[key] }))
 
   const onGrade = (g) => {
+    actions.setGrade(g) // 同步到全局年级，使配套练习 / 答题闭环按所选年级出题
     setGrade(g)
     setSubId('chinese')
     setOpen({})
@@ -192,8 +193,12 @@ export default function GradeLearning() {
                               <ul className={styles.misList}>
                                 {(p.misconceptions || []).map((m, mi) => (
                                   <li key={mi} className={styles.misItem}>
-                                    <span className={styles.misWrong}>✗ {m.wrong}</span>
-                                    <span className={styles.misFix}>✓ {m.fix}</span>
+                                    <span className={styles.misWrong}>
+                                      <Icon name="close" size={14} /> {m.wrong}
+                                    </span>
+                                    <span className={styles.misFix}>
+                                      <Icon name="check" size={14} /> {m.fix}
+                                    </span>
                                   </li>
                                 ))}
                               </ul>

@@ -40,7 +40,7 @@ export default function GameCenter() {
     if (awardedRef.current) return
     awardedRef.current = true
     actions.addPoints(REWARD, '记忆翻牌游戏')
-    celebrate({ title: `闯关成功！+${REWARD} 积分`, emoji: '🎉', confetti: true })
+    celebrate({ title: `闯关成功！+${REWARD} 积分`, icon: 'confetti', confetti: true })
     sound('fanfare')
   }
 

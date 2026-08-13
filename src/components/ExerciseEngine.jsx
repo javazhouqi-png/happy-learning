@@ -12,10 +12,10 @@ import styles from './ExerciseEngine.module.css'
 // initialReview：受控属性（默认 false）。错题本复习中心会传 true，直接以“仅错题”模式打开，
 // 无需用户再点一次“复习错题”；不传时保持原有行为，向后兼容。
 export default function ExerciseEngine({ subjectId, initialReview = false, onComplete }) {
-  const subject = getSubject(subjectId)
-  const questions = getQuiz(subjectId, state.grade)
   const { state, derived, actions } = useApp()
   const { celebrate, sound, setMood } = useFun()
+  const subject = getSubject(subjectId)
+  const questions = getQuiz(subjectId, state.grade)
 
   // answers 以题目 id 为键（而非序号），筛选/重排序时不会错位。
   const [answers, setAnswers] = useState({}) // { [questionId]: optionIndex }

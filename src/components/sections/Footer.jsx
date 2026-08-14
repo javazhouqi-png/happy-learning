@@ -38,8 +38,8 @@ export default function Footer() {
       <div className={`container ${styles.bottom}`}>
         <span>2026 {brand.name} 版权所有</span>
         <span className={styles.bottomLinks}>
-          <a href="#">隐私政策</a>
-          <a href="#">用户协议</a>
+          <button type="button" className={styles.link}>隐私政策</button>
+          <button type="button" className={styles.link}>用户协议</button>
         </span>
       </div>
     </footer>

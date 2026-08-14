@@ -5,7 +5,6 @@
 //  - prettier 兼容置于最后，关闭与格式冲突的规则。
 //  - emoji / 硬编码色等 P0 红线由 scripts/check-design-tokens.sh 在 CI 机器化拦截。
 
-import js from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import reactHooks from 'eslint-plugin-react-hooks'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
@@ -15,6 +14,10 @@ export default [
   {
     ignores: [
       'dist',
+      'dist2',
+      'dist-old',
+      '_verify_build',
+      '.verify-build',
       'node_modules',
       'coverage',
       'scripts',
@@ -59,11 +62,19 @@ export default [
     },
   },
 
-  // 仅 .ts/.tsx 走 typescript-eslint 类型检查（全量 TS 化阶段逐步收紧）。
+  // 课程 / 题库等数据文件中的 emoji 属教学匹配内容（如 emoji↔词语），
+  // 是「数据」而非「UI 功能图标」，故对 src/data/**/*.js 豁免 P0 emoji 门禁；UI 组件仍受控。
   {
-    files: ['**/*.{ts,tsx}'],
-    ...tseslint.configs.recommended,
+    files: ['src/data/**/*.js'],
+    rules: {
+      'no-restricted-syntax': 'off',
+    },
   },
+
+  // 仅 .ts/.tsx 走 typescript-eslint 类型检查（全量 TS 化阶段逐步收紧）。
+  // 注意：typescript-eslint v8 的 configs.recommended 本身是配置数组，必须在顶层展开，
+  // 不能像旧版对象那样在对象字面量里展开（否则会出现 "Unexpected key 0" 配置错误）。
+  ...tseslint.configs.recommended,
 
   // prettier 兼容：必须最后，关闭一切与 prettier 冲突的格式化规则。
   prettier,

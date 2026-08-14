@@ -1,5 +1,4 @@
 import { useApp } from '../../state/AppContext.jsx'
-import Icon from '../ui/Icon.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
 import ProgressBar from '../ui/ProgressBar.jsx'
 import { SUBJECTS } from '../../data/content.js'

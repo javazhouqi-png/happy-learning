@@ -50,6 +50,19 @@ if [[ -d dist/assets ]]; then
   fi
 fi
 
+# 年级数据隔离断言：GRADE_LEARNING 专有数据不应进入首屏共享 content 块。
+# 若年级数据被静态引用拉回主包，content-*.js 中会出现本应只在按需 grade chunk 出现的字符串。
+if [[ -d dist/assets ]]; then
+  for f in dist/assets/content-*.js; do
+    [[ -e "$f" ]] || continue
+    if grep -q 'g6-sc-micro' "$f"; then
+      echo "✗ 年级数据泄漏到 content 共享块：$f 含 GRADE_LEARNING 专有字符串 g6-sc-micro"
+      echo "  年级数据应仅在 dist/assets/grade-*.js 中按需加载，不得进入首屏。"
+      FAIL=1
+    fi
+  done
+fi
+
 [[ $FAIL -eq 0 ]] && { echo "✓ 配色门禁 + 分包断言通过"; exit 0; }
 echo "门禁失败：功能 UI 出现未令牌化硬编码色。请改用 src/index.css 的 --c-* 令牌；纯品牌插画请加入 docs/design/illustration-whitelist.json。"
 exit 1

@@ -56,6 +56,12 @@
   font-size: 14px;
   color: var(--c-on-dark-soft);
   transition: color 0.15s ease;
+  /* 同时用于 <a> 与占位按钮（隐私政策 / 用户协议），重置按钮默认外观以呈现为文字链接 */
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
 }
 .link:hover {
   color: #fff;

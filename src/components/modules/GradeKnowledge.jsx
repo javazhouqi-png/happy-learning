@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { useApp } from '../../state/AppContext.jsx'
 import Icon from '../ui/Icon.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
-import { GRADES, getGradeKnowledge, SUBJECTS } from '../../data/content.js'
+import { SUBJECTS } from '../../data/content.js'
+import { GRADES, getGradeKnowledge } from '../../data/grade.js'
 import styles from './GradeKnowledge.module.css'
 
 // 取学科展示元信息：优先复用 SUBJECTS 的 name/color/icon（与全局学科一致）；

@@ -70,7 +70,7 @@ export default function Header() {
         <Link
           to="/"
           className={styles.logo}
-          onClick={(e) => {
+          onClick={() => {
             setMobileOpen(false)
             onLogoEgg()
           }}

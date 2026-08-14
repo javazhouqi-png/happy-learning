@@ -1,11 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Icon from '../ui/Icon.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
 import ProgressBar from '../ui/ProgressBar.jsx'
 import { useApp } from '../../state/AppContext.jsx'
 import { exportProfile, importProfile } from '../../state/profileIO.js'
 import { formatStudyTime } from '../../data/content.js'
-import { brand } from '../../data/site.js'
 import styles from './ParentPanel.module.css'
 
 // 学习动态图标映射。注意：AppContext 的 ADD_POINTS 写入 type:'game'，
@@ -48,6 +47,19 @@ export default function ParentPanel() {
     { key: 'eyeRest', icon: 'moon', label: '护眼提醒', desc: '每 20 分钟提醒休息一下' },
     { key: 'sound', icon: 'sparkle', label: '音效反馈', desc: '答题与获得徽章时的提示音' },
   ]
+
+  // 键盘可达的关闭方式：任意弹出层打开时监听 Esc 关闭（文档级监听，避免在对话框元素上挂 JSX 事件处理器）。
+  useEffect(() => {
+    if (!pinOpen && !verifyOpen && !archiveOpen) return;
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      if (pinOpen) setPinOpen(false);
+      else if (verifyOpen) setVerifyOpen(false);
+      else if (archiveOpen) setArchiveOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [pinOpen, verifyOpen, archiveOpen]);
 
   const history = state.history.slice(0, 6)
 
@@ -268,8 +280,8 @@ export default function ParentPanel() {
 
       {/* 家长密码设置 / 修改弹窗 */}
       {pinOpen && (
-        <div className={styles.sheetOverlay} role="dialog" aria-modal="true" onClick={() => setPinOpen(false)}>
-          <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.sheetOverlay} role="dialog" aria-modal="true">
+          <div className={styles.sheet}>
             <div className={styles.sheetHandle} />
             <h3 className={styles.sheetTitle}>设置家长密码</h3>
             <p className={styles.sheetDesc}>用于关闭未成年人模式时验证身份，请牢记这串 4–6 位数字。</p>
@@ -277,7 +289,6 @@ export default function ParentPanel() {
               className={styles.sheetInput}
               type="password"
               inputMode="numeric"
-              autoFocus
               placeholder="请输入 4–6 位数字"
               value={pinInput}
               onChange={(e) => setPinInput(e.target.value)}
@@ -294,8 +305,8 @@ export default function ParentPanel() {
 
       {/* 关闭未成年人模式验证弹窗 */}
       {verifyOpen && (
-        <div className={styles.sheetOverlay} role="dialog" aria-modal="true" onClick={() => setVerifyOpen(false)}>
-          <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.sheetOverlay} role="dialog" aria-modal="true">
+          <div className={styles.sheet}>
             <div className={styles.sheetHandle} />
             <h3 className={styles.sheetTitle}>家长验证</h3>
             <p className={styles.sheetDesc}>关闭未成年人模式需输入家长密码。</p>
@@ -303,7 +314,6 @@ export default function ParentPanel() {
               className={styles.sheetInput}
               type="password"
               inputMode="numeric"
-              autoFocus
               placeholder="请输入家长密码"
               value={verifyInput}
               onChange={(e) => setVerifyInput(e.target.value)}
@@ -320,8 +330,8 @@ export default function ParentPanel() {
 
       {/* 学习档案统一弹窗（导出 / 导入） */}
       {archiveOpen && (
-        <div className={styles.sheetOverlay} role="dialog" aria-modal="true" onClick={() => setArchiveOpen(false)}>
-          <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.sheetOverlay} role="dialog" aria-modal="true">
+          <div className={styles.sheet}>
             <div className={styles.sheetHandle} />
             <h3 className={styles.sheetTitle}>管理学习档案</h3>
             <p className={styles.sheetDesc}>导出当前全部进度到文件，或在其他设备导入继续学习。</p>

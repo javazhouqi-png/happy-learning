@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react'
 import { useApp } from '../../state/AppContext.jsx'
 import { useFun } from '../fun/FunContext.jsx'
-import Icon from '../ui/Icon.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
 import Button from '../ui/Button.jsx'
 import { MATCH_WORDS } from '../../data/content.js'

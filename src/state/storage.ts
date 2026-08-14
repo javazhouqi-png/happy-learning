@@ -58,20 +58,27 @@ function num(v: unknown): number {
   return Number.isFinite(Number(v)) ? Number(v) : 0;
 }
 
-function mergeSubjects(base: Record<SubjectId, SubjectStat>, raw: any): Record<SubjectId, SubjectStat> {
+function mergeSubjects(base: Record<SubjectId, SubjectStat>, raw: unknown): Record<SubjectId, SubjectStat> {
   const out: Record<SubjectId, SubjectStat> = { ...base };
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
+  const r = raw as Record<string, unknown>;
   SUBJECTS.forEach((s) => {
-    const v = raw && raw[s];
-    if (v && typeof v === 'object') out[s] = { correct: num(v.correct), total: num(v.total) };
+    const v = r[s];
+    if (v && typeof v === 'object' && !Array.isArray(v)) {
+      const o = v as Record<string, unknown>;
+      out[s] = { correct: num(o.correct), total: num(o.total) };
+    }
   });
   return out;
 }
 
-function mergeWrong(base: Record<SubjectId, WrongMap>, raw: any): Record<SubjectId, WrongMap> {
+function mergeWrong(base: Record<SubjectId, WrongMap>, raw: unknown): Record<SubjectId, WrongMap> {
   const out: Record<SubjectId, WrongMap> = { ...base };
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
+  const r = raw as Record<string, unknown>;
   SUBJECTS.forEach((s) => {
-    const v = raw && raw[s];
-    if (v && typeof v === 'object') out[s] = v as WrongMap;
+    const v = r[s];
+    if (v && typeof v === 'object' && !Array.isArray(v)) out[s] = v as WrongMap;
   });
   return out;
 }
@@ -87,16 +94,19 @@ function emptyGradeQuiz(): Record<number, Record<SubjectId, SubjectStat>> {
 }
 function mergeGradeQuiz(
   base: Record<number, Record<SubjectId, SubjectStat>>,
-  raw: any
+  raw: unknown
 ): Record<number, Record<SubjectId, SubjectStat>> {
   const out = emptyGradeQuiz();
-  if (raw && typeof raw === 'object') {
-    Object.keys(raw).forEach((kg) => {
-      const g = Number(kg);
-      if (!Number.isFinite(g) || !GRADE_KEYS.includes(g)) return;
-      out[g] = mergeSubjects(base[g] || out[g], raw[kg]);
-    });
-  }
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
+  const r = raw as Record<string, unknown>;
+  Object.keys(r).forEach((kg) => {
+    const g = Number(kg);
+    if (!Number.isFinite(g) || !GRADE_KEYS.includes(g)) return;
+    const rg = r[kg];
+    if (rg && typeof rg === 'object' && !Array.isArray(rg)) {
+      out[g] = mergeSubjects(base[g] || out[g], rg);
+    }
+  });
   return out;
 }
 
@@ -108,10 +118,9 @@ function mergeGradeQuiz(
 export function migrate(raw: Partial<AppState> | null | undefined): AppState {
   const base = defaultState();
   if (!raw || typeof raw !== 'object') return base;
-  const r = raw as Record<string, any>;
+  const r = raw as Record<string, unknown>;
   return {
     ...base,
-    ...r,
     version: 2,
     points: num(r.points),
     studySeconds: num(r.studySeconds),
@@ -121,12 +130,17 @@ export function migrate(raw: Partial<AppState> | null | undefined): AppState {
     quizBySubject: mergeSubjects(base.quizBySubject, r.quizBySubject),
     quizByGrade: mergeGradeQuiz(base.quizByGrade, r.quizByGrade),
     wrongBySubject: mergeWrong(base.wrongBySubject, r.wrongBySubject),
-    reviewSchedule: { ...base.reviewSchedule, ...(r.reviewSchedule || {}) },
-    parent: { ...base.parent, ...(r.parent || {}) },
-    completedLessons: r.completedLessons || {},
-    videosWatched: r.videosWatched || {},
-    textRead: r.textRead || {},
-    textRecite: r.textRecite || {},
+    reviewSchedule: {
+      ...base.reviewSchedule,
+      ...(r.reviewSchedule as Partial<Record<SubjectId, ReviewSlot>> | undefined),
+    },
+    parent: { ...base.parent, ...(r.parent as Partial<ParentState> | undefined) },
+    completedLessons: (r.completedLessons as Record<string, boolean> | undefined) ?? base.completedLessons,
+    videosWatched: (r.videosWatched as Record<string, boolean> | undefined) ?? base.videosWatched,
+    textRead: (r.textRead as Record<string, boolean> | undefined) ?? base.textRead,
+    textRecite: (r.textRecite as Record<string, boolean> | undefined) ?? base.textRecite,
+    lastActiveDate: (r.lastActiveDate as string | null | undefined) ?? base.lastActiveDate,
+    todayDate: (r.todayDate as string | null | undefined) ?? base.todayDate,
     history: Array.isArray(r.history) ? (r.history as HistoryEntry[]) : [],
     redeemedRewards: Array.isArray(r.redeemedRewards) ? (r.redeemedRewards as string[]) : [],
   };

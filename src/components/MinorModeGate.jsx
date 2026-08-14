@@ -75,7 +75,6 @@ export default function MinorModeGate() {
               className={styles.pin}
               type="password"
               inputMode="numeric"
-              autoFocus
               placeholder="请输入家长密码"
               value={input}
               onChange={(e) => setInput(e.target.value)}

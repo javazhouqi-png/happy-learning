@@ -93,5 +93,4 @@ export type AppAction =
   | { type: 'MARK_TEXT_READ'; key: string }
   | { type: 'MARK_TEXT_RECITE'; key: string }
   | { type: 'HYDRATE'; next?: Partial<AppState> }
-  | { type: 'RESET' }
-  | { type: string; [key: string]: unknown };
+  | { type: 'RESET' };

@@ -6,6 +6,11 @@ node_modules
 # build output
 dist
 dist-ssr
+# 临时验证构建目录（M0 重构验证用，非正常产物）
+dist2
+dist-old
+_verify_build
+.verify-build
 *.local
 
 # editor / OS

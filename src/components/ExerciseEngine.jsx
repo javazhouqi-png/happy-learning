@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { getQuiz, getSubject } from '../data/content.js'
+import { getSubject } from '../data/content.js'
+import { getQuiz } from '../data/grade.js'
 import { useApp } from '../state/AppContext.jsx'
 import { useFun } from './fun/FunContext.jsx'
 import { pickRandom, PRAISE, ENCOURAGE, CLEAR_ALL } from '../data/fun.js'

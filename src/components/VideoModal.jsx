@@ -44,15 +44,20 @@ export default function VideoModal({ video, onClose }) {
       })
     }, stepMs)
     return () => clearInterval(timer.current)
-  }, [playing, actions, video.id, video.subject, durationSec])
+  }, [playing, actions, video.id, video.subject, durationSec, celebrate, sound])
+
+  // 键盘可达的关闭方式：监听 Esc（文档级监听，避免在对话框元素上挂 JSX 事件处理器而触发 a11y 规则）。
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
 
   return (
-    <div className={styles.overlay} onClick={onClose} role="dialog" aria-modal="true">
-      <div
-        className={styles.modal}
-        style={{ '--accent': subject?.color }}
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className={styles.overlay} role="dialog" aria-modal="true">
+      <div className={styles.modal} style={{ '--accent': subject?.color }}>
         <button className={styles.close} onClick={onClose} aria-label="关闭">
           <Icon name="close" size={20} />
         </button>

@@ -4,7 +4,7 @@
 // 解析后按「册 → 单元」组织；单元内课文保留其所属 lesson 标题与课后习题。
 // 仅使用 subjects.js 中真实存在的统编出处，绝不编造教材内容。
 import { LESSONS } from './subjects.js';
-import { GRADES } from './content.js';
+import { GRADES } from './grade.js';
 
 export const SUBJECT_IDS = ['chinese', 'math', 'english'];
 

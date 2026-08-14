@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { useApp } from '../../state/AppContext.jsx'
 import Icon from '../ui/Icon.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
-import { GRADES, getGradeLearning, getQuiz, SUBJECTS } from '../../data/content.js'
+import { SUBJECTS } from '../../data/content.js'
+import { GRADES, getGradeLearning, getQuiz } from '../../data/grade.js'
 import styles from './GradeLearning.module.css'
 
 // 取学科展示元信息：优先复用 SUBJECTS 的 name/color/icon；科学等补充学科在 GRADE_LEARNING 内自带。

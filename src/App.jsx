@@ -3,6 +3,7 @@ import { useEffect, Suspense, lazy } from 'react'
 import Header from './components/sections/Header.jsx'
 import Footer from './components/sections/Footer.jsx'
 import MinorModeGate from './components/MinorModeGate.jsx'
+import ErrorBoundary from './components/ui/ErrorBoundary.jsx'
 
 // 路由级代码分割：每个页面独立异步块，避免全部打入主包（门禁要求主包 < 180KB）。
 // 年级海量数据（GRADE_LEARNING 等）随页面块按需加载，不再拖入入口块。
@@ -44,17 +45,96 @@ export default function App() {
           }
         >
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/learn" element={<LearnCenter />} />
-            <Route path="/learn/:subjectId" element={<SubjectPage />} />
-            <Route path="/textbook" element={<TextbookPage />} />
-            <Route path="/review" element={<ReviewCenter />} />
-            <Route path="/growth" element={<GrowthCenter />} />
-            <Route path="/grade" element={<GradeLearning />} />
-            <Route path="/play" element={<PlayCenter />} />
-            <Route path="/parent" element={<ParentCenter />} />
-            <Route path="/videos" element={<VideoLibrary />} />
-            <Route path="*" element={<Home />} />
+            {/* 每路由独立错误边界：单页（懒加载 chunk）崩溃只影响该路由，不拖垮全局。
+                最外层兜底仍保留在 main.jsx。 */}
+            <Route
+              path="/"
+              element={
+                <ErrorBoundary>
+                  <Home />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/learn"
+              element={
+                <ErrorBoundary>
+                  <LearnCenter />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/learn/:subjectId"
+              element={
+                <ErrorBoundary>
+                  <SubjectPage />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/textbook"
+              element={
+                <ErrorBoundary>
+                  <TextbookPage />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/review"
+              element={
+                <ErrorBoundary>
+                  <ReviewCenter />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/growth"
+              element={
+                <ErrorBoundary>
+                  <GrowthCenter />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/grade"
+              element={
+                <ErrorBoundary>
+                  <GradeLearning />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/play"
+              element={
+                <ErrorBoundary>
+                  <PlayCenter />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/parent"
+              element={
+                <ErrorBoundary>
+                  <ParentCenter />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/videos"
+              element={
+                <ErrorBoundary>
+                  <VideoLibrary />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <ErrorBoundary>
+                  <Home />
+                </ErrorBoundary>
+              }
+            />
           </Routes>
         </Suspense>
       </main>

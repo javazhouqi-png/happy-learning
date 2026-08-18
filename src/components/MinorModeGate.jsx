@@ -18,7 +18,6 @@ export default function MinorModeGate() {
   // 每 30 秒刷新一次当前小时，让锁定在 6:00 自动解除、22:00 自动生效。
   const blocked = minorMode && (hour >= 22 || hour < 6)
 
-  // 每 30 秒刷新一次当前小时，让锁定在 6:00 自动解除、22:00 自动生效。
   useEffect(() => {
     const t = setInterval(() => setHour(new Date().getHours()), 30_000)
     return () => clearInterval(t)
@@ -51,7 +50,7 @@ export default function MinorModeGate() {
         <span className={styles.icon}><Icon name="moon" size={34} /></span>
         <h2 className={styles.title}>夜间休息时段</h2>
         <p className={styles.text}>
-          根据未成年人保护要求，<strong>22:00–6:00</strong> 为休息 time，暂不提供服务。<br />
+          根据未成年人保护要求，<strong>22:00–6:00</strong> 为休息时间，暂不提供服务。<br />
           明日 6:00 后将自动开放。
         </p>
         {!verifyOpen ? (

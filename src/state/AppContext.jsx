@@ -25,6 +25,19 @@ export function AppProvider({ children }) {
     saveState(state);
   }, [state]);
 
+  // 主题皮肤应用：把已兑换的皮肤真正“穿”到界面上（让奖励闭环兑现）。
+  // 规则：theme==='none' 强制默认；theme 指定则用之；theme===null 时若拥有 skin-sunset 则自动应用。
+  useEffect(() => {
+    const ownsSunset = state.redeemedRewards.includes('skin-sunset');
+    let apply = null;
+    if (state.theme === 'none') apply = null;
+    else if (state.theme) apply = state.theme;
+    else if (ownsSunset) apply = 'sunset';
+    const root = document.documentElement;
+    if (apply) root.dataset.theme = apply;
+    else delete root.dataset.theme;
+  }, [state.redeemedRewards, state.theme]);
+
   // 派生数据：由 state 计算等级、徽章、掌握度等，抽为纯函数 computeDerived 便于测试与按需 memo。
   const derived = useMemo(() => computeDerived(state), [state]);
 
@@ -51,6 +64,7 @@ export function AppProvider({ children }) {
       setGrade: (grade) => dispatch({ type: 'SET_GRADE', grade }),
       setMinorMode: (on) => dispatch({ type: 'SET_MINOR_MODE', on }),
       setParentPin: (pin) => dispatch({ type: 'SET_PARENT_PIN', pin }),
+      setTheme: (theme) => dispatch({ type: 'SET_THEME', theme }),
       hydrate: (next) => dispatch({ type: 'HYDRATE', next }),
       addPoints: (amount, reason) => dispatch({ type: 'ADD_POINTS', amount, reason }),
       redeemReward: (id, cost) => dispatch({ type: 'REDEEM_REWARD', id, cost }),

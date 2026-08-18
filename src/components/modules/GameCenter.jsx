@@ -3,6 +3,7 @@ import { useApp } from '../../state/AppContext.jsx'
 import { useFun } from '../fun/FunContext.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
 import Button from '../ui/Button.jsx'
+import Icon from '../ui/Icon.jsx'
 import { MATCH_WORDS } from '../../data/content.js'
 import styles from './GameCenter.module.css'
 
@@ -111,7 +112,7 @@ export default function GameCenter() {
                 >
                   <span className={styles.back}>?</span>
                   <span className={styles.front}>
-                    <span className={styles.emoji}>{c.emoji}</span>
+                    <Icon name={c.icon} size={30} className={styles.faceIcon} />
                     <span className={styles.word}>{c.word}</span>
                   </span>
                 </button>

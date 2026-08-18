@@ -24,6 +24,10 @@ export function parentReducer(state: AppState, action: AppAction): AppState {
       return { ...state, parent: { ...state.parent, parentPin: pin } };
     }
 
+    // 切换界面主题：null=自动（跟随已拥有皮肤）/ 'sunset'=强制暖阳 / 'none'=强制默认。
+    case 'SET_THEME':
+      return { ...state, theme: action.theme };
+
     default:
       return state;
   }

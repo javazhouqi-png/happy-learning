@@ -219,11 +219,13 @@
   cursor: pointer;
 }
 .checkBtn.recite { border-color: var(--c-english); color: var(--c-english); }
+.checkBtn.listen { border-color: var(--c-gamify); color: var(--c-gamify); }
 .checkOn {
   background: var(--accent, var(--c-primary));
   color: #fff;
 }
 .checkBtn.recite.checkOn { background: var(--c-english); border-color: var(--c-english); }
+.checkBtn.listen.listenOn { background: var(--c-gamify); border-color: var(--c-gamify); }
 
 /* 知识点速览 */
 .know {

@@ -409,15 +409,17 @@ export const REWARDS = [
 export const getReward = (id) => REWARDS.find((r) => r.id === id) || null;
 
 /* ----------------------------- 其它文案 ----------------------------- */
-// 主导航配置（与 Header 的 NAV 保持一致）：按业务类别拆分的独立菜单项。
-// 仅供需要时复用；Header 当前内置同一份 NAV，避免跨文件耦合。
+// 主导航配置：全站唯一数据源（Header 直接引用此份，避免双份配置漂移）。
+// 按业务类别拆分的独立菜单项；新增 / 删除路由只需改这里一处。
 export const NAV_ITEMS = [
   { id: 'home', label: '首页', route: '/' },
   { id: 'learn', label: '学习', route: '/learn' },
+  { id: 'textbook', label: '教材', route: '/textbook' },
   { id: 'review', label: '复习', route: '/review' },
   { id: 'growth', label: '成长', route: '/growth' },
   { id: 'grade', label: '年级', route: '/grade' },
   { id: 'play', label: '乐园', route: '/play' },
+  { id: 'videos', label: '动画', route: '/videos' },
   { id: 'parent', label: '家长', route: '/parent' },
 ];
 
@@ -429,14 +431,15 @@ export const PARENT_TIPS = [
 ];
 
 /* ----------------------------- 趣味游戏素材 ----------------------------- */
-// 记忆翻牌游戏的配对词库（字词 ↔ emoji 图标）。纯数据，便于后续扩充或按学科切换。
+// 记忆翻牌游戏的配对词库（字词 ↔ 图标）。纯数据，便于后续扩充或按学科切换。
+// 图标统一引用 ui/Icon 的锁定字形（禁止 emoji 作功能图标，P0 合规）。
 export const MATCH_WORDS = [
-  { word: '太阳', emoji: '☀️' },
-  { word: '月亮', emoji: '🌙' },
-  { word: '星星', emoji: '⭐' },
-  { word: '苹果', emoji: '🍎' },
-  { word: '书本', emoji: '📚' },
-  { word: '小猫', emoji: '🐱' },
+  { word: '书本', icon: 'book' },
+  { word: '月亮', icon: 'moon' },
+  { word: '星星', icon: 'star' },
+  { word: '爱心', icon: 'heart' },
+  { word: '火苗', icon: 'flame' },
+  { word: '魔法', icon: 'sparkle' },
 ];
 
 

@@ -50,6 +50,7 @@ export function defaultState(): AppState {
     reviewSchedule: defaultReview(),
     textRead: {},
     textRecite: {},
+    theme: null,
   };
 }
 
@@ -139,6 +140,7 @@ export function migrate(raw: Partial<AppState> | null | undefined): AppState {
     videosWatched: (r.videosWatched as Record<string, boolean> | undefined) ?? base.videosWatched,
     textRead: (r.textRead as Record<string, boolean> | undefined) ?? base.textRead,
     textRecite: (r.textRecite as Record<string, boolean> | undefined) ?? base.textRecite,
+    theme: (r.theme as string | null | undefined) ?? base.theme,
     lastActiveDate: (r.lastActiveDate as string | null | undefined) ?? base.lastActiveDate,
     todayDate: (r.todayDate as string | null | undefined) ?? base.todayDate,
     history: Array.isArray(r.history) ? (r.history as HistoryEntry[]) : [],

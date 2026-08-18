@@ -4,6 +4,7 @@ import { getQuiz } from '../data/grade.js'
 import { useApp } from '../state/AppContext.jsx'
 import { useFun } from './fun/FunContext.jsx'
 import { pickRandom, PRAISE, ENCOURAGE, CLEAR_ALL } from '../data/fun.js'
+import { scoreAll, normalizeQuestion } from './exercise/score'
 import Icon from './ui/Icon.jsx'
 import Button from './ui/Button.jsx'
 import styles from './ExerciseEngine.module.css'
@@ -32,30 +33,25 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
     ? questions.filter((q) => wrongSet[q.id])
     : questions
 
+  // 仅保留「数据完整」的题：题库为手写大表，偶发缺选项/缺答案的残缺题不应拖垮整页，
+  // 也不计入总分。渲染与判分都基于同一份 validQuestions，避免「显示 N 题但得分 X/M」错位。
+  const validQuestions = activeQuestions.filter((q) => normalizeQuestion(q).valid)
+
   const select = (qid, oi) => {
     if (submitted) return
     setAnswers((prev) => ({ ...prev, [qid]: oi }))
   }
 
-  // 在 activeQuestions 范围内统计得分与本回合对错 id。
-  const correctCount = activeQuestions.reduce(
-    (acc, q) => acc + (answers[q.id] === q.answer ? 1 : 0),
-    0
-  )
-  const allAnswered = Object.keys(answers).length >= activeQuestions.length && activeQuestions.length > 0
+  // 在 validQuestions 范围内批量判分，得到本回合对错统计。
+  const { correctCount, wrongIds, correctIds } = scoreAll(validQuestions, answers)
+  const allAnswered = Object.keys(answers).length >= validQuestions.length && validQuestions.length > 0
 
   const submit = () => {
     if (submitted || !allAnswered) return
-    const wrongIds = activeQuestions
-      .filter((q) => answers[q.id] !== q.answer)
-      .map((q) => q.id)
-    const correctIds = activeQuestions
-      .filter((q) => answers[q.id] === q.answer)
-      .map((q) => q.id)
     // 错题本溯源：为每道答错的题记录 4 个来源字段（年级 / 学科 / 知识点 id / 知识点标题），
     // 便于家长周报与错题溯源；知识点信息取自题目自身的 grade/pointId/pointTitle（GRADE_LEARNING 提供）。
-    const wrongEntries = activeQuestions
-      .filter((q) => answers[q.id] !== q.answer)
+    const wrongEntries = validQuestions
+      .filter((q) => wrongIds.includes(q.id))
       .map((q) => ({
         id: q.id,
         grade: q.grade ?? state.grade,
@@ -63,7 +59,7 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
         pointId: q.pointId ?? q.point ?? null,
         pointTitle: q.pointTitle ?? null,
       }))
-    actions.answerQuiz(subjectId, correctCount, activeQuestions.length, { wrongIds, correctIds, wrongEntries })
+    actions.answerQuiz(subjectId, correctCount, validQuestions.length, { wrongIds, correctIds, wrongEntries })
     setSubmitted(true)
 
     // 复习完成上报（可选）：错题复习中心据此推进间隔重复排程。普通练习不传该回调。

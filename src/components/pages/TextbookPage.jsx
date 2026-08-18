@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import Icon from '../ui/Icon.jsx'
 import ProgressBar from '../ui/ProgressBar.jsx'
@@ -7,12 +7,44 @@ import { SUBJECTS } from '../../data/content.js'
 import { GRADES, getGradeLearning } from '../../data/grade.js'
 import { getTextbook, countTexts, SUBJECT_IDS } from '../../data/textbook.js'
 import { TextExercises } from '../modules/LessonTexts.jsx'
+import { speak, cancelSpeech, speechSupported } from '../../utils/speech.js'
 import styles from './TextbookPage.module.css'
 
 const subjectMeta = (id) => SUBJECTS.find((s) => s.id === id)
 
-// 单篇课文卡：课文名 + 教材出处 + 课后习题 + 朗读/背诵打卡。
+// 拼装一篇课文的可朗读文本：标题 + 课后题中引号内的诗句 / 课文原文。
+// 只取引号内容，避免把“和爸爸妈妈说一说”这类引导语读出来。
+function getReadAloudText(text) {
+  const parts = [text?.title || '']
+  ;(text?.exercises || []).forEach((ex) => {
+    const m = (ex?.prompt || '').match(/[“"]([^”"]+)[”"]/)
+    if (m) parts.push(m[1])
+  })
+  return parts.filter(Boolean).join('。')
+}
+
+// 单篇课文卡：课文名 + 教材出处 + 课后习题 + 朗读/背诵打卡 + 语音“听一听”。
 function TextCard({ text, accent, read, recite, onRead, onRecite }) {
+  const [speaking, setSpeaking] = useState(false)
+  const canSpeak = speechSupported()
+  const readText = getReadAloudText(text)
+
+  // 组件卸载时停止朗读，避免串音。
+  useEffect(() => () => cancelSpeech(), [])
+
+  const onListen = () => {
+    if (speaking) {
+      cancelSpeech()
+      setSpeaking(false)
+      return
+    }
+    const ok = speak(readText, {
+      onEnd: () => setSpeaking(false),
+      onError: () => setSpeaking(false),
+    })
+    if (ok) setSpeaking(true)
+  }
+
   return (
     <article className={styles.textCard} style={{ '--accent': accent }}>
       <div className={styles.textHead}>
@@ -39,6 +71,18 @@ function TextCard({ text, accent, read, recite, onRead, onRecite }) {
           <Icon name={recite ? 'check' : 'star'} size={15} fill={recite ? 'currentColor' : 'none'} />
           背诵{recite ? '已打卡' : '打卡'}
         </button>
+        {canSpeak && (
+          <button
+            type="button"
+            className={`${styles.checkBtn} ${styles.listen} ${speaking ? styles.listenOn : ''}`}
+            onClick={onListen}
+            aria-pressed={speaking}
+            title="听一听课文朗读"
+          >
+            <Icon name={speaking ? 'close' : 'volume'} size={15} fill={speaking ? 'currentColor' : 'none'} />
+            {speaking ? '停止' : '听一听'}
+          </button>
+        )}
       </div>
     </article>
   )

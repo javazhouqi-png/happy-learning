@@ -23,10 +23,14 @@ export function rewardsReducer(state: AppState, action: AppAction): AppState {
       const price = safeInt(cost);
       if (!id || state.redeemedRewards.includes(id)) return state;
       if (state.points < price) return state;
+      // 兑换“皮肤类”奖励且当前未手动指定主题时，自动应用该皮肤（让奖励真正兑现）。
+      const nextTheme =
+        id.startsWith('skin-') && state.theme === null ? id.replace(/^skin-/, '') : state.theme;
       return {
         ...state,
         points: state.points - price,
         redeemedRewards: [...state.redeemedRewards, id],
+        theme: nextTheme,
         history: pushHistory(state.history, 'reward', `兑换 ${id}`),
       };
     }

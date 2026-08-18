@@ -3,6 +3,7 @@ import { useEffect, Suspense, lazy } from 'react'
 import Header from './components/sections/Header.jsx'
 import Footer from './components/sections/Footer.jsx'
 import MinorModeGate from './components/MinorModeGate.jsx'
+import EyeRestWatcher from './components/EyeRestWatcher.jsx'
 import ErrorBoundary from './components/ui/ErrorBoundary.jsx'
 
 // 路由级代码分割：每个页面独立异步块，避免全部打入主包（门禁要求主包 < 180KB）。
@@ -141,6 +142,8 @@ export default function App() {
       <Footer />
       {/* 全应用级未成年人夜间保护：22:00–6:00 自动锁定，仅用上下文、不引入重数据。 */}
       <MinorModeGate />
+      {/* 护眼提醒：家长开启后每满 20 分钟学习时长弹出一次温和提示。 */}
+      <EyeRestWatcher />
     </>
   )
 }

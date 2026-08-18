@@ -214,3 +214,25 @@ ul {
     scroll-behavior: auto !important;
   }
 }
+
+/* ====================== 主题皮肤：暖阳（sunset） ======================
+   通过 <html data-theme="sunset"> 挂载；仅覆盖色板令牌，不改变结构与字号。
+   约束：暖色系、无紫粉渐变、保持文字对比度（--c-ink 不变）。 */
+[data-theme='sunset'] {
+  --c-primary: #ff8a3d;
+  --c-primary-dark: #f4701f;
+  --c-primary-soft: #fff0e3;
+  --c-bg: #fff4ea;
+  --c-surface: #ffffff;
+  --c-surface-2: #fff0e3;
+  --c-line: #ffd9c2;
+  --c-gamify: #ff6b5e;
+  --c-gamify-soft: #ffe3df;
+  --c-gamify-light: #ff8a7d;
+  --c-gamify-dark: #ef5346;
+  --c-accent-yellow: #ffb020;
+  --c-accent-yellow-soft: #ffd58a;
+  --c-chinese: #ff7a8a;
+  --c-english: #36b56a;
+  --c-math: #ff9f45;
+}

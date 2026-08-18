@@ -6,20 +6,12 @@ import { useApp } from '../../state/AppContext.jsx'
 import { useFun } from '../fun/FunContext.jsx'
 import { pickRandom, EGG_MESSAGES } from '../../data/fun.js'
 import { brand } from '../../data/site.js'
+import { NAV_ITEMS } from '../../data/content.js'
 import styles from './Header.module.css'
 
-// 主导航：6 个独立菜单，按业务类别拆分（学习 / 复习 / 成长 / 乐园 / 家长）。
-// 全部为路由跳转，不再依赖首页锚点；当前路由高亮，移动端折叠为抽屉。
-const NAV = [
-  { id: 'home', label: '首页', route: '/' },
-  { id: 'learn', label: '学习', route: '/learn' },
-  { id: 'textbook', label: '教材', route: '/textbook' },
-  { id: 'review', label: '复习', route: '/review' },
-  { id: 'growth', label: '成长', route: '/growth' },
-  { id: 'grade', label: '年级', route: '/grade' },
-  { id: 'play', label: '乐园', route: '/play' },
-  { id: 'parent', label: '家长', route: '/parent' },
-]
+// 主导航：全站唯一数据源来自 data/content.js 的 NAV_ITEMS（避免双份配置漂移）。
+// 全部为路由跳转；当前路由高亮，移动端折叠为抽屉。
+const NAV = NAV_ITEMS
 
 // 判断导航项是否处于激活态：首页需精确匹配，其余按前缀匹配（如 /learn/chinese 仍高亮“学习”）。
 const isActive = (item, pathname) =>

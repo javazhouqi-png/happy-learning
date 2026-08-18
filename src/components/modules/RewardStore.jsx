@@ -23,6 +23,14 @@ export default function RewardStore() {
     sound('ding')
   }
 
+  // 主题类奖励：已拥有时显示“应用 / 恢复默认”切换。
+  const ownsSunset = owned.includes('skin-sunset')
+  const sunsetApplied = state.theme === 'sunset' || (state.theme !== 'none' && ownsSunset)
+  const handleThemeToggle = (r) => {
+    if (r.kind !== 'theme' || !owned.includes(r.id)) return
+    actions.setTheme(sunsetApplied ? 'none' : 'sunset')
+  }
+
   return (
     <section className="section" id="rewards">
       <div className="container section__inner">
@@ -60,7 +68,17 @@ export default function RewardStore() {
                   {r.cost}
                 </div>
                 {isOwned ? (
-                  <span className={styles.ownedTag}>已拥有</span>
+                  r.kind === 'theme' ? (
+                    <Button
+                      variant={sunsetApplied ? 'soft' : 'primary'}
+                      size="sm"
+                      onClick={() => handleThemeToggle(r)}
+                    >
+                      {sunsetApplied ? '恢复默认' : '应用主题'}
+                    </Button>
+                  ) : (
+                    <span className={styles.ownedTag}>已拥有</span>
+                  )
                 ) : (
                   <Button
                     variant="primary"

@@ -74,6 +74,8 @@ export interface AppState {
   textRead: Record<string, boolean>;
   /** 课文背诵打卡：键为 textbook.textKey，值为是否已背诵。 */
   textRecite: Record<string, boolean>;
+  /** 界面主题：null=跟随拥有状态自动应用；'sunset'=强制暖阳；'none'=强制默认（已拥有也关闭）。 */
+  theme: string | null;
 }
 
 /** 动作联合；末尾宽松成员保证未知动作可被安全接受（降级为原状态）。 */
@@ -86,6 +88,7 @@ export type AppAction =
   | { type: 'SET_GRADE'; grade: number }
   | { type: 'SET_MINOR_MODE'; on: boolean }
   | { type: 'SET_PARENT_PIN'; pin?: string }
+  | { type: 'SET_THEME'; theme: string | null }
   | { type: 'ADD_POINTS'; amount?: number; reason?: string }
   | { type: 'REDEEM_REWARD'; id?: string; cost?: number }
   | { type: 'RECORD_REVIEW'; subjectId: SubjectId; allCorrect?: boolean }

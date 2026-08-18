@@ -70,9 +70,8 @@
   opacity: 0;
   transform: rotateY(180deg);
 }
-.emoji {
-  font-size: 34px;
-  line-height: 1;
+.faceIcon {
+  color: var(--c-gamify);
 }
 .word {
   font-family: var(--font-head);

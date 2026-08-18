@@ -1,5 +1,5 @@
 // 持久化：读取 / 写入 / 版本迁移（v1→v2）。
-import type { AppState, ParentState, SubjectId, SubjectStat, WrongMap, ReviewSlot, HistoryEntry } from './types';
+import type { AppState, ParentState, SubjectId, SubjectStat, WrongMap, ReviewSlot, HistoryEntry, FavoriteItem } from './types';
 import { emptySubject } from './helpers';
 
 const STORAGE_KEY_V1 = 'happy-learning-state-v1';
@@ -51,6 +51,7 @@ export function defaultState(): AppState {
     textRead: {},
     textRecite: {},
     theme: null,
+    favorites: [],
   };
 }
 
@@ -141,6 +142,7 @@ export function migrate(raw: Partial<AppState> | null | undefined): AppState {
     textRead: (r.textRead as Record<string, boolean> | undefined) ?? base.textRead,
     textRecite: (r.textRecite as Record<string, boolean> | undefined) ?? base.textRecite,
     theme: (r.theme as string | null | undefined) ?? base.theme,
+    favorites: Array.isArray(r.favorites) ? (r.favorites as FavoriteItem[]) : base.favorites,
     lastActiveDate: (r.lastActiveDate as string | null | undefined) ?? base.lastActiveDate,
     todayDate: (r.todayDate as string | null | undefined) ?? base.todayDate,
     history: Array.isArray(r.history) ? (r.history as HistoryEntry[]) : [],

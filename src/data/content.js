@@ -420,6 +420,7 @@ export const NAV_ITEMS = [
   { id: 'grade', label: '年级', route: '/grade' },
   { id: 'play', label: '乐园', route: '/play' },
   { id: 'videos', label: '动画', route: '/videos' },
+  { id: 'favorites', label: '收藏', route: '/favorites' },
   { id: 'parent', label: '家长', route: '/parent' },
 ];
 

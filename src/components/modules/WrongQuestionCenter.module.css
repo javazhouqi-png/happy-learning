@@ -81,3 +81,16 @@
   padding-top: 16px;
   animation: pop-in 0.3s ease both;
 }
+
+/* 举一反三：无同源题时的温和降级提示 */
+.simEmpty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 16px;
+  background: var(--c-soft, #f6f7fb);
+  border-radius: var(--r-md);
+  color: var(--c-ink-2);
+  font-size: 14px;
+}

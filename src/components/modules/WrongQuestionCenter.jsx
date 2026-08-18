@@ -5,12 +5,37 @@ import SectionHeading from '../ui/SectionHeading.jsx'
 import Button from '../ui/Button.jsx'
 import ExerciseEngine from '../ExerciseEngine.jsx'
 import { SUBJECTS } from '../../data/content.js'
+import { getSimilarQuestions } from '../../data/similar.js'
 import styles from './WrongQuestionCenter.module.css'
 
 // 本地日期串（与 AppContext 内的口径一致，仅用于“今天待复习”判定，避免重复依赖）。
 function todayStr() {
   const d = new Date()
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+// 错题举一反三：遍历该科错题本，对每道带 pointId 溯源的错题取同源他题，去重后汇总。
+// 旧链路仅存 true（无 pointId）的错题无法溯源，自然被跳过；无结果返回空数组交由 UI 降级。
+function buildSimilar(sub, state) {
+  const set = state.wrongBySubject[sub.id] || {}
+  const out = []
+  const seen = new Set()
+  Object.entries(set).forEach(([qid, entry]) => {
+    if (!entry || !entry.pointId) return
+    const list = getSimilarQuestions({
+      subject: sub.id,
+      grade: entry.grade ?? state.grade,
+      pointId: entry.pointId,
+      questionId: qid,
+      limit: 2,
+    })
+    list.forEach((q) => {
+      if (seen.has(q.id)) return
+      seen.add(q.id)
+      out.push(q)
+    })
+  })
+  return out.slice(0, 6)
 }
 
 // 错题本复习中心：按学科聚合错题数量，内嵌 ExerciseEngine 的「仅错题」模式进行复习，
@@ -20,6 +45,7 @@ function todayStr() {
 export default function WrongQuestionCenter() {
   const { state, derived, actions } = useApp()
   const [openSubject, setOpenSubject] = useState(null)
+  const [similarSubject, setSimilarSubject] = useState(null)
   const today = todayStr()
 
   return (
@@ -76,6 +102,15 @@ export default function WrongQuestionCenter() {
                     {isOpen ? '收起' : '开始复习'}
                   </Button>
                   {count > 0 && (
+                    <Button
+                      variant="soft"
+                      size="sm"
+                      onClick={() => setSimilarSubject(similarSubject === sub.id ? null : sub.id)}
+                    >
+                      {similarSubject === sub.id ? '收起举一反三' : '举一反三'}
+                    </Button>
+                  )}
+                  {count > 0 && (
                     <button
                       className={styles.clearLink}
                       onClick={() => {
@@ -92,8 +127,21 @@ export default function WrongQuestionCenter() {
                     <ExerciseEngine
                       subjectId={sub.id}
                       initialReview
+                      favoritable
                       onComplete={({ allCorrect }) => actions.recordReview(sub.id, allCorrect)}
                     />
+                  </div>
+                )}
+
+                {similarSubject === sub.id && (
+                  <div className={styles.reviewBox}>
+                    {buildSimilar(sub, state).length > 0 ? (
+                      <ExerciseEngine subjectId={sub.id} questions={buildSimilar(sub, state)} />
+                    ) : (
+                      <p className={styles.simEmpty}>
+                        <Icon name="bulb" size={15} /> 这几道题暂无同源相似题，建议先把原题练熟～
+                      </p>
+                    )}
                   </div>
                 )}
               </div>

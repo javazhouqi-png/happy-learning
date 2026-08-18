@@ -168,6 +168,24 @@
   color: var(--c-danger-ink);
 }
 
+/* 错题★收藏：题号旁的轻量开关，与答题选项视觉解耦 */
+.favBtn {
+  margin-left: 8px;
+  border: none;
+  background: none;
+  padding: 2px;
+  cursor: pointer;
+  line-height: 0;
+  border-radius: 6px;
+  transition: transform 0.12s ease;
+}
+.favBtn:hover {
+  transform: scale(1.15);
+}
+.favOn {
+  filter: drop-shadow(0 0 2px rgba(255, 179, 0, 0.5));
+}
+
 .optLabel {
   display: inline-flex;
   align-items: center;

@@ -297,6 +297,23 @@
   background: var(--c-primary-soft);
 }
 
+/* 忘记密码：轻量文字按钮，与设置按钮并列但视觉弱化处理 */
+.pinLink {
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  color: var(--c-ink-3);
+  padding: 7px 4px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.pinLink:hover {
+  color: var(--c-danger);
+}
+
 /* 学习档案卡片 */
 .archive {
   margin-top: var(--gap);

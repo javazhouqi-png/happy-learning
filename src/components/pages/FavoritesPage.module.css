@@ -1,0 +1,139 @@
+.head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 28px 0 18px;
+}
+.headIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--c-warn);
+  box-shadow: 0 10px 22px -10px rgba(255, 179, 0, 0.6);
+}
+.headTitle {
+  margin: 0;
+  font-size: clamp(22px, 4vw, 30px);
+  color: var(--c-ink);
+}
+.headSub {
+  margin: 4px 0 0;
+  color: var(--c-ink-soft);
+  font-size: 14px;
+}
+
+/* 空态 */
+.empty {
+  text-align: center;
+  padding: 64px 16px;
+  color: var(--c-ink-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.emptyIcon { color: var(--c-line); }
+.emptyHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* 分组 */
+.group {
+  margin-bottom: 28px;
+}
+.groupHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent, var(--c-primary));
+  margin-bottom: 12px;
+}
+.groupTitle {
+  margin: 0;
+  font-size: 18px;
+  color: var(--c-ink);
+}
+.groupCount {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent, var(--c-primary));
+  border-radius: 999px;
+  padding: 1px 9px;
+}
+
+/* 列表 */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--c-surface);
+  border: 2px solid var(--c-line);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-soft);
+}
+.itemStar {
+  color: var(--accent, var(--c-warn));
+  flex-shrink: 0;
+}
+.itemBody {
+  flex: 1;
+  min-width: 0;
+}
+.itemTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--c-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.itemMeta {
+  display: flex;
+  gap: 10px;
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--c-ink-soft);
+}
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.goLink {
+  color: var(--accent, var(--c-primary));
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid currentColor;
+}
+.goLink:hover { background: color-mix(in srgb, var(--accent, var(--c-primary)) 12%, transparent); }
+.removeBtn {
+  border: none;
+  background: none;
+  color: var(--c-ink-3);
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.removeBtn:hover { color: var(--c-danger); }

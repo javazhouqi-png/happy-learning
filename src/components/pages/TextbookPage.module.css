@@ -226,6 +226,8 @@
 }
 .checkBtn.recite.checkOn { background: var(--c-english); border-color: var(--c-english); }
 .checkBtn.listen.listenOn { background: var(--c-gamify); border-color: var(--c-gamify); }
+.checkBtn.fav { border-color: var(--c-warn); color: var(--c-warn); }
+.checkBtn.fav.favOn { background: var(--c-warn); border-color: var(--c-warn); color: #fff; }
 
 /* 知识点速览 */
 .know {

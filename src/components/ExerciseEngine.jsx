@@ -13,11 +13,13 @@ import styles from './ExerciseEngine.module.css'
 // 支持「错题本复习」：仅挑出此前答错的题目重练，答对即从错题本移除。
 // initialReview：受控属性（默认 false）。错题本复习中心会传 true，直接以“仅错题”模式打开，
 // 无需用户再点一次“复习错题”；不传时保持原有行为，向后兼容。
-export default function ExerciseEngine({ subjectId, initialReview = false, onComplete }) {
+export default function ExerciseEngine({ subjectId, initialReview = false, onComplete, questions: questionOverride, favoritable = false }) {
   const { state, derived, actions } = useApp()
   const { celebrate, sound, setMood } = useFun()
   const subject = getSubject(subjectId)
-  const questions = getQuiz(subjectId, state.grade)
+  // 自定义题集（如「举一反三」）：覆盖默认题库，直接以传入集合练习，复用判分与渲染。
+  const hasOverride = Array.isArray(questionOverride) && questionOverride.length > 0
+  const questions = hasOverride ? questionOverride : getQuiz(subjectId, state.grade)
 
   // answers 以题目 id 为键（而非序号），筛选/重排序时不会错位。
   const [answers, setAnswers] = useState({}) // { [questionId]: optionIndex }
@@ -28,10 +30,12 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
   const wrongSet = derived.wrongBySubject[subjectId] || {}
   const wrongCount = derived.wrongCountBySubject[subjectId] || 0
 
-  // 当前展示的题目集：复习模式 = 仅错题；普通模式 = 全部。
-  const activeQuestions = reviewMode
-    ? questions.filter((q) => wrongSet[q.id])
-    : questions
+  // 当前展示的题目集：自定义题集 = 直接使用；复习模式 = 仅错题；普通模式 = 全部。
+  const activeQuestions = hasOverride
+    ? questions
+    : reviewMode
+      ? questions.filter((q) => wrongSet[q.id])
+      : questions
 
   // 仅保留「数据完整」的题：题库为手写大表，偶发缺选项/缺答案的残缺题不应拖垮整页，
   // 也不计入总分。渲染与判分都基于同一份 validQuestions，避免「显示 N 题但得分 X/M」错位。
@@ -119,10 +123,10 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
     <div className={styles.wrap} style={{ '--accent': subject?.color }}>
       <div className={styles.head}>
         <h3 className={styles.title}>
-          {subject?.name} · {reviewMode ? '错题复习' : '互动练习'}
+          {subject?.name} · {hasOverride ? '专项练习' : reviewMode ? '错题复习' : '互动练习'}
         </h3>
         <div className={styles.headTools}>
-          {wrongCount > 0 && (
+          {!hasOverride && wrongCount > 0 && (
             <button className={styles.reviewBtn} onClick={toggleReview}>
               <Icon name="bulb" size={14} />
               {reviewMode ? '返回全部题目' : `复习错题 (${wrongCount})`}
@@ -136,7 +140,7 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
         </div>
       </div>
 
-      {reviewMode && (
+      {reviewMode && !hasOverride && (
         <p className={styles.reviewHint}>
           仅练习之前答错的题；全部答对后这些题会移出错题本。
           <button className={styles.clearBtn} onClick={() => actions.clearWrong(subjectId)}>
@@ -146,11 +150,34 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
       )}
 
       <ol className={styles.list}>
-        {activeQuestions.map((q, qi) => (
+        {activeQuestions.map((q, qi) => {
+          const favKey = `wrong:${q.id}`
+          const favOn = favoritable && derived.favoriteSet.has(favKey)
+          const toggleFav = () =>
+            actions.toggleFavorite({
+              kind: 'wrong',
+              key: q.id,
+              title: q.q,
+              subject: subjectId,
+              grade: state.grade,
+              addedAt: Date.now(),
+            })
+          return (
           <li key={q.id} className={styles.q}>
             <p className={styles.qText}>
               <span className={styles.qNum}>{qi + 1}.</span>
               {q.q}
+              {favoritable && (
+                <button
+                  type="button"
+                  className={`${styles.favBtn} ${favOn ? styles.favOn : ''}`}
+                  onClick={toggleFav}
+                  aria-pressed={favOn}
+                  title={favOn ? '取消收藏' : '收藏这道题'}
+                >
+                  <Icon name="star" size={15} style={{ color: favOn ? 'var(--c-warn)' : 'var(--c-ink-3)', opacity: favOn ? 1 : 0.55 }} />
+                </button>
+              )}
             </p>
             <div className={styles.options}>
               {q.options.map((opt, oi) => {
@@ -189,7 +216,8 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
               </p>
             )}
           </li>
-        ))}
+          )
+        })}
       </ol>
 
       <div className={styles.actions}>

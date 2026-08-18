@@ -75,6 +75,9 @@ export function computeDerived(state: AppState) {
   // 未成年人模式下，每日上限强制不超过家长设定的“未成年人上限”（默认 40 分钟），
   // 复用既有每日时长统计与进度条，无需新增状态字段。
   const todayStudyMin = Math.round(state.todayStudySec / 60)
+
+  // 收藏夹快速查询集合：以 `${kind}:${key}` 为键，供任意条目的「★收藏」态 O(1) 判定。
+  const favoriteSet = new Set((state.favorites || []).map((f) => `${f.kind}:${f.key}`))
   const minorCap = state.parent.minorMode
     ? Math.min(state.parent.dailyLimitMin, state.parent.minorDailyCapMin || 40)
     : state.parent.dailyLimitMin
@@ -100,5 +103,6 @@ export function computeDerived(state: AppState) {
     dailyLimitMin,
     dailyRemainingMin,
     dailyOverLimit,
+    favoriteSet,
   }
 }

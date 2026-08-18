@@ -23,8 +23,8 @@ function getReadAloudText(text) {
   return parts.filter(Boolean).join('。')
 }
 
-// 单篇课文卡：课文名 + 教材出处 + 课后习题 + 朗读/背诵打卡 + 语音“听一听”。
-function TextCard({ text, accent, read, recite, onRead, onRecite }) {
+// 单篇课文卡：课文名 + 教材出处 + 课后习题 + 朗读/背诵打卡 + 语音“听一听” + ★收藏。
+function TextCard({ text, accent, read, recite, onRead, onRecite, favorited, onToggleFavorite }) {
   const [speaking, setSpeaking] = useState(false)
   const canSpeak = speechSupported()
   const readText = getReadAloudText(text)
@@ -83,6 +83,16 @@ function TextCard({ text, accent, read, recite, onRead, onRecite }) {
             {speaking ? '停止' : '听一听'}
           </button>
         )}
+        <button
+          type="button"
+          className={`${styles.checkBtn} ${styles.fav} ${favorited ? styles.favOn : ''}`}
+          onClick={onToggleFavorite}
+          aria-pressed={favorited}
+          title={favorited ? '取消收藏' : '收藏这篇课文'}
+        >
+          <Icon name="star" size={15} style={{ color: favorited ? 'var(--c-warn)' : 'var(--c-ink-3)', opacity: favorited ? 1 : 0.5 }} />
+          {favorited ? '已收藏' : '收藏'}
+        </button>
       </div>
     </article>
   )
@@ -237,6 +247,17 @@ export default function TextbookPage() {
                           recite={!!state.textRecite[t.key]}
                           onRead={actions.markTextRead}
                           onRecite={actions.markTextRecite}
+                          favorited={derived.favoriteSet.has(`text:${t.key}`)}
+                          onToggleFavorite={() =>
+                            actions.toggleFavorite({
+                              kind: 'text',
+                              key: t.key,
+                              title: t.title,
+                              subject: subId,
+                              grade,
+                              addedAt: Date.now(),
+                            })
+                          }
                         />
                       ))}
                     </div>

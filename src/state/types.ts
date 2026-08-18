@@ -25,6 +25,16 @@ export interface WrongInput {
   pointTitle?: string;
 }
 
+/** 用户收藏条目（持久化值）：儿童主动收藏的课文 / 古诗 / 错题 / 视频等。 */
+export interface FavoriteItem {
+  kind: 'text' | 'poem' | 'wrong' | 'video';
+  key: string;
+  title: string;
+  subject?: SubjectId;
+  grade?: number;
+  addedAt: number;
+}
+
 export type WrongValue = true | WrongEntry;
 export type WrongMap = Record<string, WrongValue>;
 
@@ -76,6 +86,8 @@ export interface AppState {
   textRecite: Record<string, boolean>;
   /** 界面主题：null=跟随拥有状态自动应用；'sunset'=强制暖阳；'none'=强制默认（已拥有也关闭）。 */
   theme: string | null;
+  /** 用户收藏夹：儿童主动收藏的课文/古诗/错题/视频等，按收藏时间倒序。 */
+  favorites: FavoriteItem[];
 }
 
 /** 动作联合；末尾宽松成员保证未知动作可被安全接受（降级为原状态）。 */
@@ -95,5 +107,6 @@ export type AppAction =
   | { type: 'CLEAR_WRONG'; subjectId: SubjectId }
   | { type: 'MARK_TEXT_READ'; key: string }
   | { type: 'MARK_TEXT_RECITE'; key: string }
+  | { type: 'TOGGLE_FAVORITE'; item: FavoriteItem }
   | { type: 'HYDRATE'; next?: Partial<AppState> }
   | { type: 'RESET' };

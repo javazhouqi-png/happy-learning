@@ -15,7 +15,7 @@ const FILTERS = [
 ]
 
 export default function VideoLibrary() {
-  const { state } = useApp()
+  const { state, derived, actions } = useApp()
   const navigate = useNavigate()
   const [active, setActive] = useState(null)
   const [filter, setFilter] = useState('all')
@@ -63,7 +63,22 @@ export default function VideoLibrary() {
         ) : (
           <div className={styles.grid}>
             {list.map((v) => (
-              <VideoCard key={v.id} video={v} watched={!!state.videosWatched[v.id]} onPlay={setActive} />
+              <VideoCard
+                key={v.id}
+                video={v}
+                watched={!!state.videosWatched[v.id]}
+                onPlay={setActive}
+                favorited={derived.favoriteSet.has(`video:${v.id}`)}
+                onToggleFavorite={() =>
+                  actions.toggleFavorite({
+                    kind: 'video',
+                    key: v.id,
+                    title: v.title,
+                    subject: v.subject,
+                    addedAt: Date.now(),
+                  })
+                }
+              />
             ))}
           </div>
         )}

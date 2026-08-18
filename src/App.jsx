@@ -18,6 +18,7 @@ const GradeLearning = lazy(() => import('./components/modules/GradeLearning.jsx'
 const PlayCenter = lazy(() => import('./components/pages/PlayCenter.jsx'))
 const ParentCenter = lazy(() => import('./components/pages/ParentCenter.jsx'))
 const VideoLibrary = lazy(() => import('./components/pages/VideoLibrary.jsx'))
+const FavoritesPage = lazy(() => import('./components/pages/FavoritesPage.jsx'))
 
 // 路由根：所有页面共用顶部导航与页脚；主体按路由切换。
 // 菜单结构：首页(总览) / 学习 / 复习 / 成长 / 乐园 / 家长，按业务类别拆分，
@@ -125,6 +126,14 @@ export default function App() {
               element={
                 <ErrorBoundary>
                   <VideoLibrary />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/favorites"
+              element={
+                <ErrorBoundary>
+                  <FavoritesPage />
                 </ErrorBoundary>
               }
             />

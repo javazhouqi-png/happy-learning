@@ -108,6 +108,14 @@ export default function ParentPanel() {
     setPinErr('')
   }
 
+  // 忘记家长密码：二次确认后清空为未设置（安全兜底，避免无邮箱绑定时彻底锁死）。
+  const onForgotPin = () => {
+    if (!parent.parentPin) return
+    if (window.confirm('确定要重置家长密码吗？重置后关闭未成年人模式将不再需要验证。')) {
+      actions.setParentPin('')
+    }
+  }
+
   // 档案导出 / 导入
   const onExport = () => {
     exportProfile(state)
@@ -248,6 +256,9 @@ export default function ParentPanel() {
               <button className={styles.pinBtn} onClick={() => { setPinErr(''); setPinInput(''); setPinOpen(true) }}>
                 {parent.parentPin ? '修改' : '设置'}
               </button>
+              {parent.parentPin && (
+                <button className={styles.pinLink} onClick={onForgotPin}>忘记密码？</button>
+              )}
             </div>
 
             {guards.map((g) => (

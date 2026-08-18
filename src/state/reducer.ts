@@ -5,6 +5,7 @@ import { parentReducer } from './reducers/parent';
 import { rewardsReducer } from './reducers/rewards';
 import { reviewReducer } from './reducers/review';
 import { profileReducer } from './reducers/profile';
+import { favoritesReducer } from './reducers/favorites';
 
 export function reducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
@@ -15,6 +16,9 @@ export function reducer(state: AppState, action: AppAction): AppState {
     case 'MARK_TEXT_READ':
     case 'MARK_TEXT_RECITE':
       return progressReducer(state, action);
+
+    case 'TOGGLE_FAVORITE':
+      return favoritesReducer(state, action);
 
     case 'UPDATE_PARENT':
     case 'SET_GRADE':

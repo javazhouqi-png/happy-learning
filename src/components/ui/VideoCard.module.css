@@ -77,6 +77,32 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* 视频★收藏：缩略图右上角悬浮按钮，不遮挡播放与时长 */
+.fav {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  display: grid;
+  place-items: center;
+  background: rgba(45, 49, 66, 0.5);
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.fav:hover {
+  transform: scale(1.12);
+  background: rgba(45, 49, 66, 0.7);
+}
+.favOn {
+  background: var(--c-warn);
+  box-shadow: 0 4px 12px -4px rgba(255, 179, 0, 0.6);
+}
+
 .body {
   padding: 18px 20px 22px;
   display: flex;

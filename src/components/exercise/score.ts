@@ -8,7 +8,7 @@
 // - normalizeQuestion 负责识别「可被判分」的题，调用方据此过滤或跳过，绝不产生 NaN / 越界。
 
 /** 已支持的题型。新增题型在此联合类型补一项即可。 */
-export type QuestionType = 'single'
+export type QuestionType = 'single' | 'fill'
 
 /** 题目结构（与 grade.js 中 quiz 项兼容；多余字段用索引签名兜底，避免类型报错）。 */
 export interface Question {

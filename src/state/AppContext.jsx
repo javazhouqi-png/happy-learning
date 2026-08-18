@@ -71,6 +71,7 @@ export function AppProvider({ children }) {
       recordReview: (subjectId, allCorrect) => dispatch({ type: 'RECORD_REVIEW', subjectId, allCorrect }),
       markTextRead: (key) => dispatch({ type: 'MARK_TEXT_READ', key }),
       markTextRecite: (key) => dispatch({ type: 'MARK_TEXT_RECITE', key }),
+      toggleFavorite: (item) => dispatch({ type: 'TOGGLE_FAVORITE', item }),
       reset: () => dispatch({ type: 'RESET' }),
     }),
     []

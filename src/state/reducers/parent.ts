@@ -18,9 +18,15 @@ export function parentReducer(state: AppState, action: AppAction): AppState {
     case 'SET_MINOR_MODE':
       return { ...state, parent: { ...state.parent, minorMode: !!action.on } };
 
-    // 设置 / 修改家长密码（最多 6 位，本地用于关闭未成年人模式时验证）。
+    // 设置 / 修改家长密码：强制 4–6 位数字（与 ParentPanel 受控校验双保险）。
+    // 空串视为「找回/重置」通道（清空为未设置）；非法格式忽略、不改变原值。
     case 'SET_PARENT_PIN': {
-      const pin = String(action.pin || '').slice(0, 6);
+      const pin = String(action.pin ?? '');
+      if (pin === '') {
+        if (state.parent.parentPin === '') return state;
+        return { ...state, parent: { ...state.parent, parentPin: '' } };
+      }
+      if (!/^\d{4,6}$/.test(pin)) return state; // 非法：保持原值，由 UI 提示
       return { ...state, parent: { ...state.parent, parentPin: pin } };
     }
 

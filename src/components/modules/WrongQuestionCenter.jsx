@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useApp } from '../../state/AppContext.jsx'
 import Icon from '../ui/Icon.jsx'
 import SectionHeading from '../ui/SectionHeading.jsx'
@@ -6,6 +7,7 @@ import Button from '../ui/Button.jsx'
 import ExerciseEngine from '../ExerciseEngine.jsx'
 import { SUBJECTS } from '../../data/content.js'
 import { getSimilarQuestions } from '../../data/similar.js'
+import { getQuiz } from '../../data/grade.js'
 import styles from './WrongQuestionCenter.module.css'
 
 // 本地日期串（与 AppContext 内的口径一致，仅用于“今天待复习”判定，避免重复依赖）。
@@ -38,6 +40,73 @@ function buildSimilar(sub, state) {
   return out.slice(0, 6)
 }
 
+// 错题↔知识点闭环：按 pointId 把该科错题分组，每组带知识点名、题数与代表年级。
+// 无 pointId 溯源的错题归入「未归类知识点」，仍可在复习模式巩固。返回按题数降序的分组数组。
+function groupWrongByPoint(sub, state) {
+  const set = state.wrongBySubject[sub.id] || {}
+  const map = new Map()
+  Object.values(set).forEach((entry) => {
+    const e = entry && typeof entry === 'object' ? entry : {}
+    const pid = e.pointId || ''
+    const key = pid || '__none__'
+    if (!map.has(key)) {
+      map.set(key, {
+        pointId: pid,
+        title: e.pointTitle || '未归类知识点',
+        grade: e.grade,
+        count: 0,
+      })
+    }
+    map.get(key).count += 1
+  })
+  return Array.from(map.values()).sort((a, b) => b.count - a.count)
+}
+
+// 取某知识点对应的全部题目（用于「练这组」针对性练习）；兼容 pointId / point 两种字段命名。
+function questionsOfPoint(subjectId, grade, pointId) {
+  const all = getQuiz(subjectId, grade) || []
+  return all.filter((q) => (q.pointId ?? q.point) === pointId)
+}
+
+// 单知识点针对性练习：取该 pointId 对应的全部题目复用 ExerciseEngine 判分，
+// 答对即移出错题本、答错保留溯源，形成「错题 → 知识点 → 针对性练习」闭环。
+// 顶部提供「回教材」入口，便于回到统编教材对应单元巩固。
+function PointPractice({ subject, pointId, groups, state, onClose, onComplete }) {
+  const group = groups.find((g) => g.pointId === pointId)
+  const grade = group?.grade ?? state.grade
+  const questions = pointId ? questionsOfPoint(subject.id, grade, pointId) : []
+
+  return (
+    <div>
+      <div className={styles.groupHead}>
+        <span className={styles.groupHeadTitle}>
+          <Icon name="bulb" size={15} /> 针对性练习：{group?.title || '该知识点'}
+        </span>
+        <div className={styles.groupHeadTools}>
+          <Link to="/textbook" className={styles.backLink}>
+            <Icon name="book" size={13} /> 回教材
+          </Link>
+          <button type="button" className={styles.groupBtn} onClick={onClose}>
+            收起练习
+          </button>
+        </div>
+      </div>
+      {questions.length > 0 ? (
+        <ExerciseEngine
+          subjectId={subject.id}
+          questions={questions}
+          favoritable
+          onComplete={onComplete}
+        />
+      ) : (
+        <p className={styles.simEmpty}>
+          <Icon name="bulb" size={15} /> 该知识点的练习题暂未在题库中，可先到「回教材」巩固课文。
+        </p>
+      )}
+    </div>
+  )
+}
+
 // 错题本复习中心：按学科聚合错题数量，内嵌 ExerciseEngine 的「仅错题」模式进行复习，
 // 并支持单科清空。判分 / 移出错题的逻辑完全复用 ExerciseEngine，这里只做编排，不复制业务。
 // 借鉴 flashcard 类项目的间隔重复（Leitner）思路：每次复习完成会推进该科的复习排程，
@@ -46,6 +115,7 @@ export default function WrongQuestionCenter() {
   const { state, derived, actions } = useApp()
   const [openSubject, setOpenSubject] = useState(null)
   const [similarSubject, setSimilarSubject] = useState(null)
+  const [groupPractice, setGroupPractice] = useState(null) // 正在针对性练习的知识点 pointId
   const today = todayStr()
 
   return (
@@ -124,12 +194,45 @@ export default function WrongQuestionCenter() {
 
                 {isOpen && count > 0 && (
                   <div className={styles.reviewBox}>
-                    <ExerciseEngine
-                      subjectId={sub.id}
-                      initialReview
-                      favoritable
-                      onComplete={({ allCorrect }) => actions.recordReview(sub.id, allCorrect)}
-                    />
+                    {groupPractice ? (
+                      <PointPractice
+                        subject={sub}
+                        pointId={groupPractice}
+                        groups={groupWrongByPoint(sub, state)}
+                        state={state}
+                        onClose={() => setGroupPractice(null)}
+                        onComplete={({ allCorrect }) => actions.recordReview(sub.id, allCorrect)}
+                      />
+                    ) : (
+                      <>
+                        <p className={styles.groupHint}>按知识点分组，哪个薄弱就专练哪个：</p>
+                        <ul className={styles.groups}>
+                          {groupWrongByPoint(sub, state).map((g) => (
+                            <li key={g.pointId || '__none__'} className={styles.groupRow}>
+                              <span className={styles.groupName}>{g.title}</span>
+                              <span className={styles.groupCount}>{g.count} 题</span>
+                              {g.pointId ? (
+                                <button
+                                  type="button"
+                                  className={styles.groupBtn}
+                                  onClick={() => setGroupPractice(g.pointId)}
+                                >
+                                  练这组
+                                </button>
+                              ) : (
+                                <span className={styles.groupMuted}>复习模式巩固</span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                        <ExerciseEngine
+                          subjectId={sub.id}
+                          initialReview
+                          favoritable
+                          onComplete={({ allCorrect }) => actions.recordReview(sub.id, allCorrect)}
+                        />
+                      </>
+                    )}
                   </div>
                 )}
 

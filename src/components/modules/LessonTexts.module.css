@@ -104,22 +104,65 @@
   border: 1px solid var(--c-line);
   background: var(--c-bg);
   font-size: 13px;
+  font-family: inherit;
   color: var(--c-ink);
+  cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.optCorrect {
+.optChip:disabled {
+  cursor: default;
+}
+
+.optPicked {
   border-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 14%, #fff);
   color: var(--accent);
   font-weight: 700;
 }
 
+.optCorrect {
+  border-color: var(--c-success);
+  background: var(--c-success-soft);
+  color: var(--c-success-ink);
+  font-weight: 700;
+}
+
+.optWrong {
+  border-color: var(--c-danger);
+  background: var(--c-danger-soft);
+  color: var(--c-danger-ink);
+  font-weight: 700;
+}
+
 .exExplain {
   margin: 8px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   font-size: 13px;
   line-height: 1.6;
   color: var(--c-ink-soft);
+}
+
+.exOk {
+  color: var(--c-success-ink);
+  background: var(--c-success-soft);
+  border-radius: var(--r-sm, 8px);
+  padding: 6px 10px;
+}
+
+.exNo {
+  color: var(--c-danger-ink);
+  background: var(--c-danger-soft);
+  border-radius: var(--r-sm, 8px);
+  padding: 6px 10px;
+}
+
+.exBtns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .revealBtn {
@@ -130,12 +173,88 @@
   background: #fff;
   color: var(--accent);
   font-size: 13px;
+  font-family: inherit;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.revealBtn:hover {
+.revealBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.revealBtn:hover:not(:disabled) {
   background: color-mix(in srgb, var(--accent) 10%, #fff);
+}
+
+/* 连一连：左右两列 + 中间箭头，互动配对 */
+.connectCols {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.connectCol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cArrow {
+  flex: none;
+  color: var(--c-ink-faint);
+  font-size: 18px;
+}
+
+.cItem {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: var(--r-sm, 8px);
+  border: 1px solid var(--c-line);
+  background: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--c-ink);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.cItem:disabled {
+  cursor: default;
+}
+
+.cItemSel {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, #fff);
+  color: var(--accent);
+  font-weight: 700;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.cItemMatched {
+  border-style: dashed;
+  border-color: var(--c-ink-faint);
+  background: var(--c-bg);
+}
+
+.cItemOk {
+  border-color: var(--c-success);
+  background: var(--c-success-soft);
+  color: var(--c-success-ink);
+  font-weight: 700;
+}
+
+.cItemNo {
+  border-color: var(--c-danger);
+  background: var(--c-danger-soft);
+  color: var(--c-danger-ink);
+  font-weight: 700;
 }
 
 .pairs {

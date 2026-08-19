@@ -35,6 +35,25 @@ export interface FavoriteItem {
   addedAt: number;
 }
 
+/** 每日学习任务单中的单条任务（今日三件事）。 */
+export interface DailyTask {
+  /** 稳定槽位 id（如 review-wrong / read-text / watch-video），用于持久化勾选状态。 */
+  id: string;
+  /** 展示标题。 */
+  title: string;
+  /** 是否已完成。 */
+  done: boolean;
+  /** 点击「去做」跳转的路由（如 /review、/textbook）。 */
+  route?: string;
+}
+
+/** 每日任务单：按天生成，跨天自动重置。 */
+export interface DailyTasks {
+  /** 本地日期串 YYYY-MM-DD；与当天不一致时触发重新生成。 */
+  date: string;
+  items: DailyTask[];
+}
+
 export type WrongValue = true | WrongEntry;
 export type WrongMap = Record<string, WrongValue>;
 
@@ -88,6 +107,8 @@ export interface AppState {
   theme: string | null;
   /** 用户收藏夹：儿童主动收藏的课文/古诗/错题/视频等，按收藏时间倒序。 */
   favorites: FavoriteItem[];
+  /** 每日学习任务单（今日三件事）：按天生成，跨天重置，提升学习留存与闭环。 */
+  dailyTasks: DailyTasks;
 }
 
 /** 动作联合；末尾宽松成员保证未知动作可被安全接受（降级为原状态）。 */
@@ -108,5 +129,7 @@ export type AppAction =
   | { type: 'MARK_TEXT_READ'; key: string }
   | { type: 'MARK_TEXT_RECITE'; key: string }
   | { type: 'TOGGLE_FAVORITE'; item: FavoriteItem }
+  | { type: 'SET_DAILY_TASKS'; tasks: DailyTasks }
+  | { type: 'TOGGLE_DAILY_TASK'; id: string }
   | { type: 'HYDRATE'; next?: Partial<AppState> }
   | { type: 'RESET' };

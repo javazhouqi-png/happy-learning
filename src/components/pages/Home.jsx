@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import Icon from '../ui/Icon.jsx'
 import Hero from '../sections/Hero.jsx'
 import SubjectModules from '../sections/SubjectModules.jsx'
+import DailyTasks from '../sections/DailyTasks.jsx'
 import Gamification from '../sections/Gamification.jsx'
 import ResponsiveShowcase from '../sections/ResponsiveShowcase.jsx'
 import FinalCTA from '../sections/FinalCTA.jsx'
@@ -24,6 +25,7 @@ export default function Home() {
     <>
       <Hero />
       <SubjectModules />
+      <DailyTasks />
       <Gamification />
 
       <section className={`section ${styles.quick}`}>

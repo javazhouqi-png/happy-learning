@@ -6,6 +6,7 @@ import { rewardsReducer } from './reducers/rewards';
 import { reviewReducer } from './reducers/review';
 import { profileReducer } from './reducers/profile';
 import { favoritesReducer } from './reducers/favorites';
+import { dailyTasksReducer } from './reducers/dailyTasks';
 
 export function reducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
@@ -19,6 +20,10 @@ export function reducer(state: AppState, action: AppAction): AppState {
 
     case 'TOGGLE_FAVORITE':
       return favoritesReducer(state, action);
+
+    case 'SET_DAILY_TASKS':
+    case 'TOGGLE_DAILY_TASK':
+      return dailyTasksReducer(state, action);
 
     case 'UPDATE_PARENT':
     case 'SET_GRADE':

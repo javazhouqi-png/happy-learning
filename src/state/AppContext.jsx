@@ -2,6 +2,7 @@ import { createContext, useContext, useReducer, useEffect, useMemo } from 'react
 import { reducer } from './reducer';
 import { loadState, saveState } from './storage';
 import { computeDerived } from './selectors';
+import { generateDailyTasks, todayStr } from '../data/dailyTasks.js';
 
 // 对外暴露积分规则（部分组件/测试可能需要）。
 export { POINTS } from './constants';
@@ -41,6 +42,16 @@ export function AppProvider({ children }) {
   // 派生数据：由 state 计算等级、徽章、掌握度等，抽为纯函数 computeDerived 便于测试与按需 memo。
   const derived = useMemo(() => computeDerived(state), [state]);
 
+  // 每日任务单自动生成：跨天（或首次进入、存储无任务）时按当前状态产出「今日三件事」。
+  // 仅在 date 变化时触发，生成后 date 与当天一致即不再重复生成；不阻塞首屏。
+  useEffect(() => {
+    const today = todayStr()
+    if (state.dailyTasks?.date !== today) {
+      actions.setDailyTasks(generateDailyTasks(state));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.dailyTasks?.date]);
+
   // 动作集合：用稳定的函数引用派发，组件无需关心 action 形状。
   const actions = useMemo(
     () => ({
@@ -72,6 +83,8 @@ export function AppProvider({ children }) {
       markTextRead: (key) => dispatch({ type: 'MARK_TEXT_READ', key }),
       markTextRecite: (key) => dispatch({ type: 'MARK_TEXT_RECITE', key }),
       toggleFavorite: (item) => dispatch({ type: 'TOGGLE_FAVORITE', item }),
+      setDailyTasks: (tasks) => dispatch({ type: 'SET_DAILY_TASKS', tasks }),
+      toggleDailyTask: (id) => dispatch({ type: 'TOGGLE_DAILY_TASK', id }),
       reset: () => dispatch({ type: 'RESET' }),
     }),
     []

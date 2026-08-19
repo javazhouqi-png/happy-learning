@@ -11,55 +11,173 @@ const TYPE_META = {
   connect: { label: '连一连', icon: 'arrowRight' },
 }
 
-// 填空类习题：选项展示为小卡片，点击“显示答案”后高亮正确项并给出解析。
+// 填空类习题：选项展示为可点击的小卡片，孩子先选再“检查”，即时反馈对错与解析。
+// 由被动“显示答案”升级为「先练后判」，与答题引擎一致的即时反馈体验。
 function FillExercise({ ex, accent }) {
-  const [show, setShow] = useState(false)
+  const [picked, setPicked] = useState(null)
+  const [checked, setChecked] = useState(false)
+  const answered = picked !== null
+  const isRight = answered && picked === ex.answer
+
+  const reset = () => {
+    setPicked(null)
+    setChecked(false)
+  }
+
   return (
     <li className={styles.exRow}>
       <span className={styles.exTag} style={{ background: accent }}>{TYPE_META.fill.label}</span>
       <div className={styles.exBody}>
         <p className={styles.exPrompt}>{ex.prompt}</p>
         <div className={styles.options}>
-          {ex.options.map((opt, i) => (
-            <span
-              key={i}
-              className={`${styles.optChip} ${show && i === ex.answer ? styles.optCorrect : ''}`}
-            >
-              {opt}
-            </span>
-          ))}
+          {ex.options.map((opt, i) => {
+            let cls = styles.optChip
+            if (checked && i === ex.answer) cls += ` ${styles.optCorrect}`
+            else if (checked && i === picked) cls += ` ${styles.optWrong}`
+            else if (i === picked) cls += ` ${styles.optPicked}`
+            return (
+              <button
+                key={i}
+                type="button"
+                className={cls}
+                disabled={checked}
+                aria-pressed={i === picked}
+                onClick={() => !checked && setPicked(i)}
+              >
+                {opt}
+              </button>
+            )
+          })}
         </div>
-        {show && (
-          <p className={styles.exExplain}>
-            <strong>答案：</strong>
-            {ex.options[ex.answer]}。{ex.explanation}
+        {checked && (
+          <p className={`${styles.exExplain} ${isRight ? styles.exOk : styles.exNo}`}>
+            <Icon name={isRight ? 'check' : 'close'} size={14} />
+            {isRight ? '答对啦！' : `正确答案：${ex.options[ex.answer]}。`}{ex.explanation}
           </p>
         )}
-        <button type="button" className={styles.revealBtn} onClick={() => setShow((v) => !v)}>
-          {show ? '隐藏答案' : '显示答案'}
-        </button>
+        <div className={styles.exBtns}>
+          {!checked ? (
+            <button
+              type="button"
+              className={styles.revealBtn}
+              disabled={!answered}
+              onClick={() => setChecked(true)}
+            >
+              检查
+            </button>
+          ) : (
+            <button type="button" className={styles.revealBtn} onClick={reset}>
+              再试一次
+            </button>
+          )}
+        </div>
       </div>
     </li>
   )
 }
 
-// 连一连：以“左 —— 右”成对呈现，由学习者自行连线（与统编教材“连一连”一致，为动手/动脑活动）。
+// 洗牌：把右侧项目随机打乱，保证每次连线起点不同（纯展示，不影响判分逻辑）。
+function shuffle(arr) {
+  const a = arr.slice()
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+// 连一连：左列固定、右列打乱，孩子点左再点右完成配对，点“检查连线”即时判定每对对错。
+// 由“自己连、家长核对”的静态展示升级为可自测、即时反馈的互动连线。
 function ConnectExercise({ ex, accent }) {
+  const lefts = ex.pairs.map((p) => p.left)
+  const rights = useState(() => shuffle(ex.pairs.map((p) => p.right)))[0]
+  const [selLeft, setSelLeft] = useState(null)
+  const [matches, setMatches] = useState({}) // { [leftIndex]: rightIndex }
+  const [checked, setChecked] = useState(false)
+
+  // 每道 left 对应的正确 right 在打乱数组中的位置。
+  const correctRightIdx = (li) => rights.indexOf(ex.pairs[li].right)
+
+  const onPickLeft = (li) => {
+    if (checked) return
+    setSelLeft((cur) => (cur === li ? null : li))
+  }
+  const onPickRight = (ri) => {
+    if (checked || selLeft === null) return
+    setMatches((m) => ({ ...m, [selLeft]: ri }))
+    setSelLeft(null)
+  }
+  const reset = () => {
+    setSelLeft(null)
+    setMatches({})
+    setChecked(false)
+  }
+
+  const pairOk = (li) => checked && matches[li] !== undefined && matches[li] === correctRightIdx(li)
+
   return (
     <li className={styles.exRow}>
       <span className={styles.exTag} style={{ background: accent }}>{TYPE_META.connect.label}</span>
       <div className={styles.exBody}>
         <p className={styles.exPrompt}>{ex.prompt}</p>
-        <ul className={styles.pairs}>
-          {ex.pairs.map((p, i) => (
-            <li key={i} className={styles.pair}>
-              <span className={styles.pairItem}>{p.left}</span>
-              <span className={styles.pairDash}>——</span>
-              <span className={styles.pairItem}>{p.right}</span>
-            </li>
-          ))}
-        </ul>
-        <p className={styles.exHint}>自己连一连，再请家长核对～</p>
+        <div className={styles.connectCols}>
+          <ul className={styles.connectCol}>
+            {lefts.map((lv, li) => (
+              <li key={li}>
+                <button
+                  type="button"
+                  className={`${styles.cItem} ${selLeft === li ? styles.cItemSel : ''} ${pairOk(li) ? styles.cItemOk : ''} ${checked && matches[li] !== undefined && !pairOk(li) ? styles.cItemNo : ''}`}
+                  onClick={() => onPickLeft(li)}
+                  disabled={checked}
+                >
+                  {lv}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <span className={styles.cArrow}>→</span>
+          <ul className={styles.connectCol}>
+            {rights.map((rv, ri) => {
+              const matchedLeft = Object.keys(matches).find((k) => matches[k] === ri)
+              const isOk = checked && matchedLeft !== undefined && pairOk(Number(matchedLeft))
+              const isNo = checked && matchedLeft !== undefined && !pairOk(Number(matchedLeft))
+              return (
+                <li key={ri}>
+                  <button
+                    type="button"
+                    className={`${styles.cItem} ${matchedLeft !== undefined ? styles.cItemMatched : ''} ${isOk ? styles.cItemOk : ''} ${isNo ? styles.cItemNo : ''}`}
+                    onClick={() => onPickRight(ri)}
+                    disabled={checked || matchedLeft !== undefined}
+                  >
+                    {rv}
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+        <div className={styles.exBtns}>
+          {!checked ? (
+            <button
+              type="button"
+              className={styles.revealBtn}
+              disabled={Object.keys(matches).length < lefts.length}
+              onClick={() => setChecked(true)}
+            >
+              检查连线
+            </button>
+          ) : (
+            <button type="button" className={styles.revealBtn} onClick={reset}>
+              重新连线
+            </button>
+          )}
+        </div>
+        {checked && (
+          <p className={`${styles.exExplain} ${Object.keys(matches).length === lefts.length && lefts.every((_, li) => pairOk(li)) ? styles.exOk : styles.exNo}`}>
+            <Icon name={lefts.every((_, li) => pairOk(li)) ? 'check' : 'bulb'} size={14} />
+            {lefts.every((_, li) => pairOk(li)) ? '全部连对，真棒！' : '对照一下：把意思相关的左右两项连起来就好啦～'}
+          </p>
+        )}
       </div>
     </li>
   )

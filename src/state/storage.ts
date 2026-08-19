@@ -1,5 +1,5 @@
 // 持久化：读取 / 写入 / 版本迁移（v1→v2）。
-import type { AppState, ParentState, SubjectId, SubjectStat, WrongMap, ReviewSlot, HistoryEntry, FavoriteItem } from './types';
+import type { AppState, ParentState, SubjectId, SubjectStat, WrongMap, ReviewSlot, HistoryEntry, FavoriteItem, DailyTasks } from './types';
 import { emptySubject } from './helpers';
 
 const STORAGE_KEY_V1 = 'happy-learning-state-v1';
@@ -52,6 +52,27 @@ export function defaultState(): AppState {
     textRecite: {},
     theme: null,
     favorites: [],
+    dailyTasks: { date: '', items: [] },
+  };
+}
+
+/** 校验并兜底每日任务单：缺字段 / 结构异常时回退空任务（由 App 在加载后按需重新生成）。 */
+function mergeDailyTasks(base: DailyTasks, raw: unknown): DailyTasks {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return base;
+  const r = raw as Record<string, unknown>;
+  const items = Array.isArray(r.items)
+    ? (r.items as Array<Record<string, unknown>>)
+        .filter((it) => it && typeof it === 'object' && typeof it.id === 'string')
+        .map((it) => ({
+          id: String(it.id),
+          title: typeof it.title === 'string' ? it.title : '',
+          done: it.done === true,
+          route: typeof it.route === 'string' ? it.route : undefined,
+        }))
+    : base.items;
+  return {
+    date: typeof r.date === 'string' ? r.date : base.date,
+    items,
   };
 }
 
@@ -143,6 +164,7 @@ export function migrate(raw: Partial<AppState> | null | undefined): AppState {
     textRecite: (r.textRecite as Record<string, boolean> | undefined) ?? base.textRecite,
     theme: (r.theme as string | null | undefined) ?? base.theme,
     favorites: Array.isArray(r.favorites) ? (r.favorites as FavoriteItem[]) : base.favorites,
+    dailyTasks: mergeDailyTasks(base.dailyTasks, r.dailyTasks),
     lastActiveDate: (r.lastActiveDate as string | null | undefined) ?? base.lastActiveDate,
     todayDate: (r.todayDate as string | null | undefined) ?? base.todayDate,
     history: Array.isArray(r.history) ? (r.history as HistoryEntry[]) : [],

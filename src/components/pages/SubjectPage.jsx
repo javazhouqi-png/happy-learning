@@ -7,8 +7,10 @@ import ExerciseEngine from '../ExerciseEngine.jsx'
 import LessonTexts from '../modules/LessonTexts.jsx'
 import VideoCard from '../ui/VideoCard.jsx'
 import VideoModal from '../VideoModal.jsx'
+import GradeSwitcher from '../sections/GradeSwitcher.jsx'
 import { useApp } from '../../state/AppContext.jsx'
 import { getSubject, getLessons, VIDEOS } from '../../data/content.js'
+import { getGradeLearning } from '../../data/grade.js'
 import styles from './SubjectPage.module.css'
 
 const TABS = [
@@ -59,6 +61,21 @@ export default function SubjectPage() {
           <ProgressBar value={lessons.length ? Math.round((doneCount / lessons.length) * 100) : 0} color={subject.color} height={10} />
           <span className={styles.mastery}>掌握度 {derived.mastery[subjectId] || 0}%</span>
         </div>
+
+        {/* 年级分层入口：常驻学科页内，切换后全站内容按 state.grade 过滤（不清除学习数据）。 */}
+        <GradeSwitcher value={state.grade} onChange={actions.setGrade} />
+
+        {/* 英语分龄口径提示：落实未成年人内容合规，一二年级为预备级听说启蒙，三年级起为国家统一起始年级。 */}
+        {subjectId === 'english' &&
+          (() => {
+            const note = getGradeLearning(state.grade)?.subjects?.english?.note
+            return note ? (
+              <div className={styles.gradeNote}>
+                <Icon name="shield" size={15} />
+                <span>{note}</span>
+              </div>
+            ) : null
+          })()}
 
         {/* Tab 切换 */}
         <nav className={styles.tabs}>

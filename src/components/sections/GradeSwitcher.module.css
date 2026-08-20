@@ -1,0 +1,46 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--c-ink-faint);
+}
+
+.seg {
+  display: inline-flex;
+  background: var(--c-surface-2);
+  border-radius: var(--r-pill);
+  padding: 4px;
+  gap: 2px;
+}
+
+.item {
+  border: none;
+  background: transparent;
+  color: var(--c-ink-soft);
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.item:hover {
+  color: var(--c-ink);
+}
+
+.active {
+  background: var(--accent, var(--c-primary));
+  color: #fff;
+  font-weight: 600;
+}
+
+.hint {
+  color: var(--c-ink-faint);
+}

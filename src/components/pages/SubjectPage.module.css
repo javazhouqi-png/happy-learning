@@ -83,6 +83,25 @@
   white-space: nowrap;
 }
 
+.gradeNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: color-mix(in srgb, var(--c-english) 10%, #fff);
+  border: 1px solid color-mix(in srgb, var(--c-english) 30%, #fff);
+  border-radius: var(--r-md);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--c-ink-soft);
+}
+.gradeNote svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: var(--c-english);
+}
+
 .tabs {
   display: flex;
   gap: 8px;

@@ -97,9 +97,243 @@
   text-align: center;
 }
 
+/* 模式切换 Tab */
+.modeTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.modeTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--c-line);
+  background: var(--c-surface);
+  color: var(--c-ink-soft);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.modeTab:hover {
+  border-color: var(--c-gamify);
+}
+.modeTabActive {
+  background: var(--c-gamify);
+  border-color: var(--c-gamify);
+  color: #fff;
+}
+
+/* 闪卡 */
+.flash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.flashProgress {
+  font-size: 13px;
+  color: var(--c-ink-faint);
+}
+.flashCard {
+  width: 100%;
+  max-width: 420px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 28px 24px;
+  background: var(--c-surface-2);
+  border-radius: var(--r-lg);
+  border-top: 4px solid var(--c-gamify);
+}
+.flashFront {
+  margin: 0;
+  font-size: 24px;
+  font-family: var(--font-head);
+  color: var(--c-ink);
+  text-align: center;
+}
+.flashBack {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--c-ink-soft);
+  text-align: center;
+}
+.flashActions {
+  display: flex;
+  gap: 12px;
+}
+.revealBtn {
+  padding: 8px 20px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--c-gamify);
+  background: #fff;
+  color: var(--c-gamify);
+  font-size: 14px;
+  cursor: pointer;
+}
+.revealBtn:hover {
+  background: color-mix(in srgb, var(--c-gamify) 10%, #fff);
+}
+.flashEnd {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.flashEndTitle {
+  margin: 0;
+  font-family: var(--font-head);
+  font-size: 20px;
+  color: var(--c-gamify);
+}
+.unknownList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 360px;
+}
+.unknownList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--c-surface-2);
+  border-radius: var(--r-md);
+  font-size: 14px;
+}
+.miniBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--c-line);
+  background: #fff;
+  color: var(--c-ink-soft);
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.miniBtn:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+
+/* 口算闯关 */
+.arith {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.arithBar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.arithStat {
+  font-size: 14px;
+  color: var(--c-ink-soft);
+}
+.arithStat strong {
+  font-family: var(--font-head);
+  font-size: 22px;
+  color: var(--c-gamify);
+  margin-left: 4px;
+}
+.arithProblem {
+  font-family: var(--font-head);
+  font-size: 40px;
+  color: var(--c-ink);
+}
+.arithInputRow {
+  display: flex;
+  gap: 10px;
+}
+.arithInput {
+  width: 140px;
+  padding: 10px 14px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: var(--r-md);
+  border: 2px solid var(--c-line);
+  font-family: var(--font-head);
+}
+.arithInput:focus {
+  outline: none;
+  border-color: var(--c-gamify);
+}
+
+/* 听写跟读 */
+.dictate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.dictateCard {
+  width: 100%;
+  max-width: 420px;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 28px 24px;
+  background: var(--c-surface-2);
+  border-radius: var(--r-lg);
+  border-top: 4px solid var(--c-english);
+}
+.dictatePlay {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background: var(--c-english);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.dictatePlay:hover {
+  transform: scale(1.05);
+}
+.dictateText {
+  margin: 0;
+  font-size: 22px;
+  font-family: var(--font-head);
+  color: var(--c-ink);
+}
+.dictateHint {
+  margin: 0;
+  font-size: 14px;
+  color: var(--c-ink-faint);
+}
+
 @media (max-width: 560px) {
   .board {
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+  }
+  .arithProblem {
+    font-size: 32px;
   }
 }

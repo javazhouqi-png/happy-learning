@@ -42,6 +42,14 @@ export const SUBJECTS = [
     tagline: '单词 · 听说 · 兴趣',
     desc: '字母、单词与日常对话，轻松开口说。',
   },
+  {
+    id: 'science',
+    name: '科学',
+    color: 'var(--c-science)',
+    icon: 'bulb',
+    tagline: '观察 · 探究 · 实验',
+    desc: '从身边现象出发，动手做小实验，种下科学思维的种子。',
+  },
 ];
 
 // 学科 id 列表，供遍历 / 校验使用，避免在各处硬编码字符串。

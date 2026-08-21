@@ -1,7 +1,7 @@
 // 全局状态类型定义（Task #3 引入）。
 // 配合 AppContext 动作域拆分与 storage.migrate(v1→v2) 使用；供状态层各 TS 模块共享。
 
-export type SubjectId = 'chinese' | 'math' | 'english';
+export type SubjectId = 'chinese' | 'math' | 'english' | 'science';
 
 export interface SubjectStat {
   correct: number;
@@ -27,7 +27,7 @@ export interface WrongInput {
 
 /** 用户收藏条目（持久化值）：儿童主动收藏的课文 / 古诗 / 错题 / 视频等。 */
 export interface FavoriteItem {
-  kind: 'text' | 'poem' | 'wrong' | 'video';
+  kind: 'text' | 'poem' | 'point' | 'wrong' | 'video';
   key: string;
   title: string;
   subject?: SubjectId;

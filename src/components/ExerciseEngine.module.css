@@ -103,6 +103,19 @@
   border-radius: 999px;
 }
 
+/* 自适应难度徽标：普通练习模式下展示当前智能难度档 */
+.diffBadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-ink-soft);
+  background: var(--c-bg);
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
 .list {
   list-style: none;
   margin: 0;

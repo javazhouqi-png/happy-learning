@@ -208,7 +208,7 @@ function FlashCardGame() {
                 <button
                   type="button"
                   className={styles.miniBtn}
-                  onClick={() => actions.toggleFavorite({ kind: 'text', key: `point:${u.id}`, title: u.front, grade: state.grade, addedAt: Date.now() })}
+                  onClick={() => actions.toggleFavorite({ kind: 'point', key: u.id, title: u.front, subject: u.subject, grade: state.grade, addedAt: Date.now() })}
                 >
                   <Icon name="star" size={13} /> 收藏
                 </button>

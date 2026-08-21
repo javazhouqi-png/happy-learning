@@ -5,7 +5,7 @@ import { emptySubject } from './helpers';
 const STORAGE_KEY_V1 = 'happy-learning-state-v1';
 const STORAGE_KEY = 'happy-learning-state-v2';
 
-const SUBJECTS: SubjectId[] = ['chinese', 'math', 'english'];
+const SUBJECTS: SubjectId[] = ['chinese', 'math', 'english', 'science'];
 
 function defaultParent(): ParentState {
   return { dailyLimitMin: 30, eyeRest: true, sound: true, minorMode: false, parentPin: '', minorDailyCapMin: 40 };
@@ -16,6 +16,7 @@ function defaultReview(): Record<SubjectId, ReviewSlot> {
     chinese: { box: 0, next: null },
     math: { box: 0, next: null },
     english: { box: 0, next: null },
+    science: { box: 0, next: null },
   };
 }
 
@@ -29,15 +30,15 @@ export function defaultState(): AppState {
     grade: 1,
     points: 0,
     completedLessons: {},
-    quizBySubject: { chinese: emptySubject(), math: emptySubject(), english: emptySubject() },
+    quizBySubject: { chinese: emptySubject(), math: emptySubject(), english: emptySubject(), science: emptySubject() },
     quizByGrade: (() => {
       const out: Record<number, Record<SubjectId, SubjectStat>> = {};
       [1, 2, 3, 4, 5, 6].forEach((g) => {
-        out[g] = { chinese: emptySubject(), math: emptySubject(), english: emptySubject() };
+        out[g] = { chinese: emptySubject(), math: emptySubject(), english: emptySubject(), science: emptySubject() };
       });
       return out;
     })(),
-    wrongBySubject: { chinese: {}, math: {}, english: {} },
+    wrongBySubject: { chinese: {}, math: {}, english: {}, science: {} },
     videosWatched: {},
     studySeconds: 0,
     streakDays: 0,
@@ -111,7 +112,7 @@ const GRADE_KEYS = [1, 2, 3, 4, 5, 6];
 function emptyGradeQuiz(): Record<number, Record<SubjectId, SubjectStat>> {
   const out: Record<number, Record<SubjectId, SubjectStat>> = {};
   GRADE_KEYS.forEach((g) => {
-    out[g] = { chinese: emptySubject(), math: emptySubject(), english: emptySubject() };
+    out[g] = { chinese: emptySubject(), math: emptySubject(), english: emptySubject(), science: emptySubject() };
   });
   return out;
 }

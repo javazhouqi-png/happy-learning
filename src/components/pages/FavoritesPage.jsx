@@ -10,10 +10,11 @@ import styles from './FavoritesPage.module.css'
 const KIND_META = {
   text: { label: '课文', to: '/textbook', color: 'var(--c-chinese)' },
   poem: { label: '古诗', to: '/grade', color: 'var(--c-english)' },
+  point: { label: '知识点', to: '/learn', color: 'var(--c-science)' },
   wrong: { label: '错题', to: '/review', color: 'var(--c-math)' },
   video: { label: '动画', to: '/videos', color: 'var(--c-gamify)' },
 }
-const KIND_ORDER = ['text', 'poem', 'wrong', 'video']
+const KIND_ORDER = ['text', 'poem', 'point', 'wrong', 'video']
 
 export default function FavoritesPage() {
   const { state, actions } = useApp()
@@ -60,7 +61,7 @@ export default function FavoritesPage() {
                       </div>
                     </div>
                     <div className={styles.itemActions}>
-                      <Link to={meta.to} className={styles.goLink}>前往</Link>
+                      <Link to={f.kind === 'point' && f.subject ? `/learn/${f.subject}` : meta.to} className={styles.goLink}>前往</Link>
                       <button
                         type="button"
                         className={styles.removeBtn}

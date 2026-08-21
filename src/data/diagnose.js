@@ -1,8 +1,7 @@
 // 家长诊断报告：由错题本聚合薄弱知识点，生成「薄弱点 + 陪学动作」的可落地诊断。
 // 纯函数、无 React、可在 Node 直接调用与单测；文案复用 GRADE_LEARNING 的 why/scene/core。
 import { getGradeLearning, getGradeKnowledge } from './grade.js'
-
-const SUBJECTS = ['chinese', 'math', 'english']
+import { SUBJECT_IDS as SUBJECTS } from './content.js'
 
 // 由错题本按 pointId（兜底 pointTitle / 未分类）聚合错次，返回降序排列的薄弱点列表。
 // 旧链路错题仅存 true（无 pointId）会被归入「未分类知识点」，仍参与计数，不丢失。

@@ -5,6 +5,7 @@ import { useApp } from '../state/AppContext.jsx'
 import { useFun } from './fun/FunContext.jsx'
 import { pickRandom, PRAISE, ENCOURAGE, CLEAR_ALL } from '../data/fun.js'
 import { scoreAll, normalizeQuestion } from './exercise/score'
+import { sortByAdaptive, selectDifficulty, accuracyOf, difficultyLabel } from '../data/adaptive.js'
 import Icon from './ui/Icon.jsx'
 import Button from './ui/Button.jsx'
 import styles from './ExerciseEngine.module.css'
@@ -19,7 +20,13 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
   const subject = getSubject(subjectId)
   // 自定义题集（如「举一反三」）：覆盖默认题库，直接以传入集合练习，复用判分与渲染。
   const hasOverride = Array.isArray(questionOverride) && questionOverride.length > 0
-  const questions = hasOverride ? questionOverride : getQuiz(subjectId, state.grade)
+  const baseQuestions = hasOverride ? questionOverride : getQuiz(subjectId, state.grade)
+  // 普通模式启用自适应：错题优先排序（不破坏 override / 复习模式语义）。
+  const questions = reviewMode
+    ? baseQuestions.filter((q) => wrongSet[q.id])
+    : !hasOverride
+      ? sortByAdaptive(baseQuestions, { wrongIds: wrongSet })
+      : baseQuestions
 
   // answers 以题目 id 为键（而非序号），筛选/重排序时不会错位。
   const [answers, setAnswers] = useState({}) // { [questionId]: optionIndex }
@@ -29,6 +36,10 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
   // 错题本中的题目集合（用于复习模式筛选）。
   const wrongSet = derived.wrongBySubject[subjectId] || {}
   const wrongCount = derived.wrongCountBySubject[subjectId] || 0
+
+  // 自适应难度档：依据本学科历史正确率（无数据默认巩固）。
+  const subjectStat = state.quizBySubject?.[subjectId]
+  const difficulty = selectDifficulty(accuracyOf(subjectStat?.correct, subjectStat?.total))
 
   // 当前展示的题目集：自定义题集 = 直接使用；复习模式 = 仅错题；普通模式 = 全部。
   const activeQuestions = hasOverride
@@ -126,6 +137,11 @@ export default function ExerciseEngine({ subjectId, initialReview = false, onCom
           {subject?.name} · {hasOverride ? '专项练习' : reviewMode ? '错题复习' : '互动练习'}
         </h3>
         <div className={styles.headTools}>
+          {!hasOverride && !reviewMode && (
+            <span className={styles.diffBadge} title="根据历史正确率自动调整难度">
+              智能 Lv.{difficulty} · {difficultyLabel(difficulty)}
+            </span>
+          )}
           {!hasOverride && wrongCount > 0 && (
             <button className={styles.reviewBtn} onClick={toggleReview}>
               <Icon name="bulb" size={14} />

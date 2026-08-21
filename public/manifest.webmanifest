@@ -1,0 +1,13 @@
+{
+  "name": "快乐学园 · 小学 1-6 年级",
+  "short_name": "快乐学园",
+  "description": "面向小学 1-6 年级儿童的趣味学习 App，覆盖语文、数学、英语、科学。",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4d96ff",
+  "icons": [
+    { "src": "/star.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

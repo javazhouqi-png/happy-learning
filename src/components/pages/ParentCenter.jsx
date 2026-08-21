@@ -1,6 +1,7 @@
 import PageHeader from '../ui/PageHeader.jsx'
 import ParentPanel from '../sections/ParentPanel.jsx'
 import ParentWeeklyReport from '../modules/ParentWeeklyReport.jsx'
+import ParentTermReport from '../modules/ParentTermReport.jsx'
 import styles from './Page.module.css'
 
 // 家长空间：家长面板 + 周报，聚焦“家长视角的陪伴与查看”。
@@ -16,6 +17,7 @@ export default function ParentCenter() {
       <div className={styles.body}>
         <ParentPanel />
         <ParentWeeklyReport />
+        <ParentTermReport />
       </div>
     </div>
   )

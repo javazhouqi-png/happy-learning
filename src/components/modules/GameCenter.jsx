@@ -384,22 +384,30 @@ function ArithmeticGame() {
 
 // 听写跟读：复用 TTS 朗读词，儿童跟读；诚实边界——不评分、不造假，仅陪练。
 function DictationGame() {
-  const { state } = useApp()
+  const { state, actions } = useApp()
   const supported = speechSupported()
   const [items, setItems] = useState([])
   const [idx, setIdx] = useState(0)
   const [revealed, setRevealed] = useState(false)
+  const [known, setKnown] = useState({})
+  const [feedback, setFeedback] = useState(null) // 'known' | 'review' | null
 
   useEffect(() => {
     const gl = getGradeLearning(state.grade)
     const list = []
     const en = gl?.subjects?.english?.points || []
     const cn = gl?.subjects?.chinese?.points || []
-    en.slice(0, 4).forEach((p) => list.push({ text: p.title, lang: 'en-US', label: '英语' }))
-    cn.slice(0, 4).forEach((p) => list.push({ text: p.title, lang: 'zh-CN', label: '语文' }))
+    en.slice(0, 4).forEach((p) =>
+      list.push({ text: p.title, lang: 'en-US', label: '英语', subject: 'english', pointId: p.id })
+    )
+    cn.slice(0, 4).forEach((p) =>
+      list.push({ text: p.title, lang: 'zh-CN', label: '语文', subject: 'chinese', pointId: p.id })
+    )
     setItems(shuffle(list))
     setIdx(0)
     setRevealed(false)
+    setKnown({})
+    setFeedback(null)
   }, [state.grade])
 
   useEffect(() => () => cancelSpeech(), [])
@@ -427,8 +435,26 @@ function DictationGame() {
   const it = items[idx]
   const next = () => {
     setRevealed(false)
+    setFeedback(null)
     if (idx + 1 >= items.length) setIdx(0)
     else setIdx(idx + 1)
+  }
+  const markKnown = () => {
+    if (known[it.pointId]) return // 同一词不重复加分
+    actions.addPoints(2, '听写自评掌握')
+    setKnown((k) => ({ ...k, [it.pointId]: true }))
+    setFeedback('known')
+  }
+  const markReview = () => {
+    actions.toggleFavorite({
+      kind: 'point',
+      key: `dictate:${it.subject}:${it.pointId}`,
+      title: it.text,
+      subject: it.subject,
+      grade: state.grade,
+      addedAt: Date.now(),
+    })
+    setFeedback('review')
   }
 
   return (
@@ -446,11 +472,19 @@ function DictationGame() {
       </div>
       <div className={styles.flashActions}>
         <Button variant="soft" size="sm" onClick={() => setRevealed(true)}>看答案</Button>
+        <Button variant="soft" size="sm" onClick={markKnown}>我会了</Button>
+        <Button variant="soft" size="sm" onClick={markReview}>还不会</Button>
         <Button variant="primary" size="sm" onClick={next}>
           下一个 <Icon name="chevronRight" size={14} />
         </Button>
       </div>
-      <p className={styles.tip}>诚实边界：听写跟读只陪练、不计分，避免“假成绩”。</p>
+      {feedback === 'known' && (
+        <p className={styles.tipGood}>太棒了，已记下你掌握啦！(+2 分)</p>
+      )}
+      {feedback === 'review' && (
+        <p className={styles.tip}>已加入收藏夹，可在「收藏」里回看这个知识点复习。</p>
+      )}
+      <p className={styles.tip}>自评只作鼓励、不计入正确率；「还不会」会收藏该知识点便于复习。</p>
     </div>
   )
 }

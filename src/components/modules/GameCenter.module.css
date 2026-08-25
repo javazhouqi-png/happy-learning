@@ -96,6 +96,12 @@
   color: var(--c-ink-faint);
   text-align: center;
 }
+.tipGood {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a9e57;
+  text-align: center;
+}
 
 /* 模式切换 Tab */
 .modeTabs {

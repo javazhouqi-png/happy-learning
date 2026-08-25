@@ -5,7 +5,7 @@ import { emptySubject } from './helpers';
 const STORAGE_KEY_V1 = 'happy-learning-state-v1';
 const STORAGE_KEY = 'happy-learning-state-v2';
 
-const SUBJECTS: SubjectId[] = ['chinese', 'math', 'english', 'science'];
+export const SUBJECTS: SubjectId[] = ['chinese', 'math', 'english', 'science'];
 
 function defaultParent(): ParentState {
   return { dailyLimitMin: 30, eyeRest: true, sound: true, minorMode: false, parentPin: '', minorDailyCapMin: 40 };

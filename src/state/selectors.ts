@@ -3,6 +3,8 @@
 import type { AppState, WrongMap } from './types'
 import { BADGES, LESSONS, LEVEL_STEP, levelFromPoints, levelTitle } from '../data/subjects.js'
 import { emptySubject } from './helpers'
+// 科目真相唯一来源（已含 science），避免各派生循环写死三科导致 science 统计遗漏。
+import { SUBJECTS } from './storage'
 
 /**
  * 由当前 state 计算所有派生展示数据。
@@ -36,7 +38,7 @@ export function computeDerived(state: AppState) {
   // 错题本：每科错题数量。
   const wrongCountBySubject: Record<string, number> = {}
   const wrongBySubject: Record<string, WrongMap> = {}
-  ;['chinese', 'math', 'english'].forEach((sub: string) => {
+  SUBJECTS.forEach((sub) => {
     const set = state.wrongBySubject[sub] || {}
     wrongBySubject[sub] = set
     wrongCountBySubject[sub] = Object.keys(set).length
@@ -44,8 +46,9 @@ export function computeDerived(state: AppState) {
 
   // 掌握度：课程完成率(60%) + 答题正确率(40%)，四舍五入到整数百分比。
   const mastery: Record<string, number> = {}
-  ;['chinese', 'math', 'english'].forEach((sub: string) => {
-    const lessons = LESSONS[sub] || []
+  SUBJECTS.forEach((sub) => {
+    // science 暂无课文完成度（LESSONS 无 science 键），掌握度仅来自答题正确率，故安全降级为空数组。
+    const lessons = (LESSONS[sub as 'chinese' | 'math' | 'english'] || []) as { id: string }[]
     const done = lessons.filter((l) => state.completedLessons[l.id]).length
     const q = state.quizBySubject[sub] || emptySubject()
     const quizRate = q.total ? q.correct / q.total : 0
@@ -60,7 +63,7 @@ export function computeDerived(state: AppState) {
   Object.keys(state.quizByGrade || {}).forEach((kg: string) => {
     const g = Number(kg)
     progressByGrade[g] = {}
-    ;['chinese', 'math', 'english'].forEach((sub: string) => {
+    SUBJECTS.forEach((sub) => {
       const q = (state.quizByGrade && state.quizByGrade[g] && state.quizByGrade[g][sub]) || emptySubject()
       const rate = q.total ? q.correct / q.total : 0
       progressByGrade[g][sub] = {
